@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.4.1] — 2026-07-17
+
+### Fixed
+- Settings did not open from `chrome://extensions` — the embedded options modal silently failed to appear. Options now open in a full browser tab (`options_ui.open_in_tab: true`), which also suits the full-width settings layout. Verified against the v0.4.0 artifact (row click → nothing) vs the fix (row click → settings tab).
+
 ## [0.4.0] — 2026-07-17
 
 ### Fixed
@@ -64,7 +69,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.2.0...v0.3.0
