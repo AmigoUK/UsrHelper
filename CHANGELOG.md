@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.1.0] — 2026-07-17
+
+### Added
+- Settings page: project profiles (email To/CC, subject prefix, Downloads subfolder, description template, clip limits), feature toggles, and EN/PL language switch.
+- Core libraries: timestamped file naming, subfolder sanitization, `chrome.downloads` saving, `mailto:` builder with To/CC and body truncation, environment metadata collection, report history storage.
+- Credit footer with version display on the settings page.
+- Unit tests (Vitest) for file naming and mailto construction.
+
 ## [0.0.1] — 2026-07-17
 
 ### Added
@@ -16,5 +24,6 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/AmigoUK/UsrHelper/releases/tag/v0.0.1
