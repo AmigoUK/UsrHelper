@@ -117,6 +117,11 @@ const setField = async (label, value) => {
   await input.fill(String(value));
   await input.dispatchEvent('change');
 };
+await setField('Customer no.', 'C-102');
+await setField('Company', 'ACME Sp. z o.o.');
+await setField('First name', 'Jan');
+await setField('Last name', 'Kowalski');
+await setField('AnyDesk no.', '123 456 789');
 await setField('Email to', 'qa@example.com, dev@example.com');
 await setField('CC', 'boss@example.com');
 await setField('Subfolder in Downloads', 'UsrHelper/e2e');
@@ -247,6 +252,11 @@ if (jsonItem && existsSync(jsonItem.filename)) {
     `clicks=${meta.clickPath?.length} errors=${meta.consoleErrors?.length}`,
   );
   check('JSON captured the synthetic console error', meta.consoleErrors?.some((e) => e.message.includes('E2E synthetic error')), meta.consoleErrors?.[0]?.message?.slice(0, 60));
+  check(
+    'JSON carries reporter details (customer/company/name/AnyDesk)',
+    meta.reporter?.customerNo === 'C-102' && meta.reporter?.company === 'ACME Sp. z o.o.' && meta.reporter?.firstName === 'Jan' && meta.reporter?.lastName === 'Kowalski' && meta.reporter?.anyDesk === '123 456 789',
+    JSON.stringify(meta.reporter),
+  );
   check('JSON files[] uses timestamped Downloads path', /UsrHelper\/e2e\/UsrHelper_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.png/.test(meta.files?.[0] ?? ''), meta.files?.[0]);
 } else {
   check('Companion JSON readable from disk', false, 'file missing');

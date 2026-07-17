@@ -43,6 +43,8 @@ export function buildReportBody(meta: ReportMetadata, t: Translate): string {
   if (meta.description.trim()) {
     lines.push(meta.description.trim(), '');
   }
+  const reporterLine = formatReporter(meta);
+  if (reporterLine) lines.push(`${t('meta.reporter')}: ${reporterLine}`);
   lines.push(`${t('meta.pageUrl')}: ${meta.pageUrl}`);
   lines.push(`${t('meta.pageTitle')}: ${meta.pageTitle}`);
   lines.push(`${t('meta.capturedAt')}: ${meta.capturedAt}`);
@@ -58,4 +60,17 @@ export function buildReportBody(meta: ReportMetadata, t: Translate): string {
   }
   lines.push('', t('mailto.attachReminder', { files: meta.files.join(', ') }));
   return lines.join('\n');
+}
+
+function formatReporter(meta: ReportMetadata): string {
+  const r = meta.reporter;
+  if (!r) return '';
+  return [
+    [r.firstName, r.lastName].filter(Boolean).join(' '),
+    r.company,
+    r.customerNo && `#${r.customerNo}`,
+    r.anyDesk && `AnyDesk: ${r.anyDesk}`,
+  ]
+    .filter(Boolean)
+    .join(' | ');
 }

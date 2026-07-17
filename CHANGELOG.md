@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.4.0] — 2026-07-17
+
+### Fixed
+- **Screencasts froze/failed when the recorder tab was hidden** (the normal case — users switch to the app they are demoing). Chrome throttles `requestAnimationFrame` in hidden tabs, which stalled the canvas compositor. Composition now runs in a Web Worker via WebCodecs (`MediaStreamTrackProcessor` → `OffscreenCanvas` → `MediaStreamTrackGenerator`), immune to tab visibility. Verified: 38 frames (frozen) → 252 frames (~20 fps) for a 12.5 s hidden-tab recording. Falls back to the raw display stream (no bubble/timestamp) on browsers without the API.
+
+### Added
+- **Reporter details** in settings: customer no., company, first name, last name, AnyDesk no. — included in every report JSON (`reporter` field) and in the email body ("Reporter: Jan Kowalski | ACME | #C-102 | AnyDesk: …").
+- Throttling reproduction script (`scripts/repro-throttle.mjs`) that runs the extension under real-Chrome background-throttling conditions; E2E suite extended to 36 checks (reporter details in saved JSON).
+- `CLAUDE.md` project memory (stack, conventions, protected files, gotchas).
+
 ## [0.3.1] — 2026-07-17
 
 ### Fixed
@@ -54,7 +64,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.1.0...v0.2.0

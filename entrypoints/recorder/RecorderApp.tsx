@@ -206,6 +206,7 @@ export function RecorderApp() {
   function buildMetadata(files: string[]): ReportMetadata {
     return {
       kind: 'screencast',
+      reporter: settings?.reporter,
       description,
       capturedAt: startedAtRef.current,
       pageUrl: '',

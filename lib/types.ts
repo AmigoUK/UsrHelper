@@ -19,7 +19,16 @@ export interface ProjectProfile {
   maxMinutes: number;
 }
 
+export interface ReporterInfo {
+  customerNo: string;
+  company: string;
+  firstName: string;
+  lastName: string;
+  anyDesk: string;
+}
+
 export interface Settings {
+  reporter: ReporterInfo;
   activeProfileId: string;
   profiles: ProjectProfile[];
   showCameraBubble: boolean;
@@ -58,6 +67,7 @@ export interface EnvironmentInfo {
 
 export interface ReportMetadata {
   kind: ReportKind;
+  reporter?: ReporterInfo;
   description: string;
   capturedAt: string; // ISO timestamp
   pageUrl: string;

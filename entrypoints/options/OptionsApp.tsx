@@ -75,6 +75,65 @@ export function OptionsApp() {
         </select>
       </div>
 
+      <h2>{t('options.reporter.title')}</h2>
+      <div class="card">
+        <div class="row">
+          <div>
+            <label>{t('options.reporter.customerNo')}</label>
+            <input
+              type="text"
+              value={settings.reporter.customerNo}
+              onChange={(e) =>
+                persist({ ...settings, reporter: { ...settings.reporter, customerNo: e.currentTarget.value } })
+              }
+            />
+          </div>
+          <div>
+            <label>{t('options.reporter.company')}</label>
+            <input
+              type="text"
+              value={settings.reporter.company}
+              onChange={(e) =>
+                persist({ ...settings, reporter: { ...settings.reporter, company: e.currentTarget.value } })
+              }
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>{t('options.reporter.firstName')}</label>
+            <input
+              type="text"
+              value={settings.reporter.firstName}
+              onChange={(e) =>
+                persist({ ...settings, reporter: { ...settings.reporter, firstName: e.currentTarget.value } })
+              }
+            />
+          </div>
+          <div>
+            <label>{t('options.reporter.lastName')}</label>
+            <input
+              type="text"
+              value={settings.reporter.lastName}
+              onChange={(e) =>
+                persist({ ...settings, reporter: { ...settings.reporter, lastName: e.currentTarget.value } })
+              }
+            />
+          </div>
+          <div>
+            <label>{t('options.reporter.anyDesk')}</label>
+            <input
+              type="text"
+              value={settings.reporter.anyDesk}
+              onChange={(e) =>
+                persist({ ...settings, reporter: { ...settings.reporter, anyDesk: e.currentTarget.value } })
+              }
+            />
+          </div>
+        </div>
+        <div class="hint">{t('options.reporter.hint')}</div>
+      </div>
+
       <h2>{t('options.profiles.title')}</h2>
       {settings.profiles.map((profile) => (
         <div class="card" key={profile.id}>

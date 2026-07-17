@@ -385,6 +385,7 @@ export function EditorApp() {
   function buildMetadata(files: string[]): ReportMetadata {
     return {
       kind: 'screenshot',
+      reporter: settings?.reporter,
       description,
       capturedAt: record!.capturedAt,
       pageUrl: record!.pageUrl,

@@ -20,6 +20,7 @@ export function defaultProfile(id = 'default'): ProjectProfile {
 
 export function defaultSettings(): Settings {
   return {
+    reporter: { customerNo: '', company: '', firstName: '', lastName: '', anyDesk: '' },
     activeProfileId: 'default',
     profiles: [defaultProfile()],
     showCameraBubble: false,
@@ -37,6 +38,7 @@ export async function loadSettings(): Promise<Settings> {
   const settings = stored[SETTINGS_KEY] as Partial<Settings> | undefined;
   if (!settings) return defaultSettings();
   const merged = { ...defaultSettings(), ...settings };
+  merged.reporter = { ...defaultSettings().reporter, ...settings.reporter };
   if (!merged.profiles?.length) merged.profiles = [defaultProfile()];
   if (!merged.profiles.some((p) => p.id === merged.activeProfileId)) {
     merged.activeProfileId = merged.profiles[0].id;

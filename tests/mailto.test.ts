@@ -55,6 +55,25 @@ describe('buildReportBody', () => {
     extensionVersion: '0.0.1',
   };
 
+  it('includes reporter line when reporter details are set', () => {
+    const body = buildReportBody(
+      {
+        ...meta,
+        reporter: { customerNo: 'C-102', company: 'ACME', firstName: 'Jan', lastName: 'Kowalski', anyDesk: '123 456 789' },
+      },
+      (k) => k,
+    );
+    expect(body).toContain('meta.reporter: Jan Kowalski | ACME | #C-102 | AnyDesk: 123 456 789');
+  });
+
+  it('omits reporter line when all reporter fields are empty', () => {
+    const body = buildReportBody(
+      { ...meta, reporter: { customerNo: '', company: '', firstName: '', lastName: '', anyDesk: '' } },
+      (k) => k,
+    );
+    expect(body).not.toContain('meta.reporter');
+  });
+
   it('includes description, url and attach reminder with file list', () => {
     const body = buildReportBody(meta, (k, p) =>
       k === 'mailto.attachReminder' ? `Attach: ${p?.files}` : k,
