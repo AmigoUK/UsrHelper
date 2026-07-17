@@ -2,7 +2,7 @@
   "name": "usrhelper",
   "description": "Chrome extension for deployment feedback: annotated screenshots and voice screencasts saved locally or shared via email",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
