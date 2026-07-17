@@ -1,5 +1,5 @@
 import { putCapture } from '@/lib/captureStore';
-import type { CaptureMode, PageContext, PageInfo, RegionRect } from '@/lib/messages';
+import type { CaptureMode, OverlayOptions, PageContext, PageInfo, RegionRect } from '@/lib/messages';
 import { isRestrictedUrl, sendToTab } from '@/lib/messages';
 import { stitchPlan } from '@/lib/stitch';
 
@@ -18,6 +18,19 @@ export default defineBackground(() => {
       handleRegionDone(sender.tab.id, message.rect as RegionRect | null, message.dpr as number)
         .catch(console.error);
       sendResponse({ ok: true });
+      return;
+    }
+    if (message?.type === 'recording:setOverlays') {
+      setRecordingOverlays(message.enabled as boolean, message.options as OverlayOptions | undefined)
+        .then(() => sendResponse({ ok: true }))
+        .catch((error) => sendResponse({ error: String(error) }));
+      return true;
+    }
+    if (message?.type === 'recording:queryOverlay') {
+      chrome.storage.session
+        .get('recordingOverlay')
+        .then((stored) => sendResponse(stored.recordingOverlay ?? { enabled: false }));
+      return true;
     }
   });
 });
@@ -172,6 +185,19 @@ async function openEditor(
     devicePixelRatio,
   });
   await chrome.tabs.create({ url: chrome.runtime.getURL(`/editor.html?id=${id}`) });
+}
+
+/** Enables/disables recording overlays on every open http(s) tab. */
+async function setRecordingOverlays(enabled: boolean, options?: OverlayOptions): Promise<void> {
+  await chrome.storage.session.set({ recordingOverlay: { enabled, options } });
+  const tabs = await chrome.tabs.query({ url: ['http://*/*', 'https://*/*'] });
+  await Promise.allSettled(
+    tabs.map(async (tab) => {
+      if (!tab.id) return;
+      await ensureContentScript(tab.id);
+      await sendToTab(tab.id, { type: 'recording:overlay', enabled, options });
+    }),
+  );
 }
 
 function sleep(ms: number): Promise<void> {

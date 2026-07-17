@@ -16,10 +16,17 @@ export interface PageInfo {
   devicePixelRatio: number;
 }
 
+export interface OverlayOptions {
+  ripples: boolean;
+  keystrokes: boolean;
+  timestamp: boolean;
+}
+
 /** popup/editor/recorder → background */
 export type BackgroundMessage =
   | { type: 'capture'; mode: CaptureMode }
-  | { type: 'recording:overlay'; tabId: number; enabled: boolean };
+  | { type: 'recording:setOverlays'; enabled: boolean; options?: OverlayOptions }
+  | { type: 'recording:queryOverlay' };
 
 /** background → content script */
 export type ContentMessage =
@@ -29,7 +36,7 @@ export type ContentMessage =
   | { type: 'page:prepare' }
   | { type: 'page:restore' }
   | { type: 'context:collect' }
-  | { type: 'recording:overlay'; enabled: boolean };
+  | { type: 'recording:overlay'; enabled: boolean; options?: OverlayOptions };
 
 export interface PageContext {
   clickPath: ClickPathEntry[];

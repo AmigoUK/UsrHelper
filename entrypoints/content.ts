@@ -1,4 +1,5 @@
-import type { ContentMessage, PageContext, PageInfo, RegionRect } from '@/lib/messages';
+import type { ContentMessage, OverlayOptions, PageContext, PageInfo, RegionRect } from '@/lib/messages';
+import { startRecordingOverlay, stopRecordingOverlay } from '@/lib/recordingOverlay';
 import type { ClickPathEntry, ConsoleErrorEntry } from '@/lib/types';
 
 const CLICK_BUFFER_SIZE = 10;
@@ -90,13 +91,30 @@ export default defineContentScript({
           break;
         }
         case 'recording:overlay': {
-          // Implemented with the recording feature.
+          if (message.enabled) {
+            startRecordingOverlay(
+              message.options ?? { ripples: true, keystrokes: true, timestamp: true },
+            );
+          } else {
+            stopRecordingOverlay();
+          }
           sendResponse({ ok: true });
           break;
         }
       }
       return false;
     });
+
+    // A tab opened or reloaded mid-recording asks the background whether
+    // overlays should be active.
+    void chrome.runtime
+      .sendMessage({ type: 'recording:queryOverlay' })
+      .then((state: { enabled: boolean; options?: OverlayOptions } | undefined) => {
+        if (state?.enabled) {
+          startRecordingOverlay(state.options ?? { ripples: true, keystrokes: true, timestamp: true });
+        }
+      })
+      .catch(() => {});
   },
 });
 
