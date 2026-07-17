@@ -123,14 +123,13 @@ async function captureFullPage(tabId: number, windowId: number): Promise<Blob> {
     for (let i = 0; i < plan.length; i++) {
       const segment = plan[i];
       await sendToTab(tabId, { type: 'page:scrollTo', y: segment.scrollY });
-      if (i === 0 && plan.length > 1) {
-        // Hide sticky/fixed elements after the first (top) segment so they
-        // appear once instead of repeating on every stitched slice.
-        await sendToTab(tabId, { type: 'page:prepare' });
-        await sendToTab(tabId, { type: 'page:scrollTo', y: segment.scrollY });
-      }
       await sleep(i === 0 ? SCROLL_SETTLE_MS : Math.max(SCROLL_SETTLE_MS, CAPTURE_INTERVAL_MS));
       const bitmap = await createImageBitmap(await captureVisible(windowId));
+      if (i === 0 && plan.length > 1) {
+        // The top segment keeps sticky/fixed elements; hide them for the
+        // remaining segments so they appear once instead of on every slice.
+        await sendToTab(tabId, { type: 'page:prepare' });
+      }
       const usedCss = segment.height;
       const srcY = bitmap.height - Math.round(usedCss * dpr);
       ctx.drawImage(

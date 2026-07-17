@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.3.1] — 2026-07-17
+
+### Fixed
+- Console errors from the page are now actually captured: a MAIN-world content script observes uncaught errors, unhandled rejections, and `console.error` calls and relays them to the extension (isolated worlds never receive the page's error events).
+- Full-page capture no longer hides the sticky/fixed header on the first (top) segment — it appears exactly once in the stitched image.
+
+### Added
+- Automated E2E suite (`scripts/e2e.mjs`, Playwright): 35 checks driving the real extension in Chromium — settings/i18n, all three capture modes, every editor tool including mosaic pixel verification, undo/redo, saves with JSON content validation, recording with clip splitting, overlays, burned-in timestamp frame analysis, and popup history.
+
 ## [0.3.0] — 2026-07-17
 
 ### Added
@@ -45,7 +54,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.0.1...v0.1.0

@@ -35,16 +35,16 @@ export default defineContentScript({
       true,
     );
 
-    // --- Console error capture --------------------------------------------
+    // --- Console error capture ---------------------------------------------
+    // Errors are observed by the MAIN-world script (errors.content.ts) and
+    // relayed here — isolated worlds never see the page's uncaught errors.
     const pushError = (message: string, source?: string) => {
       consoleErrors.push({ message: message.slice(0, 500), source, at: new Date().toISOString() });
       if (consoleErrors.length > CONSOLE_BUFFER_SIZE) consoleErrors.shift();
     };
-    window.addEventListener('error', (e) => {
-      pushError(e.message, e.filename ? `${e.filename}:${e.lineno}` : undefined);
-    });
-    window.addEventListener('unhandledrejection', (e) => {
-      pushError(`Unhandled rejection: ${String(e.reason)}`);
+    window.addEventListener('usrhelper:consoleerror', (e) => {
+      const detail = (e as CustomEvent<{ message?: string; source?: string }>).detail;
+      if (detail?.message) pushError(detail.message, detail.source);
     });
 
     // --- Message handlers ---------------------------------------------------
