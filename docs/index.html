@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UsrHelper — User Guide / Instrukcja</title>
+<style>
+  :root { --accent: #2563eb; --text: #1e293b; --muted: #64748b; --border: #e2e8f0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.65 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text); background: #f8fafc; }
+  .topbar { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 16px; z-index: 10; }
+  .topbar strong { font-size: 17px; }
+  .lang-toggle { margin-left: auto; display: flex; gap: 6px; }
+  .lang-toggle button { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 6px 14px; font-size: 14px; cursor: pointer; }
+  .lang-toggle button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 20px 60px; }
+  article { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 28px 36px; }
+  h1 { font-size: 26px; margin-top: 0; }
+  h2 { font-size: 20px; margin-top: 36px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  img { max-width: 100%; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.07); margin: 8px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: #f8fafc; }
+  code { background: #f1f5f9; border-radius: 4px; padding: 1px 6px; font-size: 14px; }
+  blockquote { border-left: 4px solid var(--accent); margin: 12px 0; padding: 4px 16px; color: var(--muted); background: #f8fafc; }
+  a { color: var(--accent); }
+  .hidden { display: none; }
+  @media print {
+    .topbar { display: none; }
+    body { background: #fff; }
+    article { border: 0; padding: 0; }
+    img { box-shadow: none; }
+    h2 { break-before: page; }
+    h2:first-of-type { break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <strong>UsrHelper</strong>
+  <span style="color: var(--muted); font-size: 14px;">User Guide / Instrukcja użytkownika</span>
+  <div class="lang-toggle">
+    <button id="btn-en" onclick="setLang('en')">English</button>
+    <button id="btn-pl" onclick="setLang('pl')">Polski</button>
+  </div>
+</div>
+<main>
+  <article id="lang-en"><h1>UsrHelper — User Guide</h1>
+<blockquote>
+<p>Extension version: 0.4.1+ · <a href="USER_GUIDE.pl.md">Wersja polska</a></p>
+</blockquote>
+<p><strong>UsrHelper</strong> is a Chrome extension that makes reporting issues during software deployments effortless. Take an annotated screenshot or record a screencast with voice narration — the finished report is saved on your disk and handed to email in one click. Everything stays on your machine; the extension sends no data to any server.</p>
+<hr>
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-installation">Installation</a></li>
+<li><a href="#2-first-time-setup">First-time setup</a></li>
+<li><a href="#3-screenshots">Screenshots</a></li>
+<li><a href="#4-annotation-editor">Annotation editor</a></li>
+<li><a href="#5-recording-screencasts">Recording screencasts</a></li>
+<li><a href="#6-history-and-project-profiles">History and project profiles</a></li>
+<li><a href="#7-what-a-report-contains">What a report contains</a></li>
+<li><a href="#8-troubleshooting-faq">Troubleshooting (FAQ)</a></li>
+</ol>
+<hr>
+<h2>1. Installation</h2>
+<ol>
+<li>Download the latest <code>usrhelper-X.Y.Z-chrome.zip</code> from <a href="https://github.com/AmigoUK/UsrHelper/releases/latest">GitHub Releases</a>.</li>
+<li>Unpack the archive into a permanent folder (e.g. <code>C:\UsrHelper</code> or <code>~/UsrHelper</code>). <strong>The folder must stay on disk</strong> — Chrome loads the extension from there.</li>
+<li>Open <code>chrome://extensions</code> and enable <strong>Developer mode</strong> (toggle in the top-right corner).</li>
+<li>Click <strong>Load unpacked</strong> and select the unpacked folder (the one containing <code>manifest.json</code>).</li>
+<li>Pin the <strong>U</strong> icon to the toolbar: puzzle-piece icon → pin next to &quot;UsrHelper&quot;.</li>
+</ol>
+<p><img src="manual/images/install-extensions-page.png" alt="chrome://extensions page with the extension loaded"></p>
+<p><strong>Updating:</strong> download the new zip, replace the folder contents, and click ⟳ (Reload) next to the extension on <code>chrome://extensions</code>.</p>
+<h2>2. First-time setup</h2>
+<p>Open the settings: click the <strong>U</strong> icon → <strong>⚙ Settings</strong> (or <code>chrome://extensions</code> → UsrHelper → Details → Extension options).</p>
+<p><img src="manual/images/settings.png" alt="Settings page"></p>
+<p>Configure top to bottom:</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What to enter</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Language</strong></td>
+<td>English (default) or Polski.</td>
+</tr>
+<tr>
+<td><strong>Reporter details</strong></td>
+<td>Customer no., company, first and last name, AnyDesk number — included in every report and email so the developer knows who is reporting and how to connect.</td>
+</tr>
+<tr>
+<td><strong>Project profiles</strong></td>
+<td>Recipient addresses (<strong>Email to</strong>) and carbon copy (<strong>CC</strong>), comma-separated; email subject prefix (e.g. <code>[Project X]</code>); the <strong>subfolder in Downloads</strong> where files land; an optional description template; and recording limits (clip length / maximum total).</td>
+</tr>
+<tr>
+<td><strong>Toggles</strong></td>
+<td>Click/keystroke visualization on recordings, timestamp overlay, camera bubble, click-path tracking, console error capture.</td>
+</tr>
+</tbody></table>
+<p>Every change saves automatically (green &quot;Settings saved&quot; toast).</p>
+<h2>3. Screenshots</h2>
+<p>Click the <strong>U</strong> icon in the toolbar:</p>
+<p><img src="manual/images/popup.png" alt="Extension popup"></p>
+<p>Three capture modes are available:</p>
+<ul>
+<li><strong>📷 Capture visible area</strong> — instant capture of what you see in the window.</li>
+<li><strong>📜 Capture full page</strong> — the extension scrolls the page top to bottom and stitches one tall image (sticky headers appear only once).</li>
+<li><strong>✂ Capture selected region</strong> — the cursor becomes a crosshair; drag a rectangle over the page. <code>Esc</code> cancels.</li>
+</ul>
+<p>Each capture opens the <strong>annotation editor</strong> in a new tab.</p>
+<blockquote>
+<p>Note: browser-internal pages (<code>chrome://…</code>, Chrome Web Store) cannot be captured — the buttons will be greyed out there.</p>
+</blockquote>
+<h2>4. Annotation editor</h2>
+<p><img src="manual/images/editor.png" alt="Annotation editor with sample markup"></p>
+<p>Tools (right-hand panel):</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Select</strong></td>
+<td>Click an annotation to select; drag to move; <code>Delete</code> removes it.</td>
+</tr>
+<tr>
+<td><strong>Marker</strong></td>
+<td>Freehand drawing.</td>
+</tr>
+<tr>
+<td><strong>Rectangle / Ellipse</strong></td>
+<td>Frame the relevant element.</td>
+</tr>
+<tr>
+<td><strong>Arrow</strong></td>
+<td>Point at the problem.</td>
+</tr>
+<tr>
+<td><strong>Text</strong></td>
+<td>Click on the image, type, confirm with <code>Enter</code> (<code>Esc</code> cancels).</td>
+</tr>
+<tr>
+<td><strong>Step marker</strong></td>
+<td>Each click drops a numbered circle (1, 2, 3…) — perfect for step-by-step instructions.</td>
+</tr>
+<tr>
+<td><strong>Anonymize (mosaic)</strong></td>
+<td>Paint over sensitive data (names, amounts, tokens) — the area is <strong>irreversibly</strong> turned into a pixel mosaic in the saved file.</td>
+</tr>
+<tr>
+<td><strong>Crop</strong></td>
+<td>Drag a rectangle and click &quot;Apply crop&quot;.</td>
+</tr>
+</tbody></table>
+<p>Plus: <strong>color</strong> and <strong>size</strong> pickers, full <strong>Undo / Redo</strong> (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>), and the <strong>&quot;Add click path&quot;</strong> button — it stamps orange numbered markers where you clicked on the page before capturing.</p>
+<p>Describe the issue in the <strong>Description</strong> field, then:</p>
+<ul>
+<li><strong>💾 Save</strong> — a PNG plus a <code>.json</code> metadata file land in <code>Downloads/&lt;subfolder&gt;/</code> with a timestamp in the name (e.g. <code>UsrHelper_2026-07-17_14-32-05.png</code>);</li>
+<li><strong>✉ Save + Email</strong> — additionally opens a new message in your mail client with recipients, subject, and description pre-filled. <strong>You attach the file manually</strong> — the extension shows the exact path of the saved file.</li>
+</ul>
+<p><img src="manual/images/editor-saved.png" alt="Save confirmation with the attach reminder"></p>
+<h2>5. Recording screencasts</h2>
+<p>Click <strong>🎥 Record screencast</strong> in the popup. The recording panel opens:</p>
+<p><img src="manual/images/recorder-setup.png" alt="Panel before recording — mic level meter and camera bubble toggle"></p>
+<ol>
+<li><strong>Check the microphone</strong> — the green bar moves when you speak. No movement = no audio on the recording.</li>
+<li>Optionally enable the <strong>camera bubble</strong> (your face in a circle, Loom-style).</li>
+<li>Click <strong>Start recording</strong> and pick what to share in Chrome&#39;s dialog: <strong>tab / window / entire screen</strong>.</li>
+<li>After the <strong>3-2-1</strong> countdown the recording starts — switch freely between tabs and applications.</li>
+</ol>
+<p><img src="manual/images/recorder-recording.png" alt="Panel while recording — elapsed timer and clip number"></p>
+<p>While recording, pages show: <strong>yellow ripples</strong> on clicks (blue for right-click), <strong>key captions</strong> (e.g. <code>Ctrl + S</code> — plain typing is never shown, for privacy), and a <strong>clock</strong> in the corner:</p>
+<p><img src="manual/images/recording-overlay.png" alt="A page during recording — click ripple and key caption"></p>
+<p><strong>Pause / Resume</strong> stops the clock and the recording. <strong>⏹ Stop &amp; save</strong> ends the session. The recording splits automatically into <strong>standalone clips</strong> (default: 5 minutes each, 30-minute total cap — configurable per profile). Each clip is a separate <code>.webm</code> file (<code>…_part-01.webm</code>, <code>…_part-02.webm</code>).</p>
+<p><img src="manual/images/recorder-done.png" alt="Panel after recording — clip list and description"></p>
+<p>After stopping, add a description and click <strong>💾 Save</strong> (writes the <code>.json</code> metadata) or <strong>✉ Save + Email</strong>.</p>
+<h2>6. History and project profiles</h2>
+<p>The popup lists your <strong>recent reports</strong> with thumbnails:</p>
+<ul>
+<li><strong>Show file</strong> — opens the file manager with the file selected;</li>
+<li><strong>Email again</strong> — opens a new email message with the report details.</li>
+</ul>
+<p>If you have several <strong>project profiles</strong> (different recipients, folders, limits), switch them in the popup with a single dropdown — all subsequent reports use the active profile.</p>
+<h2>7. What a report contains</h2>
+<p>Every report is a set of files in <code>Downloads/&lt;subfolder&gt;/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>UsrHelper_&lt;date&gt;_&lt;time&gt;.png</code></td>
+<td>The annotated screenshot with a timestamp in the corner.</td>
+</tr>
+<tr>
+<td><code>UsrHelper_&lt;date&gt;_&lt;time&gt;_part-NN.webm</code></td>
+<td>Recording clips (with the burned-in clock and camera bubble).</td>
+</tr>
+<tr>
+<td><code>UsrHelper_&lt;date&gt;_&lt;time&gt;.json</code></td>
+<td>Description, reporter details, exact time, page URL and title, environment (browser, OS, resolution), recent JavaScript console errors, click path, file list.</td>
+</tr>
+</tbody></table>
+<p>The timestamp lives in three places: the file name, visibly on the image/recording, and in the <code>.json</code> — easy to correlate with server logs.</p>
+<h2>8. Troubleshooting (FAQ)</h2>
+<p><strong>The capture buttons are greyed out.</strong> You are on a browser-internal page (<code>chrome://…</code>) or the Chrome Web Store — these cannot be captured. Switch to a regular page.</p>
+<p><strong>The recording has no audio.</strong> Chrome blocked the microphone for the extension. Click the lock/permissions icon in the recorder tab&#39;s address bar and allow the microphone, or check your system microphone. The panel warns before starting when no mic is available.</p>
+<p><strong>The recording stopped by itself.</strong> You hit the maximum length (default 30 min). All clips up to that point are saved. Change the limit in the profile settings.</p>
+<p><strong>Where are my files?</strong> In <code>Downloads/&lt;subfolder&gt;/</code> (set the subfolder in the profile; default <code>UsrHelper</code>). Fastest route: popup → <strong>Show file</strong>.</p>
+<p><strong>The email opens without the attachment.</strong> That is a <code>mailto:</code> limitation — no mail client lets an extension attach files automatically. The extension shows the exact path; drag the file into the message.</p>
+<p><strong>Is the mosaic really safe?</strong> Yes. The mosaic is baked into the PNG&#39;s pixel data at save time — the original pixels cannot be recovered from the exported file.</p>
+<hr>
+<p><em>UsrHelper · <a href="https://github.com/AmigoUK/UsrHelper">github.com/AmigoUK/UsrHelper</a> · Project &amp; Development: Tomasz &#39;Amigo&#39; Lewandowski · <a href="mailto:dev@attv.uk">dev@attv.uk</a> · <a href="https://www.attv.uk">www.attv.uk</a></em></p>
+</article>
+  <article id="lang-pl" class="hidden"><h1>UsrHelper — Instrukcja użytkownika</h1>
+<blockquote>
+<p>Wersja wtyczki: 0.4.1+ · <a href="USER_GUIDE.en.md">English version</a></p>
+</blockquote>
+<p><strong>UsrHelper</strong> to wtyczka do przeglądarki Chrome, która ułatwia zgłaszanie uwag podczas wdrożeń oprogramowania. Robisz zrzut ekranu z adnotacjami albo nagrywasz screencast z komentarzem głosowym, a gotowy raport zapisuje się na Twoim dysku i jednym kliknięciem trafia do emaila. Wszystko zostaje na Twoim komputerze — wtyczka nie wysyła danych na żaden serwer.</p>
+<hr>
+<h2>Spis treści</h2>
+<ol>
+<li><a href="#1-instalacja">Instalacja</a></li>
+<li><a href="#2-pierwsza-konfiguracja">Pierwsza konfiguracja</a></li>
+<li><a href="#3-zrzuty-ekranu">Zrzuty ekranu</a></li>
+<li><a href="#4-edytor-adnotacji">Edytor adnotacji</a></li>
+<li><a href="#5-nagrywanie-screencast%C3%B3w">Nagrywanie screencastów</a></li>
+<li><a href="#6-historia-i-profile-projekt%C3%B3w">Historia i profile projektów</a></li>
+<li><a href="#7-co-zawiera-raport">Co zawiera raport</a></li>
+<li><a href="#8-rozwi%C4%85zywanie-problem%C3%B3w-faq">Rozwiązywanie problemów (FAQ)</a></li>
+</ol>
+<hr>
+<h2>1. Instalacja</h2>
+<ol>
+<li>Pobierz najnowszy plik <code>usrhelper-X.Y.Z-chrome.zip</code> z <a href="https://github.com/AmigoUK/UsrHelper/releases/latest">GitHub Releases</a>.</li>
+<li>Rozpakuj archiwum do stałego folderu (np. <code>C:\UsrHelper</code> albo <code>~/UsrHelper</code>). <strong>Folder musi pozostać na dysku</strong> — Chrome ładuje wtyczkę z tego miejsca.</li>
+<li>Otwórz <code>chrome://extensions</code> i włącz <strong>Tryb dewelopera</strong> (przełącznik w prawym górnym rogu).</li>
+<li>Kliknij <strong>Załaduj rozpakowane</strong> (Load unpacked) i wskaż rozpakowany folder (ten z plikiem <code>manifest.json</code>).</li>
+<li>Przypnij ikonę <strong>U</strong> do paska: kliknij ikonę puzzla → pinezka obok „UsrHelper&quot;.</li>
+</ol>
+<p><img src="manual/images/install-extensions-page.png" alt="Strona chrome://extensions z załadowaną wtyczką"></p>
+<p><strong>Aktualizacja:</strong> pobierz nowy zip, podmień zawartość folderu i kliknij ⟳ (Odśwież) przy wtyczce na <code>chrome://extensions</code>.</p>
+<h2>2. Pierwsza konfiguracja</h2>
+<p>Otwórz ustawienia: kliknij ikonę <strong>U</strong> → <strong>⚙ Settings</strong> (albo <code>chrome://extensions</code> → UsrHelper → Szczegóły → Opcje rozszerzenia).</p>
+<p><img src="manual/images/settings.png" alt="Strona ustawień"></p>
+<p>Ustaw kolejno:</p>
+<table>
+<thead>
+<tr>
+<th>Sekcja</th>
+<th>Co wpisać</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Language</strong></td>
+<td><code>Polski</code> — cały interfejs przełączy się na polski (domyślnie English).</td>
+</tr>
+<tr>
+<td><strong>Dane zgłaszającego</strong></td>
+<td>Nr klienta, firma, imię, nazwisko i numer AnyDesk — trafiają do każdego raportu i emaila, żeby developer wiedział, kto zgłasza i jak się połączyć.</td>
+</tr>
+<tr>
+<td><strong>Profile projektów</strong></td>
+<td>Adresy email odbiorców (<strong>Email to</strong>) i kopii (<strong>CC</strong>) rozdzielone przecinkami, prefiks tematu (np. <code>[Projekt X]</code>), <strong>podfolder w Pobranych</strong> gdzie lądują pliki, opcjonalny szablon opisu oraz limity nagrania (długość klipu / maksymalny czas).</td>
+</tr>
+<tr>
+<td><strong>Przełączniki</strong></td>
+<td>Wizualizacja kliknięć i klawiszy na nagraniu, znacznik czasu, dymek z kamerką, śledzenie ścieżki kliknięć, przechwytywanie błędów konsoli.</td>
+</tr>
+</tbody></table>
+<p>Każda zmiana zapisuje się automatycznie (zielony komunikat „Zapisano ustawienia&quot;).</p>
+<h2>3. Zrzuty ekranu</h2>
+<p>Kliknij ikonę <strong>U</strong> na pasku:</p>
+<p><img src="manual/images/popup.png" alt="Popup wtyczki"></p>
+<p>Do wyboru są trzy tryby:</p>
+<ul>
+<li><strong>📷 Zrzut widocznego obszaru</strong> — natychmiastowy zrzut tego, co widać w oknie.</li>
+<li><strong>📜 Zrzut całej strony</strong> — wtyczka sama przewija stronę od góry do dołu i skleja jeden wysoki obraz (przyklejone nagłówki pojawiają się tylko raz).</li>
+<li><strong>✂ Zrzut zaznaczonego fragmentu</strong> — kursor zmienia się w celownik; przeciągnij prostokąt po stronie. Klawisz <code>Esc</code> anuluje.</li>
+</ul>
+<p>Po każdym zrzucie otwiera się <strong>edytor adnotacji</strong> w nowej karcie.</p>
+<blockquote>
+<p>Uwaga: stron wewnętrznych przeglądarki (<code>chrome://…</code>, Chrome Web Store) nie da się przechwycić — przyciski będą wyszarzone.</p>
+</blockquote>
+<h2>4. Edytor adnotacji</h2>
+<p><img src="manual/images/editor.png" alt="Edytor adnotacji z przykładowymi oznaczeniami"></p>
+<p>Narzędzia (pasek po prawej):</p>
+<table>
+<thead>
+<tr>
+<th>Narzędzie</th>
+<th>Działanie</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Zaznacz</strong></td>
+<td>Kliknij adnotację, aby ją zaznaczyć; przeciągnij, aby przesunąć; <code>Delete</code> usuwa.</td>
+</tr>
+<tr>
+<td><strong>Marker</strong></td>
+<td>Odręczne rysowanie.</td>
+</tr>
+<tr>
+<td><strong>Prostokąt / Elipsa</strong></td>
+<td>Ramka wokół istotnego elementu.</td>
+</tr>
+<tr>
+<td><strong>Strzałka</strong></td>
+<td>Wskazanie miejsca problemu.</td>
+</tr>
+<tr>
+<td><strong>Tekst</strong></td>
+<td>Kliknij na obrazie, wpisz treść, zatwierdź <code>Enter</code> (<code>Esc</code> anuluje).</td>
+</tr>
+<tr>
+<td><strong>Znacznik kroku</strong></td>
+<td>Każde kliknięcie stawia kółko z kolejnym numerem (1, 2, 3…) — idealne do instrukcji „krok po kroku&quot;.</td>
+</tr>
+<tr>
+<td><strong>Anonimizuj (mozaika)</strong></td>
+<td>Zamaluj dane wrażliwe (nazwiska, kwoty, tokeny) — obszar zostaje <strong>nieodwracalnie</strong> zamieniony w mozaikę pikselową w zapisanym pliku.</td>
+</tr>
+<tr>
+<td><strong>Kadruj</strong></td>
+<td>Przeciągnij prostokąt i kliknij „Zastosuj kadr&quot;.</td>
+</tr>
+</tbody></table>
+<p>Dodatkowo: wybór <strong>koloru</strong> i <strong>grubości</strong>, pełne <strong>Cofnij / Ponów</strong> (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>) oraz przycisk <strong>„Nanieś ścieżkę kliknięć&quot;</strong> — stawia pomarańczowe numerowane znaczniki w miejscach, które klikałeś na stronie przed zrobieniem zrzutu.</p>
+<p>W polu <strong>Opis</strong> opisz problem lub instrukcję, następnie:</p>
+<ul>
+<li><strong>💾 Zapisz</strong> — plik PNG + plik <code>.json</code> z metadanymi lądują w <code>Pobrane/&lt;podfolder&gt;/</code> z timestampem w nazwie (np. <code>UsrHelper_2026-07-17_14-32-05.png</code>);</li>
+<li><strong>✉ Zapisz + Email</strong> — dodatkowo otwiera się nowa wiadomość w Twoim programie pocztowym z adresatami, tematem i opisem. <strong>Załącznik musisz dodać ręcznie</strong> — wtyczka pokazuje dokładną ścieżkę zapisanego pliku.</li>
+</ul>
+<p><img src="manual/images/editor-saved.png" alt="Potwierdzenie zapisu z podpowiedzią o załączniku"></p>
+<h2>5. Nagrywanie screencastów</h2>
+<p>Kliknij <strong>🎥 Nagraj screencast</strong> w popupie. Otworzy się panel nagrywania:</p>
+<p><img src="manual/images/recorder-setup.png" alt="Panel przed nagraniem — wskaźnik mikrofonu i dymek kamerki"></p>
+<ol>
+<li><strong>Sprawdź mikrofon</strong> — zielony pasek porusza się, gdy mówisz. Brak paska = brak dźwięku na nagraniu.</li>
+<li>Opcjonalnie włącz <strong>dymek z kamerką</strong> (Twój obraz w kółku, styl Loom).</li>
+<li>Kliknij <strong>Rozpocznij nagrywanie</strong> i w oknie Chrome wybierz, co udostępniasz: <strong>karta / okno / cały ekran</strong>.</li>
+<li>Po odliczaniu <strong>3-2-1</strong> nagranie startuje — możesz swobodnie przełączać się na inne karty i aplikacje.</li>
+</ol>
+<p><img src="manual/images/recorder-recording.png" alt="Panel podczas nagrywania — licznik czasu i numer klipu"></p>
+<p>Podczas nagrania na stronach widoczne są: <strong>żółte kręgi</strong> przy kliknięciach (niebieskie dla prawego przycisku), <strong>podpisy klawiszy</strong> (np. <code>Ctrl + S</code> — zwykłe pisanie nie jest pokazywane, prywatność!) oraz <strong>zegar</strong> w rogu:</p>
+<p><img src="manual/images/recording-overlay.png" alt="Strona podczas nagrywania — ripple kliknięcia i podpis klawisza"></p>
+<p><strong>Pauza / Wznów</strong> zatrzymuje zegar i nagranie. <strong>⏹ Zatrzymaj i zapisz</strong> kończy sesję. Nagranie dzieli się automatycznie na <strong>samodzielne klipy</strong> (domyślnie po 5 minut, limit całości 30 minut — konfigurowalne w profilu). Każdy klip to osobny plik <code>.webm</code> (<code>…_part-01.webm</code>, <code>…_part-02.webm</code>).</p>
+<p><img src="manual/images/recorder-done.png" alt="Panel po nagraniu — lista klipów i opis"></p>
+<p>Po zatrzymaniu dopisz opis i kliknij <strong>💾 Zapisz</strong> (metadane <code>.json</code>) lub <strong>✉ Zapisz + Email</strong>.</p>
+<h2>6. Historia i profile projektów</h2>
+<p>Popup pokazuje <strong>ostatnie zgłoszenia</strong> z miniaturami:</p>
+<ul>
+<li><strong>Pokaż plik</strong> — otwiera menedżer plików z zaznaczonym plikiem;</li>
+<li><strong>Wyślij ponownie</strong> — otwiera nową wiadomość email z danymi zgłoszenia.</li>
+</ul>
+<p>Jeśli masz kilka <strong>profili projektów</strong> (różni odbiorcy, foldery, limity), przełączasz je w popupie jedną listą rozwijaną — wszystkie kolejne zgłoszenia używają aktywnego profilu.</p>
+<h2>7. Co zawiera raport</h2>
+<p>Każde zgłoszenie to komplet plików w <code>Pobrane/&lt;podfolder&gt;/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Plik</th>
+<th>Zawartość</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>UsrHelper_&lt;data&gt;_&lt;czas&gt;.png</code></td>
+<td>Zrzut z adnotacjami i timestampem w rogu.</td>
+</tr>
+<tr>
+<td><code>UsrHelper_&lt;data&gt;_&lt;czas&gt;_part-NN.webm</code></td>
+<td>Klipy nagrania (z wypalonym zegarem i dymkiem kamerki).</td>
+</tr>
+<tr>
+<td><code>UsrHelper_&lt;data&gt;_&lt;czas&gt;.json</code></td>
+<td>Opis, dane zgłaszającego, dokładny czas, adres i tytuł strony, środowisko (przeglądarka, system, rozdzielczość), ostatnie błędy konsoli JavaScript, ścieżka kliknięć, lista plików.</td>
+</tr>
+</tbody></table>
+<p>Timestamp jest w trzech miejscach: w nazwie pliku, widoczny na obrazie/nagraniu i w pliku <code>.json</code> — łatwo powiązać zgłoszenie z logami serwera.</p>
+<h2>8. Rozwiązywanie problemów (FAQ)</h2>
+<p><strong>Przyciski zrzutów są wyszarzone.</strong> Jesteś na stronie wewnętrznej przeglądarki (<code>chrome://…</code>) lub w Chrome Web Store — tych stron nie można przechwytywać. Przejdź na zwykłą stronę.</p>
+<p><strong>Nagranie nie ma dźwięku.</strong> Chrome zablokował mikrofon dla wtyczki. Kliknij ikonę kłódki/suwaków przy pasku adresu panelu nagrywania i zezwól na mikrofon, albo sprawdź mikrofon systemowy. Panel ostrzega przed startem, gdy mikrofonu brak.</p>
+<p><strong>Nagranie zatrzymało się samo.</strong> Osiągnąłeś maksymalny czas (domyślnie 30 min). Wszystkie klipy do tego momentu są zapisane. Limit zmienisz w ustawieniach profilu.</p>
+<p><strong>Gdzie są moje pliki?</strong> W folderze <code>Pobrane/&lt;podfolder&gt;/</code> (podfolder ustawiasz w profilu; domyślnie <code>UsrHelper</code>). Najszybciej: popup → <strong>Pokaż plik</strong>.</p>
+<p><strong>Email otwiera się bez załącznika.</strong> To ograniczenie mechanizmu <code>mailto:</code> — żaden program nie pozwala wtyczce samodzielnie dołączyć pliku. Wtyczka pokazuje dokładną ścieżkę; przeciągnij plik do wiadomości.</p>
+<p><strong>Zamazane dane — czy na pewno bezpieczne?</strong> Tak. Mozaika jest wtapiana w pikselową zawartość pliku PNG przy zapisie — oryginalnych pikseli nie da się odzyskać z pliku wynikowego.</p>
+<hr>
+<p><em>UsrHelper · <a href="https://github.com/AmigoUK/UsrHelper">github.com/AmigoUK/UsrHelper</a> · Project &amp; Development: Tomasz &#39;Amigo&#39; Lewandowski · <a href="mailto:dev@attv.uk">dev@attv.uk</a> · <a href="https://www.attv.uk">www.attv.uk</a></em></p>
+</article>
+</main>
+<script>
+  function setLang(lang) {
+    document.getElementById('lang-en').classList.toggle('hidden', lang !== 'en');
+    document.getElementById('lang-pl').classList.toggle('hidden', lang !== 'pl');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-pl').classList.toggle('active', lang === 'pl');
+    document.documentElement.lang = lang;
+    try { localStorage.setItem('usrhelper-docs-lang', lang); } catch (e) {}
+  }
+  const param = new URLSearchParams(location.search).get('lang');
+  let stored = null;
+  try { stored = localStorage.getItem('usrhelper-docs-lang'); } catch (e) {}
+  setLang(param === 'pl' || param === 'en' ? param : stored === 'pl' ? 'pl' : 'en');
+</script>
+</body>
+</html>

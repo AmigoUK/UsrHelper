@@ -26,6 +26,14 @@ A Chrome extension that makes software-deployment feedback effortless. Testers a
 - **Project profiles:** switchable sets of recipients, folder, description template, and limits.
 - UI in **English** (default) and **Polish**.
 
+## Documentation
+
+- 📖 **[User Guide (English)](docs/manual/USER_GUIDE.en.md)** · **[Instrukcja użytkownika (polski)](docs/manual/USER_GUIDE.pl.md)** — with screenshots
+- 🌐 Online version with a language toggle: **[amigouk.github.io/UsrHelper](https://amigouk.github.io/UsrHelper/)**
+- 📄 Printable PDFs: [EN](docs/manual/pdf/UsrHelper_User_Guide_EN.pdf) · [PL](docs/manual/pdf/UsrHelper_Instrukcja_PL.pdf) (also attached to each release)
+
+Screenshots are generated from the real extension (`scripts/make-docs-shots.mjs`); the HTML page is built from the Markdown guides (`scripts/make-docs-html.mjs`).
+
 ## Installation (development)
 
 ```bash

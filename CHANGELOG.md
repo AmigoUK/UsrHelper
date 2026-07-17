@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.4.2] — 2026-07-17
+
+### Added
+- Complete user guide in English and Polish with screenshots generated from the real extension: Markdown (`docs/manual/`), an online version with a language toggle (GitHub Pages, `docs/index.html`), and printable PDFs attached to releases.
+- Documentation tooling: `scripts/make-docs-shots.mjs` (Playwright screenshot generator) and `scripts/make-docs-html.mjs` (Markdown → HTML build).
+
 ## [0.4.1] — 2026-07-17
 
 ### Fixed
@@ -69,7 +75,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.0...v0.3.1
