@@ -8,7 +8,7 @@ export default defineConfig({
     name: 'UsrHelper',
     description:
       'Deployment feedback helper: annotated screenshots and voice screencasts, saved locally or shared via email.',
-    permissions: ['activeTab', 'tabs', 'downloads', 'storage', 'scripting', 'notifications'],
+    permissions: ['activeTab', 'tabs', 'downloads', 'storage', 'scripting'],
     host_permissions: ['<all_urls>'],
   },
 });

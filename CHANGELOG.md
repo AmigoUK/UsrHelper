@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.3.0] — 2026-07-17
+
+### Added
+- Screencast recorder: source picker (tab/window/screen), microphone narration with live level meter, 3-2-1 countdown, pause/resume, elapsed-time counter.
+- Automatic clip splitting: standalone `.webm` clips every N minutes (profile setting, default 5) with a total cap (default 30 min) and auto-stop notice.
+- Optional Loom-style camera bubble and burned-in timestamp via canvas compositing.
+- Recording overlays on pages: click ripples (left/right differentiated), pressed-key and click-type captions, live timestamp clock; enabled across tabs for the duration of the recording.
+- Report history actions in the popup: show saved file, re-open a pre-filled email.
+- Chrome Web Store compliance: PRIVACY.md, permission justifications and listing checklist (docs/STORE_LISTING.md), dropped unused `notifications` permission.
+
 ## [0.2.0] — 2026-07-17
 
 ### Added
@@ -35,7 +45,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/AmigoUK/UsrHelper/releases/tag/v0.0.1

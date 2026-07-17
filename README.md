@@ -50,6 +50,10 @@ npm run compile   # type check
 
 Manual E2E checklist: see [docs/TESTING.md](docs/TESTING.md).
 
+## Privacy
+
+Everything stays on your machine: captures are saved to your local Downloads folder, settings live in your Chrome profile, and there is no backend, tracking, or analytics. See [PRIVACY.md](PRIVACY.md). Chrome Web Store compliance notes live in [docs/STORE_LISTING.md](docs/STORE_LISTING.md).
+
 ## Tech stack
 
 TypeScript · [WXT](https://wxt.dev) (Manifest V3) · Preact · Vitest. The annotation editor is a hand-rolled `<canvas>` object layer — no heavy canvas libraries.

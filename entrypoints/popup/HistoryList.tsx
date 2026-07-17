@@ -1,8 +1,26 @@
 import { useEffect, useState } from 'preact/hooks';
 import { useT } from '@/lib/i18n';
-import { loadHistory } from '@/lib/storage';
+import { buildMailtoUrl } from '@/lib/mailto';
+import { loadHistory, getActiveProfile } from '@/lib/storage';
 import { showFile } from '@/lib/save';
 import type { HistoryEntry } from '@/lib/types';
+
+async function reEmail(entry: HistoryEntry): Promise<void> {
+  const profile = await getActiveProfile();
+  const lines = [entry.description, '', entry.pageUrl, '', `Attach: ${entry.files.join(', ')}`]
+    .filter((l, i) => l !== '' || i === 1 || i === 3)
+    .join('\n');
+  const subject = `${profile.subjectPrefix} ${entry.kind === 'screenshot' ? 'Screenshot' : 'Screencast'} — ${
+    entry.pageTitle || new Date(entry.createdAt).toLocaleString()
+  }`.trim();
+  const url = buildMailtoUrl({
+    to: profile.emailTo,
+    cc: profile.emailCc,
+    subject,
+    body: lines,
+  });
+  await chrome.tabs.create({ url });
+}
 
 export function HistoryList() {
   const { t } = useT();
@@ -35,6 +53,9 @@ export function HistoryList() {
           <div style="display: flex; gap: 6px; margin-top: 6px;">
             <button style="font-size: 11px; padding: 3px 8px;" onClick={() => showFile(entry.downloadIds[0])}>
               {t('popup.history.open')}
+            </button>
+            <button style="font-size: 11px; padding: 3px 8px;" onClick={() => void reEmail(entry)}>
+              {t('popup.history.mailto')}
             </button>
           </div>
         </div>
