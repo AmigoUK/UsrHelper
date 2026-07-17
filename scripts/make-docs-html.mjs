@@ -83,3 +83,32 @@ const page = `<!doctype html>
 
 writeFileSync('docs/index.html', page);
 console.log('docs/index.html written');
+
+// Privacy policy page — the Chrome Web Store requires a public HTTPS URL.
+const privacy = marked.parse(readFileSync('PRIVACY.md', 'utf8'));
+const privacyPage = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UsrHelper — Privacy Policy</title>
+<style>
+  body { margin: 0; font: 16px/1.65 system-ui, -apple-system, 'Segoe UI', sans-serif; color: #1e293b; background: #f8fafc; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 60px; }
+  article { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 28px 36px; }
+  h1 { font-size: 24px; margin-top: 0; }
+  h2 { font-size: 19px; margin-top: 30px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+  a { color: #2563eb; }
+  .back { display: inline-block; margin-bottom: 14px; color: #64748b; text-decoration: none; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="./">← UsrHelper User Guide</a>
+  <article>${privacy}</article>
+</main>
+</body>
+</html>
+`;
+writeFileSync('docs/privacy.html', privacyPage);
+console.log('docs/privacy.html written');

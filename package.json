@@ -1,6 +1,6 @@
 {
   "name": "usrhelper",
-  "description": "Chrome extension for deployment feedback: annotated screenshots and voice screencasts saved locally or shared via email",
+  "description": "Deployment feedback helper: annotated screenshots and voice screencasts, saved locally or shared via email.",
   "private": true,
   "version": "0.4.2",
   "type": "module",

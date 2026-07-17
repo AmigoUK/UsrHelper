@@ -22,6 +22,10 @@ UsrHelper is designed to keep every byte of your data on your machine.
 
 Uninstalling the extension removes all its stored settings and history. Files saved to your `Downloads/` folder remain yours to keep or delete.
 
+## Chrome Web Store compliance
+
+The use of information received from Google APIs adheres to the [Chrome Web Store User Data Policy](https://developer.chrome.com/docs/webstore/program-policies/user-data-faq), including the Limited Use requirements. UsrHelper collects website content (screenshots, page URL/title, recent console errors) solely to produce the report the user explicitly requests; this data is never sold, never transferred to third parties, and never used for any purpose unrelated to the extension's single purpose.
+
 ## Contact
 
 Questions: [dev@attv.uk](mailto:dev@attv.uk)
