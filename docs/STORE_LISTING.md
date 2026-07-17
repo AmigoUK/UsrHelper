@@ -35,7 +35,7 @@ UsrHelper has one purpose: **capturing deployment feedback** — annotated scree
 ## Dashboard submission checklist
 
 1. Developer account: one-time $5 fee, 2-Step Verification enabled, developer email monitored (mail from `chromewebstore-noreply@google.com`, check spam).
-2. **Trader / Non-Trader declaration** (EEA consumer law; applies regardless of UK residence): choose **Trader** if UsrHelper supports the professional activity of attv.uk (requires publicly shown name, address, email, phone + verification); choose **Non-Trader** if published privately/hobby, free of charge (EEA users see a consumer-rights notice instead). Legal call for Tomasz; does not affect ranking.
+2. **Trader / Non-Trader declaration** (EEA consumer law; applies regardless of UK residence). **Decision (2026-07-17): Non-Trader** — the extension is free, attv.uk generates no revenue, there is no registered business behind the distribution, and the purpose is a student portfolio / personal brand. Revisit and switch to Trader if UsrHelper ever promotes paid services, gains a paid tier, or a registered business (self-employed/Ltd) takes over distribution. Non-Trader means no public disclosure of personal contact details; EEA users see a consumer-rights notice; no effect on ranking or review.
 3. Package: `npm run zip` → upload `.output/usrhelper-X.Y.Z-chrome.zip` (manifest at zip root, no comments, no sources/`node_modules`).
 4. Store listing: title "UsrHelper" (≤75), summary ≤132 chars (no superlatives), detailed description from README features, category **Developer Tools**, language English.
 5. Privacy practices tab: single-purpose sentence, permission justifications (table above), data-usage boxes + certifications, privacy policy URL (above).
