@@ -61,6 +61,7 @@ const context = await chromium.launchPersistentContext(join(WORK, 'profile'), {
     '--use-fake-device-for-media-stream',
     '--autoplay-policy=no-user-gesture-required',
     '--no-sandbox',
+    '--disable-gpu',
   ],
 });
 const cdp = await context.browser()?.newBrowserCDPSession?.();

@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.4.3] — 2026-07-20
+
+### Fixed
+- Long annotation text no longer runs off the image in one endless line: text wraps to ~40% of the image width and the whole block is kept inside the image even when anchored at an edge (user report).
+- The text input box is now a fixed-width (320 px), wrapping field that always stays fully on screen, wherever you click.
+
+### Changed
+- The Select tool icon is now a classic mouse-pointer arrow (SVG) — users found the previous abstract glyph confusing (user report).
+
 ## [0.4.2] — 2026-07-17
 
 ### Added
@@ -75,7 +84,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.2...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.3...HEAD
+[0.4.3]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.3.1...v0.4.0

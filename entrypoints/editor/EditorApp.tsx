@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Annotation, Point, Tool } from '@/lib/annotations/model';
 import { nextStepNumber } from '@/lib/annotations/model';
 import { buildMosaic, renderScene, stampTimestamp } from '@/lib/annotations/render';
+import { wrapText } from '@/lib/annotations/wrapText';
 import type { CaptureRecord } from '@/lib/captureStore';
 import { deleteCapture, getCapture } from '@/lib/captureStore';
 import { buildBaseName, companionFilename, screenshotFilename } from '@/lib/filenames';
@@ -14,8 +15,22 @@ import type { ProjectProfile, ReportMetadata, Settings } from '@/lib/types';
 
 const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#2563eb', '#a855f7', '#0f172a', '#ffffff'];
 const TOOLS: Tool[] = ['select', 'pen', 'rect', 'ellipse', 'arrow', 'text', 'step', 'pixelate', 'crop'];
+
+/** Classic mouse-pointer arrow — clearer than an abstract glyph for "Select". */
+const CursorIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 16 16" style="vertical-align: -1px;" aria-hidden="true">
+    <path
+      d="M3 0.8 L3 14.2 L6.4 11.2 L8.4 15.8 L10.6 14.8 L8.6 10.3 L13.2 10.3 Z"
+      fill="currentColor"
+      stroke="currentColor"
+      stroke-width="0.5"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
 const TOOL_ICONS: Record<Tool, string> = {
-  select: '⬚',
+  select: '',
   pen: '✏',
   rect: '▭',
   ellipse: '◯',
@@ -209,7 +224,13 @@ export function EditorApp() {
       return;
     }
     if (tool === 'text') {
-      setTextInput({ x: p.x, y: p.y, screenX: e.clientX, screenY: e.clientY });
+      // Keep the input box fully on screen, wherever the user clicked.
+      setTextInput({
+        x: p.x,
+        y: p.y,
+        screenX: Math.min(e.clientX, window.innerWidth - 344),
+        screenY: Math.min(e.clientY, window.innerHeight - 150),
+      });
       return;
     }
     if (tool === 'step') {
@@ -296,14 +317,23 @@ export function EditorApp() {
   function commitText(value: string) {
     if (textInput && value.trim()) {
       snapshot();
+      // Clamp the anchor so the wrapped block stays inside the image.
+      const base = currentBase();
+      const size_ = scaledSize();
+      const fontSize = size_ * 6;
+      const estimate = (s: string) => s.length * fontSize * 0.55;
+      const maxWidth = Math.max(fontSize * 4, base.width * 0.4);
+      const lines = wrapText(value, maxWidth, estimate);
+      const blockWidth = Math.min(Math.max(...lines.map(estimate)), maxWidth);
+      const blockHeight = lines.length * fontSize * 1.25;
       annotations.current.push({
         id: newId(),
         kind: 'text',
-        x: textInput.x,
-        y: textInput.y,
+        x: Math.max(0, Math.min(textInput.x, base.width - blockWidth)),
+        y: Math.max(0, Math.min(textInput.y, base.height - blockHeight)),
         text: value,
         color,
-        size: scaledSize(),
+        size: size_,
       });
     }
     setTextInput(null);
@@ -487,7 +517,7 @@ export function EditorApp() {
                 if (tl !== 'crop') setCropRect(null);
               }}
             >
-              {TOOL_ICONS[tl]} {t(`editor.tool.${tl}`)}
+              {tl === 'select' ? <CursorIcon /> : TOOL_ICONS[tl]} {t(`editor.tool.${tl}`)}
             </button>
           ))}
         </div>
@@ -603,8 +633,15 @@ function annotationBounds(a: Annotation): { x: number; y: number; w: number; h: 
       const y = Math.min(a.y1, a.y2);
       return { x, y, w: Math.abs(a.x2 - a.x1), h: Math.abs(a.y2 - a.y1) };
     }
-    case 'text':
-      return { x: a.x, y: a.y, w: a.text.length * a.size * 3.5, h: a.size * 8 };
+    case 'text': {
+      // Mirror the renderer's wrapping with a cheap width estimator.
+      const fontSize = a.size * 6;
+      const estimate = (s: string) => s.length * fontSize * 0.55;
+      const maxWidth = fontSize * 20;
+      const lines = wrapText(a.text, maxWidth, estimate);
+      const w = Math.min(Math.max(...lines.map(estimate)), maxWidth);
+      return { x: a.x, y: a.y, w, h: lines.length * fontSize * 1.25 };
+    }
     case 'step': {
       const r = Math.max(14, a.size * 5);
       return { x: a.x - r, y: a.y - r, w: r * 2, h: r * 2 };

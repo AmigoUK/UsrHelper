@@ -1,5 +1,9 @@
 import type { Annotation, PixelateAnnotation } from './model';
 import { mosaicBlockSize, pixelateBuffer } from './pixelate';
+import { wrapText } from './wrapText';
+
+/** Text annotations wrap to this fraction of the image width. */
+export const TEXT_MAX_WIDTH_FRACTION = 0.4;
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -99,8 +103,14 @@ function drawAnnotation(ctx: Ctx, a: Annotation): void {
       const fontSize = a.size * 6;
       ctx.font = `600 ${fontSize}px system-ui, sans-serif`;
       ctx.textBaseline = 'top';
-      const lines = a.text.split('\n');
-      lines.forEach((line, i) => ctx.fillText(line, a.x, a.y + i * fontSize * 1.25));
+      const maxWidth = Math.max(fontSize * 4, ctx.canvas.width * TEXT_MAX_WIDTH_FRACTION);
+      const lines = wrapText(a.text, maxWidth, (s) => ctx.measureText(s).width);
+      // Keep the whole block inside the image, even when anchored near an edge.
+      const blockWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
+      const blockHeight = lines.length * fontSize * 1.25;
+      const x = Math.max(0, Math.min(a.x, ctx.canvas.width - blockWidth - fontSize * 0.3));
+      const y = Math.max(0, Math.min(a.y, ctx.canvas.height - blockHeight));
+      lines.forEach((line, i) => ctx.fillText(line, x, y + i * fontSize * 1.25));
       break;
     }
     case 'step': {
