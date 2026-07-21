@@ -34,7 +34,8 @@ const SHORT_PAGE = `<!doctype html><html><head><title>E2E Short Page</title></he
 <div id="secret" style="font: bold 28px monospace; background: #fff; color: #000; width: 420px; padding: 8px;">
 SECRET-DATA-12345-ABCDE</div>
 <button id="btn" style="margin-top: 620px;">Click me</button>
-<script>setTimeout(() => { throw new Error('E2E synthetic error'); }, 300);</script>
+<script>console.error('E2E console error marker');
+setTimeout(() => { throw new Error('E2E synthetic error'); }, 300);</script>
 </body></html>`;
 
 const LONG_PAGE = `<!doctype html><html><head><title>E2E Long Page</title></head>
@@ -299,6 +300,13 @@ if (jsonItem && existsSync(jsonItem.filename)) {
     `clicks=${meta.clickPath?.length} errors=${meta.consoleErrors?.length}`,
   );
   check('JSON captured the synthetic console error', meta.consoleErrors?.some((e) => e.message.includes('E2E synthetic error')), meta.consoleErrors?.[0]?.message?.slice(0, 60));
+  // No project domain is configured yet, so console.error must not be wrapped —
+  // uncaught errors still are, because those listeners leave no stack frame.
+  check(
+    'console.error is not captured on unconfigured domains',
+    !meta.consoleErrors?.some((e) => e.message.includes('E2E console error marker')),
+    `${meta.consoleErrors?.length} entries`,
+  );
   check(
     'JSON carries reporter details (customer/company/name/AnyDesk)',
     meta.reporter?.customerNo === 'C-102' && meta.reporter?.company === 'ACME Sp. z o.o.' && meta.reporter?.firstName === 'Jan' && meta.reporter?.lastName === 'Kowalski' && meta.reporter?.anyDesk === '123 456 789',
@@ -310,6 +318,21 @@ if (jsonItem && existsSync(jsonItem.filename)) {
 }
 const savedNote = await editor.textContent('.editor-sidebar').catch(() => '');
 check('UI confirms save with attach hint', savedNote.includes('Saved to Downloads/') && savedNote.includes('Attach'), '');
+
+// --- console.error scope -----------------------------------------------------
+// The wrapper is a stack frame in every console.error on the page, so pages with
+// error telemetry would report the extension's ID. It must appear only once the
+// page's domain is configured in the profile.
+const consoleIsNative = () => site.evaluate(() => console.error.toString().includes('[native code]'));
+check('console.error is left untouched while no domain is configured', await consoleIsNative());
+
+await options.bringToFront();
+await setField('Capture console errors on these domains', '127.0.0.1');
+await options.waitForTimeout(400);
+await site.bringToFront();
+await site.reload();
+await site.waitForTimeout(600);
+check('Configuring a project domain installs the console.error wrapper', !(await consoleIsNative()));
 await editor.close();
 
 // ============================================================== 3. Full page

@@ -7,7 +7,8 @@ UsrHelper is designed to keep every byte of your data on your machine.
 ## What the extension processes
 
 - **Screenshots and screen recordings** you explicitly start. They are processed in your browser and saved only to your local `Downloads/` folder.
-- **Report context** (page URL, page title, recent clicks on the page, recent JavaScript console errors, browser/OS version, screen resolution) is gathered at capture time and written into a local companion `.json` file so developers can reproduce your report.
+- **Report context** (page URL, page title, recent clicks on the page, recent JavaScript errors, browser/OS version, screen resolution) is gathered at capture time and written into a local companion `.json` file so developers can reproduce your report.
+- **Messages an application logs itself through `console.error`** are collected **only on the domains you list in your project profile**. That list is empty by default, so this is off until you fill it in. On every other site the extension does not touch the page's `console` at all and therefore never appears in that site's own error reports. Errors the page never handled (uncaught exceptions, rejected promises) are observed passively on any page you capture.
 - **Settings and project profiles** (email recipients, folder names, templates) are stored in Chrome's extension storage, synced only through your own Chrome profile (`chrome.storage.sync`).
 - **Report history** (file names, thumbnails, descriptions) is stored locally (`chrome.storage.local`).
 
@@ -24,7 +25,7 @@ Uninstalling the extension removes all its stored settings and history. Files sa
 
 ## Chrome Web Store compliance
 
-The use of information received from Google APIs adheres to the [Chrome Web Store User Data Policy](https://developer.chrome.com/docs/webstore/program-policies/user-data-faq), including the Limited Use requirements. UsrHelper collects website content (screenshots, page URL/title, recent console errors) solely to produce the report the user explicitly requests; this data is never sold, never transferred to third parties, and never used for any purpose unrelated to the extension's single purpose.
+The use of information received from Google APIs adheres to the [Chrome Web Store User Data Policy](https://developer.chrome.com/docs/webstore/program-policies/user-data-faq), including the Limited Use requirements. UsrHelper collects website content (screenshots, page URL/title, recent JavaScript errors — `console.error` only on the project domains the user configured) solely to produce the report the user explicitly requests; this data is never sold, never transferred to third parties, and never used for any purpose unrelated to the extension's single purpose.
 
 ## Contact
 

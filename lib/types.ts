@@ -7,6 +7,12 @@ export interface ProjectProfile {
   emailTo: string[];
   /** Carbon-copy email addresses. */
   emailCc: string[];
+  /**
+   * Domains of the application under test. The MAIN-world `console.error`
+   * wrapper is installed only here — everywhere else the extension stays out of
+   * the page's call stack. Empty means it is never installed.
+   */
+  domains: string[];
   /** Prefix prepended to the mailto subject, e.g. "[Project X]". */
   subjectPrefix: string;
   /** Subfolder under Downloads/ where files are saved. */

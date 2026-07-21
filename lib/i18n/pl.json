@@ -1,7 +1,6 @@
 {
   "app.name": "UsrHelper",
   "app.tagline": "Feedback wdrożeniowy bez wysiłku",
-
   "popup.screenshot.visible": "Zrzut widocznego obszaru",
   "popup.screenshot.fullpage": "Zrzut całej strony",
   "popup.screenshot.region": "Zrzut zaznaczonego fragmentu",
@@ -18,7 +17,6 @@
   "popup.profile.label": "Profil projektu",
   "popup.settings": "Ustawienia",
   "popup.pageNotSupported": "Tej strony nie można przechwycić (strona wewnętrzna przeglądarki).",
-
   "editor.title": "Adnotacje na zrzucie",
   "editor.tool.select": "Zaznacz",
   "editor.tool.pen": "Marker",
@@ -46,7 +44,6 @@
   "editor.downloadManually": "Pobierz ręcznie",
   "editor.attachHint": "Załącz zapisany plik do emaila: {path}",
   "editor.textPrompt": "Wpisz tekst",
-
   "recorder.title": "Nagrywanie screencastu",
   "recorder.chooseSource": "Wybierz, co udostępnić",
   "recorder.start": "Rozpocznij nagrywanie",
@@ -64,7 +61,6 @@
   "recorder.screenDenied": "Przechwytywanie ekranu zostało anulowane lub zablokowane.",
   "recorder.saved": "Nagranie zapisane ({n} klip(ów)) w Pobrane/{path}",
   "recorder.saveEmail": "Zapisz + Email",
-
   "options.title": "Ustawienia UsrHelper",
   "options.language": "Język",
   "options.language.en": "English",
@@ -97,10 +93,9 @@
   "options.record.timestampOverlay": "Pokazuj znacznik czasu",
   "options.screenshot.timestampStamp": "Wypalaj timestamp na zrzutach",
   "options.screenshot.clickPath": "Śledź ścieżkę kliknięć dla zrzutów",
-  "options.console.capture": "Przechwytuj błędy konsoli",
+  "options.console.capture": "Przechwytuj błędy konsoli na tych domenach",
   "options.saved": "Zapisano ustawienia",
   "options.version": "Wersja",
-
   "meta.reportDescription": "Opis",
   "meta.pageUrl": "Adres strony",
   "meta.pageTitle": "Tytuł strony",
@@ -112,10 +107,10 @@
   "mailto.subject.screencast": "Zgłoszenie — screencast",
   "mailto.truncated": "(Opis przycięty — pełne zgłoszenie w załączonym pliku .json.)",
   "mailto.attachReminder": "Pamiętaj o załączeniu: {files}",
-
   "common.cancel": "Anuluj",
   "common.close": "Zamknij",
   "common.save": "Zapisz",
   "common.delete": "Usuń",
-  "common.confirm": "Potwierdź"
+  "common.confirm": "Potwierdź",
+  "options.console.domainsHint": "Po przecinku, np. app.example.com, *.staging.example.com, localhost. Puste pole oznacza, że błędy konsoli nie są przechwytywane nigdzie — rozszerzenie nie wchodzi wtedy w stos wywołań żadnej strony, więc żadna witryna go nie zobaczy. Błędy nieobsłużone i odrzucone promisy są przechwytywane zawsze, na każdej stronie."
 }

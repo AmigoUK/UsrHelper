@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.5.0] — 2026-07-21
+
+### Added
+- **Project domains** in each project profile. `console.error` messages are captured only on the domains listed there (comma-separated, `*.staging.example.com` and `localhost` supported).
+
+### Changed
+- **BREAKING** `console.error` is no longer captured on every page. The domain list is empty by default, so after this update the extension collects logged console errors nowhere until a domain is filled in. Uncaught errors and rejected promises are unaffected — they are still captured on any page you capture.
+- The reason: wrapping `console.error` makes the extension a frame in the call stack of every `console.error` on every page. Sites with client-side error telemetry (observed on facebook.com) ship that frame to their own servers, which tells them the user has UsrHelper installed. The extension itself still transmits nothing; this stops it from making other pages report its presence. See `docs/superpowers/specs/2026-07-21-console-capture-scope-design.md`.
+- `PRIVACY.md` and `docs/STORE_LISTING.md` updated to describe the narrowed data flow. The `<all_urls>` justification is unchanged — click path, recording overlays and region capture still require it.
+
 ## [0.4.5] — 2026-07-21
 
 ### Security
@@ -104,7 +114,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.5...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.5...v0.5.0
 [0.4.5]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.2...v0.4.3

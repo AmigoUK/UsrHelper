@@ -10,6 +10,7 @@ export function defaultProfile(id = 'default'): ProjectProfile {
     name: 'Default',
     emailTo: [],
     emailCc: [],
+    domains: [],
     subjectPrefix: '[UsrHelper]',
     subfolder: 'UsrHelper',
     descriptionTemplate: '',

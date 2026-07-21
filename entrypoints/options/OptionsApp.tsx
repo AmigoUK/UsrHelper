@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import { AppFooter } from '@/components/AppFooter';
 import { useT, type Language } from '@/lib/i18n';
+import { parseDomainList } from '@/lib/domainScope';
 import { defaultProfile, loadSettings, newId, saveSettings } from '@/lib/storage';
 import type { ProjectProfile, Settings } from '@/lib/types';
 
@@ -181,6 +182,15 @@ export function OptionsApp() {
             value={profile.emailCc.join(', ')}
             onChange={(e) => updateProfile(profile.id, { emailCc: emailList(e.currentTarget.value) })}
           />
+
+          <label>{t('options.console.capture')}</label>
+          <input
+            type="text"
+            placeholder="app.example.com, *.staging.example.com, localhost"
+            value={(profile.domains ?? []).join(', ')}
+            onChange={(e) => updateProfile(profile.id, { domains: parseDomainList(e.currentTarget.value) })}
+          />
+          <div class="hint">{t('options.console.domainsHint')}</div>
 
           <div class="row">
             <div>

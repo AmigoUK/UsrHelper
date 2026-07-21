@@ -15,7 +15,9 @@ UsrHelper has one purpose: **capturing deployment feedback** — annotated scree
 | `downloads` | Save screenshots, recordings, and report `.json` files into the user-chosen subfolder of Downloads. |
 | `storage` | Store user settings, project profiles, and local report history. |
 | `scripting` | Inject the capture helper into already-open tabs right after install/update (the registered content script only loads on new navigations). |
-| `<all_urls>` (host) | Required for capabilities that must exist **before or across** user actions and therefore cannot be granted per-click via `activeTab`: (1) the click-path buffer and console-error context are collected in the seconds *before* the user decides to capture — on-demand injection would arrive too late to have seen them; (2) during a screencast, click ripples and keystroke captions must follow the user across every tab they switch to; (3) the region-selection overlay and full-page scroll capture must work on whatever site the customer is testing, which cannot be known in advance. All processing is local; nothing is transmitted (see privacy policy). |
+| `<all_urls>` (host) | Required for capabilities that must exist **before or across** user actions and therefore cannot be granted per-click via `activeTab`: (1) the click-path buffer and error context are collected in the seconds *before* the user decides to capture — on-demand injection would arrive too late to have seen them; (2) during a screencast, click ripples and keystroke captions must follow the user across every tab they switch to; (3) the region-selection overlay and full-page scroll capture must work on whatever site the customer is testing, which cannot be known in advance. All processing is local; nothing is transmitted (see privacy policy). |
+
+**Decision (2026-07-21):** capture of `console.error` is scoped to the domains the user lists in the project profile (empty by default), so the extension does not enter the `console` call path of unrelated sites. Uncaught errors and rejected promises are still observed passively on any page, which leaves no trace in the page. `<all_urls>` itself is unchanged and still needed for the reasons below.
 
 **Decision (2026-07-17):** keep `<all_urls>` and accept the likely in-depth manual review (1–2 weeks). Downgrading to `activeTab`+on-demand injection would silently break the click-path, pre-capture console context, and cross-tab recording overlays — core product value.
 
@@ -29,7 +31,7 @@ UsrHelper has one purpose: **capturing deployment feedback** — annotated scree
 - [x] Version consistent: `package.json` 0.4.2 = latest CHANGELOG entry (WXT takes the manifest version from `package.json`).
 - [x] Descriptions unified between `package.json` and `wxt.config.ts` (≤132 chars).
 - [x] **Privacy policy at a public HTTPS URL:** https://amigouk.github.io/UsrHelper/privacy.html (built from `PRIVACY.md` by `scripts/make-docs-html.mjs`; includes the Limited Use compliance statement).
-- [x] No analytics/tracking; no data leaves the machine. Data-usage declaration to tick in the dashboard: *website content* (screenshots, page URL/title, console errors) — processed locally only, not sold, not transferred, single-purpose only.
+- [x] No analytics/tracking; no data leaves the machine. Data-usage declaration to tick in the dashboard: *website content* (screenshots, page URL/title, JavaScript errors — `console.error` only on user-configured project domains) — processed locally only, not sold, not transferred, single-purpose only.
 - [x] Store assets: screenshots 1280×800 ready in `docs/manual/images/` (editor.png, settings.png, recorder-*.png, recording-overlay.png); promo tile 440×280 in `docs/store-assets/promo-tile-440x280.png`; store icon = `public/icon/128.png`.
 
 ## Dashboard submission checklist

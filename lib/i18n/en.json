@@ -1,7 +1,6 @@
 {
   "app.name": "UsrHelper",
   "app.tagline": "Deployment feedback made easy",
-
   "popup.screenshot.visible": "Capture visible area",
   "popup.screenshot.fullpage": "Capture full page",
   "popup.screenshot.region": "Capture selected region",
@@ -18,7 +17,6 @@
   "popup.profile.label": "Project profile",
   "popup.settings": "Settings",
   "popup.pageNotSupported": "This page cannot be captured (browser-internal page).",
-
   "editor.title": "Annotate screenshot",
   "editor.tool.select": "Select",
   "editor.tool.pen": "Marker",
@@ -46,7 +44,6 @@
   "editor.downloadManually": "Download manually",
   "editor.attachHint": "Attach the saved file to the email: {path}",
   "editor.textPrompt": "Enter text",
-
   "recorder.title": "Record screencast",
   "recorder.chooseSource": "Choose what to share",
   "recorder.start": "Start recording",
@@ -64,7 +61,6 @@
   "recorder.screenDenied": "Screen capture was cancelled or denied.",
   "recorder.saved": "Recording saved ({n} clip(s)) to Downloads/{path}",
   "recorder.saveEmail": "Save + Email",
-
   "options.title": "UsrHelper Settings",
   "options.language": "Language",
   "options.language.en": "English",
@@ -97,10 +93,9 @@
   "options.record.timestampOverlay": "Show timestamp overlay",
   "options.screenshot.timestampStamp": "Stamp timestamp on screenshots",
   "options.screenshot.clickPath": "Track click path for screenshots",
-  "options.console.capture": "Capture console errors",
+  "options.console.capture": "Capture console errors on these domains",
   "options.saved": "Settings saved",
   "options.version": "Version",
-
   "meta.reportDescription": "Description",
   "meta.pageUrl": "Page URL",
   "meta.pageTitle": "Page title",
@@ -112,10 +107,10 @@
   "mailto.subject.screencast": "Screencast report",
   "mailto.truncated": "(Description truncated — see the attached .json file for the full report.)",
   "mailto.attachReminder": "Remember to attach: {files}",
-
   "common.cancel": "Cancel",
   "common.close": "Close",
   "common.save": "Save",
   "common.delete": "Delete",
-  "common.confirm": "Confirm"
+  "common.confirm": "Confirm",
+  "options.console.domainsHint": "Comma-separated, e.g. app.example.com, *.staging.example.com, localhost. Leave empty and console errors are not captured anywhere — the extension then stays out of every page’s call stack, so no site can see it. Uncaught errors and rejected promises are always captured, on every page."
 }
