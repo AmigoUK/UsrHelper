@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.4.4] — 2026-07-21
+
+### Fixed
+- A text annotation was added **twice** for a single text box (user report). Chrome fires `blur` on the textarea while it is being removed from the DOM, so pressing Enter ran the commit once for the key and once for that blur — the text was drawn on top of itself and Undo had to be pressed twice to remove it. The commit is now gated by a synchronously cleared anchor, so whichever trigger fires first commits and the rest are no-ops.
+- Every text box after the first one opened **unfocused** and swallowed the typing: the `autofocus` attribute is processed only once per document. The editor now focuses the box explicitly when it opens.
+- Escape now really discards the draft and closes the box. It used to leave the box behind, and a leftover box blocks `onPointerDown` — which made every drawing tool go dead until the editor was reopened.
+
+### Added
+- `scripts/probe-text-dup.mjs` — focused Playwright repro for the text-box commit path; the same assertions run inside the main E2E suite (`scripts/e2e.mjs`).
+
 ## [0.4.3] — 2026-07-20
 
 ### Fixed
@@ -84,7 +94,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.3...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.4...HEAD
+[0.4.4]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.0...v0.4.1

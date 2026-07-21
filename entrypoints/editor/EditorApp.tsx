@@ -72,6 +72,12 @@ export function EditorApp() {
   const redoStack = useRef<HistorySnapshot[]>([]);
   const drawing = useRef<Annotation | null>(null);
   const dragStart = useRef<Point | null>(null);
+  // Anchor of the open text box. Chrome fires `blur` on the textarea while it is
+  // being removed from the DOM, so Enter/Escape and the blur handler can both
+  // reach commitText(); `textInput` state clears too late to stop the second
+  // one. This ref is cleared synchronously and is the single commit gate.
+  const textAnchor = useRef<Point | null>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const id = new URLSearchParams(location.search).get('id');
@@ -96,6 +102,12 @@ export function EditorApp() {
       redraw();
     })();
   }, []);
+
+  // The `autofocus` attribute is honoured once per document, so every text box
+  // after the first one would open unfocused and swallow the user's typing.
+  useEffect(() => {
+    if (textInput) textAreaRef.current?.focus();
+  }, [textInput]);
 
   const currentBase = () => bases.current[baseIndex.current];
 
@@ -225,6 +237,7 @@ export function EditorApp() {
     }
     if (tool === 'text') {
       // Keep the input box fully on screen, wherever the user clicked.
+      textAnchor.current = { x: p.x, y: p.y };
       setTextInput({
         x: p.x,
         y: p.y,
@@ -315,7 +328,10 @@ export function EditorApp() {
   }
 
   function commitText(value: string) {
-    if (textInput && value.trim()) {
+    // Claim the anchor: whichever trigger fires first commits, the rest no-op.
+    const anchor = textAnchor.current;
+    textAnchor.current = null;
+    if (anchor && value.trim()) {
       snapshot();
       // Clamp the anchor so the wrapped block stays inside the image.
       const base = currentBase();
@@ -329,8 +345,8 @@ export function EditorApp() {
       annotations.current.push({
         id: newId(),
         kind: 'text',
-        x: Math.max(0, Math.min(textInput.x, base.width - blockWidth)),
-        y: Math.max(0, Math.min(textInput.y, base.height - blockHeight)),
+        x: Math.max(0, Math.min(anchor.x, base.width - blockWidth)),
+        y: Math.max(0, Math.min(anchor.y, base.height - blockHeight)),
         text: value,
         color,
         size: size_,
@@ -338,6 +354,12 @@ export function EditorApp() {
     }
     setTextInput(null);
     redraw();
+  }
+
+  /** Discards the open text box; the blur that follows removal must not commit. */
+  function cancelText() {
+    textAnchor.current = null;
+    setTextInput(null);
   }
 
   function applyCrop() {
@@ -487,17 +509,22 @@ export function EditorApp() {
         {textInput && (
           <textarea
             class="editor-text-input"
+            ref={textAreaRef}
             style={`left: ${textInput.screenX}px; top: ${textInput.screenY}px; position: fixed;`}
-            autoFocus
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 commitText((e.target as HTMLTextAreaElement).value);
               } else if (e.key === 'Escape') {
-                setTextInput(null);
+                cancelText();
               }
             }}
-            onBlur={(e) => commitText((e.target as HTMLTextAreaElement).value)}
+            onBlur={(e) => {
+              // Chrome also fires blur while the textarea is being removed
+              // after Enter/Escape; the anchor is already claimed by then, so
+              // leave the state untouched instead of re-running the commit.
+              if (textAnchor.current) commitText((e.target as HTMLTextAreaElement).value);
+            }}
             placeholder={t('editor.textPrompt')}
           />
         )}

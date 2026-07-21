@@ -199,6 +199,51 @@ await editor.keyboard.type('E2E annotation');
 await editor.keyboard.press('Enter');
 check('All drawing tools work (pen/rect/ellipse/arrow/steps/text)', true, 'drawn without errors');
 
+// Committing a text box must add exactly ONE annotation. Chrome fires `blur` on
+// the textarea as it is removed, so Enter used to commit the text twice.
+const undoOnce = editor.locator('button:has-text("Undo")');
+const redoOnce = editor.locator('button:has-text("Redo")');
+/** Coloured (non-greyscale) pixels in the text block anchored at (fx, fy). */
+const textInk = (fx = 0.15, fy = 0.8) =>
+  editor.evaluate(([fx, fy]) => {
+    const c = document.querySelector('canvas');
+    const d = c.getContext('2d').getImageData(Math.round(c.width * fx), Math.round(c.height * fy) - 20, 400, 120).data;
+    let n = 0;
+    for (let i = 0; i < d.length; i += 4) {
+      if (Math.abs(d[i] - d[i + 1]) > 40 || Math.abs(d[i] - d[i + 2]) > 40) n++;
+    }
+    return n;
+  }, [fx, fy]);
+const inkAfterCommit = await textInk();
+await undoOnce.click();
+await editor.waitForTimeout(200);
+const inkAfterUndo = await textInk();
+check(
+  'Text is committed once — a single Undo removes it entirely',
+  inkAfterCommit > 50 && inkAfterUndo === 0,
+  `ink after commit=${inkAfterCommit} after one undo=${inkAfterUndo}`,
+);
+await redoOnce.click();
+await editor.waitForTimeout(200);
+
+// `autofocus` is honoured once per document, so the SECOND box used to open
+// unfocused and swallow everything the user typed.
+await toolBtn('Text').click();
+await editor.mouse.click(at(0.6, 0.8).x, at(0.6, 0.8).y);
+await editor.waitForSelector('.editor-text-input');
+const focused = await editor.evaluate(() => document.activeElement?.className ?? '');
+check('Second text box opens focused', focused.includes('editor-text-input'), `activeElement=${focused || 'none'}`);
+
+// Escape discards the draft; the blur that follows removal must not commit it,
+// and the box must not stay behind — a leftover box blocks every tool.
+await editor.keyboard.type('discarded draft');
+await editor.keyboard.press('Escape');
+await editor.waitForTimeout(200);
+check(
+  'Escape discards the text box and closes it',
+  (await textInk(0.6, 0.8)) === 0 && (await editor.locator('.editor-text-input').count()) === 0,
+);
+
 // Anonymization brush: three overlapping passes fully covering the SECRET text
 // (which sits in the top-left of the captured viewport, around y≈0.11).
 const secretColorsBefore = await uniqueColors(0.15, 0.11);
