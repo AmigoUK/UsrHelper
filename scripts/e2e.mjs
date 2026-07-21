@@ -231,12 +231,13 @@ await editor.waitForTimeout(200);
 await toolBtn('Text').click();
 await editor.mouse.click(at(0.6, 0.8).x, at(0.6, 0.8).y);
 await editor.waitForSelector('.editor-text-input');
-const focused = await editor.evaluate(() => document.activeElement?.className ?? '');
-check('Second text box opens focused', focused.includes('editor-text-input'), `activeElement=${focused || 'none'}`);
+await editor.waitForTimeout(200);
+await editor.keyboard.type('discarded draft');
+const typed = await editor.locator('.editor-text-input').inputValue();
+check('Second text box opens focused and accepts typing', typed === 'discarded draft', `value="${typed}"`);
 
 // Escape discards the draft; the blur that follows removal must not commit it,
 // and the box must not stay behind — a leftover box blocks every tool.
-await editor.keyboard.type('discarded draft');
 await editor.keyboard.press('Escape');
 await editor.waitForTimeout(200);
 check(

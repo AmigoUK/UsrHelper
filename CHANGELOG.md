@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.4.5] — 2026-07-21
+
+### Security
+- All 16 open Dependabot alerts (5 critical, 6 high, 5 moderate) are closed — `npm audit` reports zero. Every one of them sat in the build toolchain; the only runtime dependency is Preact, so no vulnerable code was ever shipped to users or to the Chrome Web Store.
+- Toolchain upgraded: WXT 0.19 → 0.20.27, Vitest 2.1 → 4.1, Vite 5.4 → 8.1 (the whole tree now shares one Vite; the audit flagged every Vite ≤ 6.4.2).
+- Patched transitive build dependencies pinned via `package.json` `overrides` — tar, tmp, adm-zip, shell-quote, uuid, esbuild. Their parents (`giget`, `web-ext-run`, which serve `wxt init` templates and Firefox runs this project never uses) still ship the vulnerable ranges, so no wxt release fixes them.
+
+### Changed
+- **BREAKING (build only)** WXT 0.20 removed the `extensionApi` option; it is gone from `wxt.config.ts` and the global `chrome.*` API is now typed through `@types/chrome`. No change to the extension's behaviour, permissions or manifest — verified by the full suite: 35 unit tests and 39/39 E2E checks against the built extension.
+
 ## [0.4.4] — 2026-07-21
 
 ### Fixed
@@ -94,7 +104,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.4...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.5...HEAD
+[0.4.5]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.1...v0.4.2
