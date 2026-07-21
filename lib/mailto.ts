@@ -49,8 +49,10 @@ export function buildReportBody(meta: ReportMetadata, t: Translate): string {
   lines.push(`${t('meta.pageTitle')}: ${meta.pageTitle}`);
   lines.push(`${t('meta.capturedAt')}: ${meta.capturedAt}`);
   lines.push(
-    `${t('meta.environment')}: ${meta.environment.userAgent} | ${meta.environment.platform} | ` +
-      `screen ${meta.environment.screenResolution} | viewport ${meta.environment.viewport}`,
+    `${t('meta.environment')}: ${[meta.environment.platform, meta.environment.architecture, meta.environment.browser]
+      .filter(Boolean)
+      .join(' | ')} | screen ${meta.environment.screenResolution} | viewport ${meta.environment.viewport}`,
+    `${t('meta.userAgent')}: ${meta.environment.userAgent}`,
   );
   if (meta.consoleErrors.length > 0) {
     lines.push('', `${t('meta.consoleErrors')}:`);

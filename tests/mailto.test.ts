@@ -43,7 +43,9 @@ describe('buildReportBody', () => {
     pageTitle: 'Orders',
     environment: {
       userAgent: 'TestUA',
-      platform: 'Linux',
+      platform: 'macOS 15.3.0',
+      architecture: 'arm64',
+      browser: 'Google Chrome 150.0.7827.55',
       language: 'en-GB',
       screenResolution: '1920x1080',
       viewport: '1600x900',
@@ -72,6 +74,20 @@ describe('buildReportBody', () => {
       (k) => k,
     );
     expect(body).not.toContain('meta.reporter');
+  });
+
+  it('reports the real machine, not the frozen UA values', () => {
+    const body = buildReportBody(meta, (k) => k);
+    expect(body).toContain('meta.environment: macOS 15.3.0 | arm64 | Google Chrome 150.0.7827.55 | screen 1920x1080');
+    expect(body).toContain('meta.userAgent: TestUA');
+  });
+
+  it('omits environment parts the browser did not report', () => {
+    const body = buildReportBody(
+      { ...meta, environment: { ...meta.environment, architecture: '', browser: '' } },
+      (k) => k,
+    );
+    expect(body).toContain('meta.environment: macOS 15.3.0 | screen 1920x1080');
   });
 
   it('includes description, url and attach reminder with file list', () => {

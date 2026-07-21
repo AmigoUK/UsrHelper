@@ -64,7 +64,12 @@ export interface ConsoleErrorEntry {
 
 export interface EnvironmentInfo {
   userAgent: string;
+  /** Real OS and version from Client Hints, e.g. "macOS 15.3.0". */
   platform: string;
+  /** CPU architecture, e.g. "arm64" — the UA string cannot express it. */
+  architecture: string;
+  /** Full browser version; the UA string is reduced to `<major>.0.0.0`. */
+  browser: string;
   language: string;
   screenResolution: string;
   viewport: string;

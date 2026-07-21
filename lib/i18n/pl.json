@@ -113,5 +113,6 @@
   "common.delete": "Usuń",
   "common.confirm": "Potwierdź",
   "options.console.domainsHint": "Po przecinku, np. app.example.com, *.staging.example.com, localhost. Puste pole oznacza, że błędy konsoli nie są przechwytywane nigdzie — rozszerzenie nie wchodzi wtedy w stos wywołań żadnej strony, więc żadna witryna go nie zobaczy. Błędy nieobsłużone i odrzucone promisy są przechwytywane zawsze, na każdej stronie.",
-  "options.console.domains": "Domeny projektu (przechwytywanie błędów konsoli)"
+  "options.console.domains": "Domeny projektu (przechwytywanie błędów konsoli)",
+  "meta.userAgent": "User agent"
 }

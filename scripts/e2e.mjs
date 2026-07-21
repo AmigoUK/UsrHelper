@@ -317,6 +317,16 @@ if (jsonItem && existsSync(jsonItem.filename)) {
     !meta.consoleErrors?.some((e) => e.message.includes('E2E console error marker')),
     `${meta.consoleErrors?.length} entries`,
   );
+  // navigator.platform / the UA string are deliberately inaccurate, so the
+  // report must come from Client Hints: a full browser version (not the reduced
+  // <major>.0.0.0) and a CPU architecture the UA string cannot express.
+  check(
+    'JSON reports the machine from Client Hints, not the frozen UA values',
+    !!meta.environment?.architecture &&
+      !!meta.environment?.browser &&
+      !/\b\d+\.0\.0\.0$/.test(meta.environment.browser),
+    `${meta.environment?.platform} | ${meta.environment?.architecture} | ${meta.environment?.browser}`,
+  );
   check(
     'JSON carries reporter details (customer/company/name/AnyDesk)',
     meta.reporter?.customerNo === 'C-102' && meta.reporter?.company === 'ACME Sp. z o.o.' && meta.reporter?.firstName === 'Jan' && meta.reporter?.lastName === 'Kowalski' && meta.reporter?.anyDesk === '123 456 789',

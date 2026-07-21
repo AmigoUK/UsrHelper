@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.6.0] — 2026-07-21
+
+### Fixed
+- Reports described the wrong machine (user report). Chrome deliberately misreports the legacy signals: `navigator.platform` returns `MacIntel` even on Apple Silicon, the UA string freezes macOS at `10_15_7`, and the browser version in it is reduced to `<major>.0.0.0`. A report filed from an M4 Mac therefore read "Intel Mac OS X 10_15_7". The environment block is now built from User-Agent Client Hints, so the same machine reports e.g. `macOS 15.3.0 | arm64 | Google Chrome 150.0.7827.55`.
+
+### Added
+- `architecture` and `browser` fields in the companion `.json`, and the raw `userAgent` moved to its own line in the email body so the readable summary comes first.
+- Windows is named from its Client Hints platform version (`Windows 11` / `Windows 10`) instead of the compatibility number it reports.
+
+### Changed
+- `PRIVACY.md` now lists operating system and version, CPU architecture and exact browser version explicitly, replacing the vaguer "browser/OS version".
+
 ## [0.5.1] — 2026-07-21
 
 ### Fixed
@@ -120,7 +132,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.5...v0.5.0
 [0.4.5]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.4...v0.4.5

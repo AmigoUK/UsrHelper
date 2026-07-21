@@ -113,5 +113,6 @@
   "common.delete": "Delete",
   "common.confirm": "Confirm",
   "options.console.domainsHint": "Comma-separated, e.g. app.example.com, *.staging.example.com, localhost. Leave empty and console errors are not captured anywhere — the extension then stays out of every page’s call stack, so no site can see it. Uncaught errors and rejected promises are always captured, on every page.",
-  "options.console.domains": "Project domains (console error capture)"
+  "options.console.domains": "Project domains (console error capture)",
+  "meta.userAgent": "User agent"
 }

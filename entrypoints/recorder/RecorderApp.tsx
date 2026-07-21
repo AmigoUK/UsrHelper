@@ -203,7 +203,7 @@ export function RecorderApp() {
     setPhase('done');
   }
 
-  function buildMetadata(files: string[]): ReportMetadata {
+  async function buildMetadata(files: string[]): Promise<ReportMetadata> {
     return {
       kind: 'screencast',
       reporter: settings?.reporter,
@@ -211,7 +211,7 @@ export function RecorderApp() {
       capturedAt: startedAtRef.current,
       pageUrl: '',
       pageTitle: '',
-      environment: collectEnvironment(),
+      environment: await collectEnvironment(),
       consoleErrors: [],
       clickPath: [],
       files,
@@ -222,7 +222,7 @@ export function RecorderApp() {
   async function saveReport(withEmail: boolean) {
     if (!profile) return;
     const filePaths = savedFiles.map((f) => f.path);
-    const meta = buildMetadata(filePaths);
+    const meta = await buildMetadata(filePaths);
     try {
       const json = await saveJson(meta, profile.subfolder, companionFilename(baseNameRef.current));
       const allFiles = [...savedFiles, json];

@@ -435,7 +435,7 @@ export function EditorApp() {
     return { blob, thumbnail: thumb.toDataURL('image/jpeg', 0.7) };
   }
 
-  function buildMetadata(files: string[]): ReportMetadata {
+  async function buildMetadata(files: string[]): Promise<ReportMetadata> {
     // Both context buffers are gated by their Settings toggles.
     const context = filterReportContext(settings, record!);
     return {
@@ -445,7 +445,7 @@ export function EditorApp() {
       capturedAt: record!.capturedAt,
       pageUrl: record!.pageUrl,
       pageTitle: record!.pageTitle,
-      environment: collectEnvironment(),
+      environment: await collectEnvironment(),
       consoleErrors: context.consoleErrors,
       clickPath: context.clickPath,
       files,
@@ -460,7 +460,7 @@ export function EditorApp() {
       const { blob, thumbnail } = await exportImage();
       const base = buildBaseName(new Date());
       const image = await saveBlob(blob, profile.subfolder, screenshotFilename(base));
-      const meta = buildMetadata([image.path]);
+      const meta = await buildMetadata([image.path]);
       const json = await saveJson(
         { ...meta, files: [image.path] },
         profile.subfolder,
