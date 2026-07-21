@@ -21,6 +21,10 @@
 
 ## 1. Installation
 
+**The easy way — [install from the Chrome Web Store](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic).** One click, automatic updates, nothing else to do. Then skip to [First-time setup](#2-first-time-setup).
+
+The rest of this section covers the manual install, which you only need if your organisation blocks the Web Store or you want to run a specific build.
+
 1. Download the latest `usrhelper-X.Y.Z-chrome.zip` from [GitHub Releases](https://github.com/AmigoUK/UsrHelper/releases/latest).
 2. Unpack the archive into a permanent folder (e.g. `C:\UsrHelper` or `~/UsrHelper`). **The folder must stay on disk** — Chrome loads the extension from there.
 3. Open `chrome://extensions` and enable **Developer mode** (toggle in the top-right corner).

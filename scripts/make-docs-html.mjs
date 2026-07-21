@@ -7,8 +7,28 @@
 import { marked } from 'marked';
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const pl = marked.parse(readFileSync('docs/manual/USER_GUIDE.pl.md', 'utf8'));
-const en = marked.parse(readFileSync('docs/manual/USER_GUIDE.en.md', 'utf8'));
+/**
+ * marked stopped emitting heading ids in v5, which left every "#1-installation"
+ * link in the table of contents pointing at nothing. Re-add them using GitHub's
+ * slug rules so the in-page navigation works again.
+ */
+const slug = (text) =>
+  text
+    .replace(/<[^>]+>/g, '')          // strip inline markup (code, em, links)
+    .replace(/&[a-z]+;|&#\d+;/gi, '') // strip entities rather than slugging them
+    .toLowerCase()
+    .trim()
+    .replace(/[^\p{L}\p{N} -]/gu, '')
+    .replace(/\s+/g, '-');
+
+const addHeadingIds = (html) =>
+  html.replace(/<h([23])>(.*?)<\/h\1>/gs, (_, level, inner) =>
+    `<h${level} id="${slug(inner)}">${inner}</h${level}>`);
+
+const render = (path) => addHeadingIds(marked.parse(readFileSync(path, 'utf8')));
+
+const pl = render('docs/manual/USER_GUIDE.pl.md');
+const en = render('docs/manual/USER_GUIDE.en.md');
 
 // Image paths in the MD are relative to docs/manual/; index.html lives in docs/.
 const fixImages = (html) => html.replaceAll('src="images/', 'src="manual/images/');

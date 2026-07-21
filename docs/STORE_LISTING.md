@@ -50,3 +50,7 @@ UsrHelper has one purpose: **capturing deployment feedback** — annotated scree
 "Deployment feedback made easy: annotated screenshots and voice screencasts, saved locally or shared via email. No accounts, no cloud."
 
 **Category:** Developer Tools · **Language:** English (Polish UI included)
+
+**Support / homepage URL:** `https://attv.uk/projects/usrhelper.html` — carries the public roadmap
+(vote on what gets built next) and a problem-report form that accepts screenshots. Pointing the
+listing here gives users somewhere to go with a feature request instead of leaving a one-star review.

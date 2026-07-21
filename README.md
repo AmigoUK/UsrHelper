@@ -1,6 +1,16 @@
 # UsrHelper
 
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hmmlhdogplekofonkkmhacfolcfgejic?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)
+[![Users](https://img.shields.io/chrome-web-store/users/hmmlhdogplekofonkkmhacfolcfgejic?label=users)](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)
+[![Rating](https://img.shields.io/chrome-web-store/rating/hmmlhdogplekofonkkmhacfolcfgejic?label=rating)](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)
+
 A Chrome extension that makes software-deployment feedback effortless. Testers and end users capture **annotated screenshots** or record **screencasts with voice narration**, and the report is saved locally with a timestamp and/or handed off to email — no backend, no accounts.
+
+## Install
+
+**➡️ [Add to Chrome — Chrome Web Store](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)**
+
+One click, nothing to configure, no account to create. It works offline; if you want to build it yourself instead, see [Build from source](#build-from-source-development).
 
 ## Features
 
@@ -34,7 +44,15 @@ A Chrome extension that makes software-deployment feedback effortless. Testers a
 
 Screenshots are generated from the real extension (`scripts/make-docs-shots.mjs`); the HTML page is built from the Markdown guides (`scripts/make-docs-html.mjs`).
 
-## Installation (development)
+## Feedback & roadmap
+
+Missing a feature, or hit a bug? The project page has a public roadmap you can vote on, plus a short form for problem reports where you can attach screenshots (paste straight from the clipboard):
+
+**➡️ [attv.uk/projects/usrhelper.html](https://attv.uk/projects/usrhelper.html)**
+
+No account needed, and an email address is optional. If you would rather stay on GitHub, [open an issue](https://github.com/AmigoUK/UsrHelper/issues) instead.
+
+## Build from source (development)
 
 ```bash
 npm install

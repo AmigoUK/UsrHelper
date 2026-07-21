@@ -21,6 +21,10 @@
 
 ## 1. Instalacja
 
+**Najprościej — [zainstaluj z Chrome Web Store](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic).** Jedno kliknięcie, automatyczne aktualizacje, nic więcej nie trzeba robić. Potem przejdź od razu do [Pierwszej konfiguracji](#2-pierwsza-konfiguracja).
+
+Dalsza część tego rozdziału opisuje instalację ręczną — potrzebujesz jej tylko wtedy, gdy Twoja firma blokuje Web Store albo chcesz uruchomić konkretną wersję.
+
 1. Pobierz najnowszy plik `usrhelper-X.Y.Z-chrome.zip` z [GitHub Releases](https://github.com/AmigoUK/UsrHelper/releases/latest).
 2. Rozpakuj archiwum do stałego folderu (np. `C:\UsrHelper` albo `~/UsrHelper`). **Folder musi pozostać na dysku** — Chrome ładuje wtyczkę z tego miejsca.
 3. Otwórz `chrome://extensions` i włącz **Tryb dewelopera** (przełącznik w prawym górnym rogu).
