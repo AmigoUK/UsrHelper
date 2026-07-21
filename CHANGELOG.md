@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.5.1] — 2026-07-21
+
+### Fixed
+- **"Track click path for screenshots" was a dead switch.** Nothing read the setting: clicks were written into every companion `.json` and email body even with it turned off. Both context toggles now run through one gate (`lib/reportContext.ts`), covered by unit tests.
+- Settings showed two different controls under the same label — v0.5.0 reused the console-error toggle's translation key for the new domain list, so the checkbox read "Capture console errors on these domains". The toggle and the domain list now have their own labels, and E2E asserts they stay distinct.
+
 ## [0.5.0] — 2026-07-21
 
 ### Added
@@ -114,7 +120,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.5...v0.5.0
 [0.4.5]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.3...v0.4.4

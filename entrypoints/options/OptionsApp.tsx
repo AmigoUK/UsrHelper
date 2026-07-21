@@ -183,7 +183,7 @@ export function OptionsApp() {
             onChange={(e) => updateProfile(profile.id, { emailCc: emailList(e.currentTarget.value) })}
           />
 
-          <label>{t('options.console.capture')}</label>
+          <label>{t('options.console.domains')}</label>
           <input
             type="text"
             placeholder="app.example.com, *.staging.example.com, localhost"

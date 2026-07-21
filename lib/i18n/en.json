@@ -93,7 +93,7 @@
   "options.record.timestampOverlay": "Show timestamp overlay",
   "options.screenshot.timestampStamp": "Stamp timestamp on screenshots",
   "options.screenshot.clickPath": "Track click path for screenshots",
-  "options.console.capture": "Capture console errors on these domains",
+  "options.console.capture": "Capture console errors",
   "options.saved": "Settings saved",
   "options.version": "Version",
   "meta.reportDescription": "Description",
@@ -112,5 +112,6 @@
   "common.save": "Save",
   "common.delete": "Delete",
   "common.confirm": "Confirm",
-  "options.console.domainsHint": "Comma-separated, e.g. app.example.com, *.staging.example.com, localhost. Leave empty and console errors are not captured anywhere — the extension then stays out of every page’s call stack, so no site can see it. Uncaught errors and rejected promises are always captured, on every page."
+  "options.console.domainsHint": "Comma-separated, e.g. app.example.com, *.staging.example.com, localhost. Leave empty and console errors are not captured anywhere — the extension then stays out of every page’s call stack, so no site can see it. Uncaught errors and rejected promises are always captured, on every page.",
+  "options.console.domains": "Project domains (console error capture)"
 }

@@ -9,6 +9,7 @@ import { buildBaseName, companionFilename, screenshotFilename } from '@/lib/file
 import { useT } from '@/lib/i18n';
 import { buildMailtoUrl, buildReportBody } from '@/lib/mailto';
 import { collectEnvironment, extensionVersion } from '@/lib/metadata';
+import { filterReportContext } from '@/lib/reportContext';
 import { saveBlob, saveJson, type SavedFile } from '@/lib/save';
 import { addHistoryEntry, getActiveProfile, loadSettings, newId } from '@/lib/storage';
 import type { ProjectProfile, ReportMetadata, Settings } from '@/lib/types';
@@ -435,6 +436,8 @@ export function EditorApp() {
   }
 
   function buildMetadata(files: string[]): ReportMetadata {
+    // Both context buffers are gated by their Settings toggles.
+    const context = filterReportContext(settings, record!);
     return {
       kind: 'screenshot',
       reporter: settings?.reporter,
@@ -443,8 +446,8 @@ export function EditorApp() {
       pageUrl: record!.pageUrl,
       pageTitle: record!.pageTitle,
       environment: collectEnvironment(),
-      consoleErrors: settings?.captureConsoleErrors ? record!.consoleErrors : [],
-      clickPath: record!.clickPath,
+      consoleErrors: context.consoleErrors,
+      clickPath: context.clickPath,
       files,
       extensionVersion: extensionVersion(),
     };

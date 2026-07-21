@@ -114,6 +114,16 @@ check('Switch back to EN works', (await options.textContent('h1')).includes('Usr
 const footer = await options.textContent('.app-footer').catch(() => '');
 check('Credit footer with version', footer.includes('attv.uk') && /v\d+\.\d+\.\d+/.test(footer), footer.trim().slice(0, 80));
 
+// The console-error toggle and the project-domain list are different controls;
+// they must not share a label, or Settings reads as one contradictory control.
+const optionLabels = (await options.locator('label').allTextContents()).map((l) => l.trim());
+check(
+  'Console-error toggle and project-domain list have distinct labels',
+  optionLabels.filter((l) => l === 'Capture console errors').length === 1 &&
+    optionLabels.filter((l) => l.startsWith('Project domains')).length === 1,
+  optionLabels.filter((l) => l.toLowerCase().includes('console') || l.startsWith('Project domains')).join(' | '),
+);
+
 const setField = async (label, value) => {
   const input = options.locator(`label:has-text("${label}")`).first().locator('xpath=following-sibling::*[self::input or self::textarea][1]');
   await input.fill(String(value));
@@ -327,7 +337,7 @@ const consoleIsNative = () => site.evaluate(() => console.error.toString().inclu
 check('console.error is left untouched while no domain is configured', await consoleIsNative());
 
 await options.bringToFront();
-await setField('Capture console errors on these domains', '127.0.0.1');
+await setField('Project domains', '127.0.0.1');
 await options.waitForTimeout(400);
 await site.bringToFront();
 await site.reload();
