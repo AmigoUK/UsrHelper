@@ -46,6 +46,8 @@ One click, nothing to configure, no account to create. It works offline; if you 
 
 Screenshots are generated from the real extension (`scripts/make-docs-shots.mjs`); the HTML page is built from the Markdown guides (`scripts/make-docs-html.mjs`).
 
+Hand-made screenshots and video live in [`docs/media/`](docs/media/) — note that everything under `docs/` is published by GitHub Pages, so anything placed there is public.
+
 ## Feedback & roadmap
 
 Missing a feature, or hit a bug? The project page has a public roadmap you can vote on, plus a short form for problem reports where you can attach screenshots (paste straight from the clipboard):
