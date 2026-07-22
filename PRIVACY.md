@@ -7,6 +7,7 @@ UsrHelper is designed to keep every byte of your data on your machine.
 ## What the extension processes
 
 - **Screenshots and screen recordings** you explicitly start. They are processed in your browser and saved only to your local `Downloads/` folder.
+- **Your own annotations.** Text you type on a sticky note is saved into the companion `.json` alongside the image, so the developer reading the report can quote it instead of retyping it from the screenshot.
 - **Report context** (page URL, page title, recent clicks on the page, recent JavaScript errors, operating system and version, CPU architecture, exact browser version, screen resolution) is gathered at capture time and written into a local companion `.json` file so developers can reproduce your report.
 - **Messages an application logs itself through `console.error`** are collected **only on the domains you list in your project profile**. That list is empty by default, so this is off until you fill it in. On every other site the extension does not touch the page's `console` at all and therefore never appears in that site's own error reports. Errors the page never handled (uncaught exceptions, rejected promises) are observed passively on any page you capture.
 - **Settings and project profiles** (email recipients, folder names, templates) are stored in Chrome's extension storage, synced only through your own Chrome profile (`chrome.storage.sync`).

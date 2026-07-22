@@ -52,6 +52,10 @@ Missing a feature, or hit a bug? The project page has a public roadmap you can v
 
 No account needed, and an email address is optional. If you would rather stay on GitHub, [open an issue](https://github.com/AmigoUK/UsrHelper/issues) instead.
 
+Accepted ideas waiting to be built are recorded in [`docs/BACKLOG.md`](docs/BACKLOG.md), including:
+
+- **Project profiles — export / import as JSON.** A developer prepares one profile (recipients, subject prefix, Downloads subfolder, description template, project domains) and sends the file to every tester, instead of each tester configuring Settings by hand.
+
 ## Build from source (development)
 
 ```bash

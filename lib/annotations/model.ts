@@ -5,6 +5,7 @@ export type Tool =
   | 'ellipse'
   | 'arrow'
   | 'text'
+  | 'note'
   | 'step'
   | 'pixelate'
   | 'crop';
@@ -48,6 +49,14 @@ export interface TextAnnotation extends AnnotationBase {
   text: string;
 }
 
+/** A yellow sticky note: a compact block of readable text above the page. */
+export interface NoteAnnotation extends AnnotationBase {
+  kind: 'note';
+  x: number;
+  y: number;
+  text: string;
+}
+
 export interface StepAnnotation extends AnnotationBase {
   kind: 'step';
   x: number;
@@ -65,6 +74,7 @@ export type Annotation =
   | ShapeAnnotation
   | ArrowAnnotation
   | TextAnnotation
+  | NoteAnnotation
   | StepAnnotation
   | PixelateAnnotation;
 

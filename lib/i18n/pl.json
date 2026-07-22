@@ -118,5 +118,10 @@
   "feedback.rate": "UsrHelper Ci się przydaje?",
   "feedback.rate.link": "Oceń go w Chrome Web Store",
   "feedback.feature": "Potrzebna funkcjonalność, której nie ma?",
-  "feedback.feature.link": "Poproś o nią na stronie projektu"
+  "feedback.feature.link": "Poproś o nią na stronie projektu",
+  "meta.notes": "Karteczki",
+  "editor.tool.note": "Karteczka",
+  "editor.notePrompt": "Napisz notatkę…",
+  "editor.noteHint": "Ctrl+Enter dodaje karteczkę · Esc anuluje",
+  "editor.textHint": "Enter dodaje tekst · Shift+Enter nowa linia · Esc anuluje"
 }

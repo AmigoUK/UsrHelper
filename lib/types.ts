@@ -62,6 +62,11 @@ export interface ConsoleErrorEntry {
   at: string; // ISO timestamp
 }
 
+export interface NoteEntry {
+  index: number;
+  text: string;
+}
+
 export interface EnvironmentInfo {
   userAgent: string;
   /** Real OS and version from Client Hints, e.g. "macOS 15.3.0". */
@@ -85,6 +90,8 @@ export interface ReportMetadata {
   pageTitle: string;
   environment: EnvironmentInfo;
   consoleErrors: ConsoleErrorEntry[];
+  /** Sticky notes placed on the screenshot, numbered as they appear on it. */
+  notes: NoteEntry[];
   clickPath: ClickPathEntry[];
   files: string[];
   extensionVersion: string;

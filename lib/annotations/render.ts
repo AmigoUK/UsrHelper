@@ -1,4 +1,5 @@
 import type { Annotation, PixelateAnnotation } from './model';
+import { layoutNote, NOTE_EDGE, NOTE_INK, NOTE_PAPER, noteFontSize } from './note';
 import { mosaicBlockSize, pixelateBuffer } from './pixelate';
 import { wrapText } from './wrapText';
 
@@ -25,8 +26,13 @@ export function renderScene(
   if (pixelates.length > 0 && mosaic) {
     drawPixelates(ctx, mosaic, pixelates);
   }
+  // A note's number is its position among the notes — the report reads the same
+  // list, so the image and the JSON cannot disagree about which note is which.
+  const noteNumbers = new Map<string, number>();
+  annotations.filter((a) => a.kind === 'note').forEach((a, i) => noteNumbers.set(a.id, i + 1));
+
   for (const a of annotations) {
-    if (a.kind !== 'pixelate') drawAnnotation(ctx, a);
+    if (a.kind !== 'pixelate') drawAnnotation(ctx, a, noteNumbers.get(a.id));
   }
 }
 
@@ -75,7 +81,7 @@ function strokePath(ctx: Ctx, points: { x: number; y: number }[], size: number):
   ctx.stroke();
 }
 
-function drawAnnotation(ctx: Ctx, a: Annotation): void {
+function drawAnnotation(ctx: Ctx, a: Annotation, noteNumber = 1): void {
   ctx.save();
   ctx.strokeStyle = a.color;
   ctx.fillStyle = a.color;
@@ -111,6 +117,37 @@ function drawAnnotation(ctx: Ctx, a: Annotation): void {
       const x = Math.max(0, Math.min(a.x, ctx.canvas.width - blockWidth - fontSize * 0.3));
       const y = Math.max(0, Math.min(a.y, ctx.canvas.height - blockHeight));
       lines.forEach((line, i) => ctx.fillText(line, x, y + i * fontSize * 1.25));
+      break;
+    }
+    case 'note': {
+      // The font must be set before measuring — measureText reads ctx.font.
+      const font = noteFontSize(ctx.canvas.width);
+      ctx.font = `500 ${font}px system-ui, sans-serif`;
+      const layout = layoutNote(a.text, ctx.canvas.width, (s) => ctx.measureText(s).width);
+      const x = Math.max(0, Math.min(a.x, ctx.canvas.width - layout.width));
+      const y = Math.max(0, Math.min(a.y, ctx.canvas.height - layout.height));
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+      ctx.shadowBlur = font * 0.6;
+      ctx.shadowOffsetY = font * 0.2;
+      ctx.fillStyle = a.color || NOTE_PAPER;
+      ctx.fillRect(x, y, layout.width, layout.height);
+      ctx.restore();
+
+      ctx.fillStyle = NOTE_EDGE;
+      ctx.fillRect(x, y, layout.width, layout.header);
+
+      ctx.fillStyle = NOTE_INK;
+      ctx.textBaseline = 'middle';
+      ctx.font = `700 ${font * 0.95}px system-ui, sans-serif`;
+      ctx.fillText(String(noteNumber), x + layout.padding, y + layout.header / 2);
+
+      ctx.font = `500 ${font}px system-ui, sans-serif`;
+      ctx.textBaseline = 'top';
+      layout.lines.forEach((line, i) =>
+        ctx.fillText(line, x + layout.padding, y + layout.header + layout.padding + i * layout.lineHeight),
+      );
       break;
     }
     case 'step': {

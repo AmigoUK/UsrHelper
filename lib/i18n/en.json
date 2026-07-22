@@ -118,5 +118,10 @@
   "feedback.rate": "Is UsrHelper useful to you?",
   "feedback.rate.link": "Rate it in the Chrome Web Store",
   "feedback.feature": "Need a feature it does not have?",
-  "feedback.feature.link": "Request it on the project page"
+  "feedback.feature.link": "Request it on the project page",
+  "meta.notes": "Sticky notes",
+  "editor.tool.note": "Sticky note",
+  "editor.notePrompt": "Write a note…",
+  "editor.noteHint": "Ctrl+Enter adds the note · Esc cancels",
+  "editor.textHint": "Enter adds the text · Shift+Enter new line · Esc cancels"
 }

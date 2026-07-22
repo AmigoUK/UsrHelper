@@ -269,6 +269,55 @@ check(
   (await textInk(0.6, 0.8)) === 0 && (await editor.locator('.editor-text-input').count()) === 0,
 );
 
+// Sticky note: Enter must break the line (a note is sentences, not a label) and
+// Ctrl+Enter commits. One Undo must remove the whole note.
+const notePaper0 = () =>
+  editor.evaluate(() => {
+    const c = document.querySelector('canvas');
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+    let n = 0;
+    for (let i = 0; i < d.length; i += 4) if (d[i] > 230 && d[i + 1] > 200 && d[i + 2] < 190) n++;
+    return n;
+  });
+const paperBaseline = await notePaper0();
+await toolBtn('Sticky note').click();
+await editor.mouse.click(at(0.62, 0.62).x, at(0.62, 0.62).y);
+await editor.waitForSelector('.editor-text-input');
+await editor.waitForTimeout(200);
+await editor.keyboard.type('Sticky note one');
+await editor.keyboard.press('Enter');
+await editor.keyboard.type('second line');
+check(
+  'Enter inside a sticky note breaks the line instead of committing',
+  (await editor.locator('.editor-text-input').count()) === 1,
+);
+await editor.keyboard.press('Control+Enter');
+await editor.waitForTimeout(300);
+const notePaper = () =>
+  editor.evaluate(() => {
+    const c = document.querySelector('canvas');
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+    let n = 0;
+    for (let i = 0; i < d.length; i += 4) if (d[i] > 230 && d[i + 1] > 200 && d[i + 2] < 190) n++;
+    return n;
+  });
+const paperAfterAdd = await notePaper();
+check(
+  'Ctrl+Enter adds a yellow sticky note',
+  paperAfterAdd - paperBaseline > 500 && (await editor.locator('.editor-text-input').count()) === 0,
+  `yellow px ${paperBaseline} → ${paperAfterAdd}`,
+);
+await undoOnce.click();
+await editor.waitForTimeout(250);
+const paperAfterUndo = await notePaper();
+check(
+  'One Undo removes the whole sticky note',
+  paperAfterUndo === paperBaseline,
+  `yellow px baseline ${paperBaseline}, after undo ${paperAfterUndo}`,
+);
+await redoOnce.click();
+await editor.waitForTimeout(250);
+
 // Anonymization brush: three overlapping passes fully covering the SECRET text
 // (which sits in the top-left of the captured viewport, around y≈0.11).
 const secretColorsBefore = await uniqueColors(0.15, 0.11);
@@ -339,6 +388,13 @@ if (jsonItem && existsSync(jsonItem.filename)) {
       !!meta.environment?.browser &&
       !/\b\d+\.0\.0\.0$/.test(meta.environment.browser),
     `${meta.environment?.platform} | ${meta.environment?.architecture} | ${meta.environment?.browser}`,
+  );
+  // The note is burned into the PNG; the JSON must also carry it as text so the
+  // developer can search and quote it.
+  check(
+    'JSON carries sticky notes with their numbers',
+    meta.notes?.length === 1 && meta.notes[0].index === 1 && meta.notes[0].text.includes('Sticky note one'),
+    JSON.stringify(meta.notes),
   );
   check(
     'JSON carries reporter details (customer/company/name/AnyDesk)',

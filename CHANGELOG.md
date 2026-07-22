@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.8.0] — 2026-07-22
+
+### Added
+- **Yellow sticky notes** — a new annotation tool for a reviewer's comment, as opposed to the one-word label the Text tool draws. The note sizes itself from the image: `max(12px, 1.1% of width)`, so a 240 px region crop stays readable where a plain proportion would collapse to 2.6 px, and a retina capture gets a note that reads the same after the browser scales it down. The shared "Size" slider does not apply.
+- Notes are **numbered on the image**, and their number and text go into the companion `.json` and the email body, so the developer can search and quote a comment instead of retyping it from the screenshot. The number is derived from the note's position in the list, so the image and the report cannot disagree about which note is which.
+- Inside a note **Enter breaks the line** and **Ctrl/Cmd+Enter** commits — a note is sentences, not a label — with a hint under the field stating so. Escape discards.
+- `docs/BACKLOG.md`, recording accepted ideas and the reasoning behind them; linked from the README.
+
+### Fixed
+- The `console.error` wrapper sometimes never installed on a configured project domain. The gate and the MAIN-world script are injected independently, so the gate could dispatch its decision before the other script had registered a listener — and nothing re-sent it. The two now shake hands. This surfaced as an intermittently failing E2E check, which was a real product race rather than test flakiness.
+
 ## [0.7.0] — 2026-07-22
 
 ### Added
@@ -141,7 +152,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.0...v0.5.1

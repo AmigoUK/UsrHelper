@@ -215,6 +215,7 @@ export function RecorderApp() {
       environment: await collectEnvironment(),
       consoleErrors: [],
       clickPath: [],
+      notes: [],
       files,
       extensionVersion: extensionVersion(),
     };

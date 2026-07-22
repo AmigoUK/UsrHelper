@@ -54,6 +54,12 @@ export function buildReportBody(meta: ReportMetadata, t: Translate): string {
       .join(' | ')} | screen ${meta.environment.screenResolution} | viewport ${meta.environment.viewport}`,
     `${t('meta.userAgent')}: ${meta.environment.userAgent}`,
   );
+  if (meta.notes.length > 0) {
+    lines.push('', `${t('meta.notes')}:`);
+    for (const note of meta.notes) {
+      lines.push(`  ${note.index}. ${note.text.replace(/\n/g, ' ')}`);
+    }
+  }
   if (meta.consoleErrors.length > 0) {
     lines.push('', `${t('meta.consoleErrors')}:`);
     for (const err of meta.consoleErrors.slice(-10)) {

@@ -53,6 +53,7 @@ describe('buildReportBody', () => {
     },
     consoleErrors: [{ message: 'TypeError: x is undefined', at: '2026-07-17T14:31:00.000Z' }],
     clickPath: [],
+    notes: [],
     files: ['UsrHelper/a.png', 'UsrHelper/a.json'],
     extensionVersion: '0.0.1',
   };
@@ -74,6 +75,20 @@ describe('buildReportBody', () => {
       (k) => k,
     );
     expect(body).not.toContain('meta.reporter');
+  });
+
+  it('lists sticky notes with their numbers', () => {
+    const body = buildReportBody(
+      { ...meta, notes: [{ index: 1, text: 'Button does nothing' }, { index: 2, text: 'Missing\nseparator' }] },
+      (k) => k,
+    );
+    expect(body).toContain('meta.notes:');
+    expect(body).toContain('  1. Button does nothing');
+    expect(body).toContain('  2. Missing separator');
+  });
+
+  it('omits the sticky-note section when there are none', () => {
+    expect(buildReportBody(meta, (k) => k)).not.toContain('meta.notes');
   });
 
   it('reports the real machine, not the frozen UA values', () => {

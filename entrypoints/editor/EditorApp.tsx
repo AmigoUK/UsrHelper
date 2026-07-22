@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Annotation, Point, Tool } from '@/lib/annotations/model';
 import { nextStepNumber } from '@/lib/annotations/model';
+import { collectNotes, layoutNote, NOTE_PAPER, noteFontSize } from '@/lib/annotations/note';
 import { buildMosaic, renderScene, stampTimestamp } from '@/lib/annotations/render';
 import { wrapText } from '@/lib/annotations/wrapText';
 import type { CaptureRecord } from '@/lib/captureStore';
@@ -17,7 +18,7 @@ import { addHistoryEntry, getActiveProfile, loadSettings, newId } from '@/lib/st
 import type { ProjectProfile, ReportMetadata, Settings } from '@/lib/types';
 
 const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#2563eb', '#a855f7', '#0f172a', '#ffffff'];
-const TOOLS: Tool[] = ['select', 'pen', 'rect', 'ellipse', 'arrow', 'text', 'step', 'pixelate', 'crop'];
+const TOOLS: Tool[] = ['select', 'pen', 'rect', 'ellipse', 'arrow', 'text', 'note', 'step', 'pixelate', 'crop'];
 
 /** Classic mouse-pointer arrow — clearer than an abstract glyph for "Select". */
 const CursorIcon = () => (
@@ -39,6 +40,7 @@ const TOOL_ICONS: Record<Tool, string> = {
   ellipse: '◯',
   arrow: '↗',
   text: 'T',
+  note: '🗒',
   step: '➊',
   pixelate: '▩',
   crop: '⧉',
@@ -63,7 +65,13 @@ export function EditorApp() {
   const [saveError, setSaveError] = useState(false);
   const [cropRect, setCropRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [textInput, setTextInput] = useState<{ x: number; y: number; screenX: number; screenY: number } | null>(null);
+  const [textInput, setTextInput] = useState<{
+    x: number;
+    y: number;
+    screenX: number;
+    screenY: number;
+    mode: 'text' | 'note';
+  } | null>(null);
   const [, forceRender] = useState(0);
 
   // Mutable editor state kept in refs (canvas drawing happens outside React).
@@ -79,7 +87,7 @@ export function EditorApp() {
   // being removed from the DOM, so Enter/Escape and the blur handler can both
   // reach commitText(); `textInput` state clears too late to stop the second
   // one. This ref is cleared synchronously and is the single commit gate.
-  const textAnchor = useRef<Point | null>(null);
+  const textAnchor = useRef<(Point & { mode: 'text' | 'note' }) | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -148,7 +156,7 @@ export function EditorApp() {
     if (selectedId) {
       const a = annotations.current.find((x) => x.id === selectedId);
       if (a) {
-        const box = annotationBounds(a);
+        const box = annotationBounds(a, base.width);
         ctx.save();
         ctx.strokeStyle = '#38bdf8';
         ctx.setLineDash([6, 4]);
@@ -232,16 +240,17 @@ export function EditorApp() {
     dragStart.current = p;
 
     if (tool === 'select') {
-      const hit = [...annotations.current].reverse().find((a) => hitTest(a, p));
+      const hit = [...annotations.current].reverse().find((a) => hitTest(a, p, currentBase().width));
       setSelectedId(hit?.id ?? null);
       if (hit) snapshot();
       redraw();
       return;
     }
-    if (tool === 'text') {
+    if (tool === 'text' || tool === 'note') {
       // Keep the input box fully on screen, wherever the user clicked.
-      textAnchor.current = { x: p.x, y: p.y };
+      textAnchor.current = { x: p.x, y: p.y, mode: tool };
       setTextInput({
+        mode: tool,
         x: p.x,
         y: p.y,
         screenX: Math.min(e.clientX, window.innerWidth - 344),
@@ -334,7 +343,21 @@ export function EditorApp() {
     // Claim the anchor: whichever trigger fires first commits, the rest no-op.
     const anchor = textAnchor.current;
     textAnchor.current = null;
-    if (anchor && value.trim()) {
+    if (anchor && value.trim() && anchor.mode === 'note') {
+      snapshot();
+      const base = currentBase();
+      const font = noteFontSize(base.width);
+      const layout = layoutNote(value, base.width, (s) => s.length * font * 0.55);
+      annotations.current.push({
+        id: newId(),
+        kind: 'note',
+        x: Math.max(0, Math.min(anchor.x, base.width - layout.width)),
+        y: Math.max(0, Math.min(anchor.y, base.height - layout.height)),
+        text: value,
+        color: NOTE_PAPER,
+        size: scaledSize(),
+      });
+    } else if (anchor && value.trim()) {
       snapshot();
       // Clamp the anchor so the wrapped block stays inside the image.
       const base = currentBase();
@@ -450,6 +473,7 @@ export function EditorApp() {
       environment: await collectEnvironment(),
       consoleErrors: context.consoleErrors,
       clickPath: context.clickPath,
+      notes: collectNotes(annotations.current),
       files,
       extensionVersion: extensionVersion(),
     };
@@ -512,12 +536,20 @@ export function EditorApp() {
           onMouseLeave={() => onPointerUp()}
         />
         {textInput && (
+          <div
+            class="editor-text-box"
+            style={`left: ${textInput.screenX}px; top: ${textInput.screenY}px;`}
+          >
           <textarea
             class="editor-text-input"
             ref={textAreaRef}
-            style={`left: ${textInput.screenX}px; top: ${textInput.screenY}px; position: fixed;`}
+            style="position: static;"
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
+              // A note is several sentences, so Enter breaks the line there and
+              // Ctrl/Cmd+Enter commits; a text label commits on plain Enter.
+              const commitKey =
+                textInput.mode === 'note' ? e.key === 'Enter' && (e.ctrlKey || e.metaKey) : e.key === 'Enter' && !e.shiftKey;
+              if (commitKey) {
                 e.preventDefault();
                 commitText((e.target as HTMLTextAreaElement).value);
               } else if (e.key === 'Escape') {
@@ -530,8 +562,12 @@ export function EditorApp() {
               // leave the state untouched instead of re-running the commit.
               if (textAnchor.current) commitText((e.target as HTMLTextAreaElement).value);
             }}
-            placeholder={t('editor.textPrompt')}
+            placeholder={t(textInput.mode === 'note' ? 'editor.notePrompt' : 'editor.textPrompt')}
           />
+            <div class="editor-text-hint">
+              {t(textInput.mode === 'note' ? 'editor.noteHint' : 'editor.textHint')}
+            </div>
+          </div>
         )}
       </div>
 
@@ -652,7 +688,7 @@ export function EditorApp() {
   );
 }
 
-function annotationBounds(a: Annotation): { x: number; y: number; w: number; h: number } {
+function annotationBounds(a: Annotation, imageWidth: number): { x: number; y: number; w: number; h: number } {
   switch (a.kind) {
     case 'pen':
     case 'pixelate': {
@@ -679,6 +715,12 @@ function annotationBounds(a: Annotation): { x: number; y: number; w: number; h: 
       const w = Math.min(Math.max(...lines.map(estimate)), maxWidth);
       return { x: a.x, y: a.y, w, h: lines.length * fontSize * 1.25 };
     }
+    case 'note': {
+      // Same layout rules the renderer uses, measured with a cheap estimator.
+      const font = noteFontSize(imageWidth);
+      const layout = layoutNote(a.text, imageWidth, (s) => s.length * font * 0.55);
+      return { x: a.x, y: a.y, w: layout.width, h: layout.height };
+    }
     case 'step': {
       const r = Math.max(14, a.size * 5);
       return { x: a.x - r, y: a.y - r, w: r * 2, h: r * 2 };
@@ -686,8 +728,8 @@ function annotationBounds(a: Annotation): { x: number; y: number; w: number; h: 
   }
 }
 
-function hitTest(a: Annotation, p: { x: number; y: number }): boolean {
-  const b = annotationBounds(a);
+function hitTest(a: Annotation, p: { x: number; y: number }, imageWidth: number): boolean {
+  const b = annotationBounds(a, imageWidth);
   const pad = 8;
   return p.x >= b.x - pad && p.x <= b.x + b.w + pad && p.y >= b.y - pad && p.y <= b.y + b.h + pad;
 }
@@ -713,6 +755,7 @@ function moveAnnotation(a: Annotation, dx: number, dy: number): void {
       a.y2 += dy;
       break;
     case 'text':
+    case 'note':
     case 'step':
       a.x += dx;
       a.y += dy;

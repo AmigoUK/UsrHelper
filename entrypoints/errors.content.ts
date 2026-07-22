@@ -51,5 +51,9 @@ export default defineContentScript({
       };
     };
     window.addEventListener('usrhelper:enableconsolecapture', installConsoleWrapper);
+    // This script and the gate that decides for it are injected independently,
+    // so either can win the race. Announcing readiness lets the gate re-send its
+    // decision if it arrived before this listener existed.
+    window.dispatchEvent(new CustomEvent('usrhelper:consoleready'));
   },
 });
