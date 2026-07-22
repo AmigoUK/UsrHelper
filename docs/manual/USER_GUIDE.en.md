@@ -81,6 +81,7 @@ Tools (right-hand panel):
 | **Rectangle / Ellipse** | Frame the relevant element. |
 | **Arrow** | Point at the problem. |
 | **Text** | Click on the image, type, confirm with `Enter` (`Esc` cancels). |
+| **Sticky note** | A yellow note for a comment of a sentence or two. `Enter` breaks the line, `Ctrl+Enter` adds the note (`Esc` cancels). Notes are numbered on the image, and their number and text also go into the `.json` and the email, so the developer can quote them instead of retyping from the screenshot. |
 | **Step marker** | Each click drops a numbered circle (1, 2, 3…) — perfect for step-by-step instructions. |
 | **Anonymize (mosaic)** | Paint over sensitive data (names, amounts, tokens) — the area is **irreversibly** turned into a pixel mosaic in the saved file. |
 | **Crop** | Drag a rectangle and click "Apply crop". |
@@ -126,6 +127,8 @@ The popup lists your **recent reports** with thumbnails:
 
 If you have several **project profiles** (different recipients, folders, limits), switch them in the popup with a single dropdown — all subsequent reports use the active profile.
 
+**Getting a ready-made profile from your developer.** In Settings, **Export** saves the active profile as a JSON file you can send to your testers; **Import profile…** reads such a file. The import first shows what the file would add — the recipient addresses above all, since that is where finished reports will go — and stores nothing until you confirm. The file carries project settings only: never your name, customer number or AnyDesk number, and never your report history.
+
 ## 7. What a report contains
 
 Every report is a set of files in `Downloads/<subfolder>/`:
@@ -134,7 +137,7 @@ Every report is a set of files in `Downloads/<subfolder>/`:
 |---|---|
 | `UsrHelper_<date>_<time>.png` | The annotated screenshot with a timestamp in the corner. |
 | `UsrHelper_<date>_<time>_part-NN.webm` | Recording clips (with the burned-in clock and camera bubble). |
-| `UsrHelper_<date>_<time>.json` | Description, reporter details, exact time, page URL and title, environment (browser, OS, resolution), recent JavaScript console errors, click path, file list. |
+| `UsrHelper_<date>_<time>.json` | Description, reporter details, exact time, page URL and title, environment (browser, OS, CPU architecture, resolution), recent JavaScript errors, sticky notes with their numbers, click path, file list. |
 
 The timestamp lives in three places: the file name, visibly on the image/recording, and in the `.json` — easy to correlate with server logs.
 

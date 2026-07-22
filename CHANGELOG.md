@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.9.1] — 2026-07-22
+
+### Fixed
+- The text and sticky-note box could swallow the first characters typed into it. Focus was applied one tick after the box appeared, so anything typed in that gap went nowhere — it showed up as an annotation reading "ative total?!" instead of "Negative total?!" in a freshly generated screenshot. Focus is now claimed the moment the box enters the document, and the click that opens it no longer lets the browser move focus to the canvas, which would otherwise blur the box in the same frame.
+- Documentation and store screenshots regenerated from the current build, so they show sticky notes, the version badge and the current Settings.
+
 ## [0.9.0] — 2026-07-22
 
 ### Added
@@ -163,7 +169,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.6.0...v0.7.0

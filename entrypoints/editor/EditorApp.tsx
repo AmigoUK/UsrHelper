@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import type { Annotation, Point, Tool } from '@/lib/annotations/model';
 import { nextStepNumber } from '@/lib/annotations/model';
 import { collectNotes, layoutNote, NOTE_PAPER, noteFontSize } from '@/lib/annotations/note';
@@ -114,11 +114,14 @@ export function EditorApp() {
     })();
   }, []);
 
-  // The `autofocus` attribute is honoured once per document, so every text box
-  // after the first one would open unfocused and swallow the user's typing.
-  useEffect(() => {
-    if (textInput) textAreaRef.current?.focus();
-  }, [textInput]);
+  // Focus is claimed in the ref callback, which Preact runs as soon as the node
+  // is in the document. An effect runs a tick later, and anything typed in that
+  // gap is lost — and `autofocus` is honoured only once per document, so it
+  // cannot do the job either. The callback is stable so it fires on mount only.
+  const focusTextArea = useCallback((el: HTMLTextAreaElement | null) => {
+    textAreaRef.current = el;
+    el?.focus();
+  }, []);
 
   const currentBase = () => bases.current[baseIndex.current];
 
@@ -247,6 +250,10 @@ export function EditorApp() {
       return;
     }
     if (tool === 'text' || tool === 'note') {
+      // Without this the browser finishes the mousedown by moving focus to the
+      // canvas, which blurs the box we are about to open — it would appear and
+      // vanish in the same frame, or swallow the first characters typed.
+      e.preventDefault();
       // Keep the input box fully on screen, wherever the user clicked.
       textAnchor.current = { x: p.x, y: p.y, mode: tool };
       setTextInput({
@@ -542,7 +549,7 @@ export function EditorApp() {
           >
           <textarea
             class="editor-text-input"
-            ref={textAreaRef}
+            ref={focusTextArea}
             style="position: static;"
             onKeyDown={(e) => {
               // A note is several sentences, so Enter breaks the line there and

@@ -148,6 +148,10 @@
 <td>Click on the image, type, confirm with <code>Enter</code> (<code>Esc</code> cancels).</td>
 </tr>
 <tr>
+<td><strong>Sticky note</strong></td>
+<td>A yellow note for a comment of a sentence or two. <code>Enter</code> breaks the line, <code>Ctrl+Enter</code> adds the note (<code>Esc</code> cancels). Notes are numbered on the image, and their number and text also go into the <code>.json</code> and the email, so the developer can quote them instead of retyping from the screenshot.</td>
+</tr>
+<tr>
 <td><strong>Step marker</strong></td>
 <td>Each click drops a numbered circle (1, 2, 3…) — perfect for step-by-step instructions.</td>
 </tr>
@@ -189,6 +193,7 @@
 <li><strong>Email again</strong> — opens a new email message with the report details.</li>
 </ul>
 <p>If you have several <strong>project profiles</strong> (different recipients, folders, limits), switch them in the popup with a single dropdown — all subsequent reports use the active profile.</p>
+<p><strong>Getting a ready-made profile from your developer.</strong> In Settings, <strong>Export</strong> saves the active profile as a JSON file you can send to your testers; <strong>Import profile…</strong> reads such a file. The import first shows what the file would add — the recipient addresses above all, since that is where finished reports will go — and stores nothing until you confirm. The file carries project settings only: never your name, customer number or AnyDesk number, and never your report history.</p>
 <h2 id="7-what-a-report-contains">7. What a report contains</h2>
 <p>Every report is a set of files in <code>Downloads/&lt;subfolder&gt;/</code>:</p>
 <table>
@@ -208,7 +213,7 @@
 </tr>
 <tr>
 <td><code>UsrHelper_&lt;date&gt;_&lt;time&gt;.json</code></td>
-<td>Description, reporter details, exact time, page URL and title, environment (browser, OS, resolution), recent JavaScript console errors, click path, file list.</td>
+<td>Description, reporter details, exact time, page URL and title, environment (browser, OS, CPU architecture, resolution), recent JavaScript errors, sticky notes with their numbers, click path, file list.</td>
 </tr>
 </tbody></table>
 <p>The timestamp lives in three places: the file name, visibly on the image/recording, and in the <code>.json</code> — easy to correlate with server logs.</p>
@@ -325,6 +330,10 @@
 <td>Kliknij na obrazie, wpisz treść, zatwierdź <code>Enter</code> (<code>Esc</code> anuluje).</td>
 </tr>
 <tr>
+<td><strong>Karteczka</strong></td>
+<td>Żółta notatka na komentarz o długości zdania lub dwóch. <code>Enter</code> łamie wiersz, <code>Ctrl+Enter</code> dodaje karteczkę (<code>Esc</code> anuluje). Karteczki są numerowane na obrazie, a ich numer i treść trafiają też do pliku <code>.json</code> i do maila — deweloper może je zacytować, zamiast przepisywać ze zrzutu.</td>
+</tr>
+<tr>
 <td><strong>Znacznik kroku</strong></td>
 <td>Każde kliknięcie stawia kółko z kolejnym numerem (1, 2, 3…) — idealne do instrukcji „krok po kroku&quot;.</td>
 </tr>
@@ -366,6 +375,7 @@
 <li><strong>Wyślij ponownie</strong> — otwiera nową wiadomość email z danymi zgłoszenia.</li>
 </ul>
 <p>Jeśli masz kilka <strong>profili projektów</strong> (różni odbiorcy, foldery, limity), przełączasz je w popupie jedną listą rozwijaną — wszystkie kolejne zgłoszenia używają aktywnego profilu.</p>
+<p><strong>Gotowy profil od dewelopera.</strong> W Ustawieniach <strong>Eksportuj</strong> zapisuje aktywny profil do pliku JSON, który możesz rozesłać testerom, a <strong>Importuj profil…</strong> taki plik wczytuje. Import najpierw pokazuje, co plik doda — przede wszystkim adresy odbiorców, bo to tam trafią gotowe raporty — i nic nie zapisuje, dopóki nie potwierdzisz. Plik zawiera wyłącznie ustawienia projektu: nigdy Twojego imienia, numeru klienta ani numeru AnyDesk, i nigdy historii raportów.</p>
 <h2 id="7-co-zawiera-raport">7. Co zawiera raport</h2>
 <p>Każde zgłoszenie to komplet plików w <code>Pobrane/&lt;podfolder&gt;/</code>:</p>
 <table>
@@ -385,7 +395,7 @@
 </tr>
 <tr>
 <td><code>UsrHelper_&lt;data&gt;_&lt;czas&gt;.json</code></td>
-<td>Opis, dane zgłaszającego, dokładny czas, adres i tytuł strony, środowisko (przeglądarka, system, rozdzielczość), ostatnie błędy konsoli JavaScript, ścieżka kliknięć, lista plików.</td>
+<td>Opis, dane zgłaszającego, dokładny czas, adres i tytuł strony, środowisko (przeglądarka, system, architektura procesora, rozdzielczość), ostatnie błędy JavaScript, karteczki wraz z numerami, ścieżka kliknięć, lista plików.</td>
 </tr>
 </tbody></table>
 <p>Timestamp jest w trzech miejscach: w nazwie pliku, widoczny na obrazie/nagraniu i w pliku <code>.json</code> — łatwo powiązać zgłoszenie z logami serwera.</p>

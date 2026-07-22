@@ -81,6 +81,7 @@ Narzędzia (pasek po prawej):
 | **Prostokąt / Elipsa** | Ramka wokół istotnego elementu. |
 | **Strzałka** | Wskazanie miejsca problemu. |
 | **Tekst** | Kliknij na obrazie, wpisz treść, zatwierdź `Enter` (`Esc` anuluje). |
+| **Karteczka** | Żółta notatka na komentarz o długości zdania lub dwóch. `Enter` łamie wiersz, `Ctrl+Enter` dodaje karteczkę (`Esc` anuluje). Karteczki są numerowane na obrazie, a ich numer i treść trafiają też do pliku `.json` i do maila — deweloper może je zacytować, zamiast przepisywać ze zrzutu. |
 | **Znacznik kroku** | Każde kliknięcie stawia kółko z kolejnym numerem (1, 2, 3…) — idealne do instrukcji „krok po kroku". |
 | **Anonimizuj (mozaika)** | Zamaluj dane wrażliwe (nazwiska, kwoty, tokeny) — obszar zostaje **nieodwracalnie** zamieniony w mozaikę pikselową w zapisanym pliku. |
 | **Kadruj** | Przeciągnij prostokąt i kliknij „Zastosuj kadr". |
@@ -126,6 +127,8 @@ Popup pokazuje **ostatnie zgłoszenia** z miniaturami:
 
 Jeśli masz kilka **profili projektów** (różni odbiorcy, foldery, limity), przełączasz je w popupie jedną listą rozwijaną — wszystkie kolejne zgłoszenia używają aktywnego profilu.
 
+**Gotowy profil od dewelopera.** W Ustawieniach **Eksportuj** zapisuje aktywny profil do pliku JSON, który możesz rozesłać testerom, a **Importuj profil…** taki plik wczytuje. Import najpierw pokazuje, co plik doda — przede wszystkim adresy odbiorców, bo to tam trafią gotowe raporty — i nic nie zapisuje, dopóki nie potwierdzisz. Plik zawiera wyłącznie ustawienia projektu: nigdy Twojego imienia, numeru klienta ani numeru AnyDesk, i nigdy historii raportów.
+
 ## 7. Co zawiera raport
 
 Każde zgłoszenie to komplet plików w `Pobrane/<podfolder>/`:
@@ -134,7 +137,7 @@ Każde zgłoszenie to komplet plików w `Pobrane/<podfolder>/`:
 |---|---|
 | `UsrHelper_<data>_<czas>.png` | Zrzut z adnotacjami i timestampem w rogu. |
 | `UsrHelper_<data>_<czas>_part-NN.webm` | Klipy nagrania (z wypalonym zegarem i dymkiem kamerki). |
-| `UsrHelper_<data>_<czas>.json` | Opis, dane zgłaszającego, dokładny czas, adres i tytuł strony, środowisko (przeglądarka, system, rozdzielczość), ostatnie błędy konsoli JavaScript, ścieżka kliknięć, lista plików. |
+| `UsrHelper_<data>_<czas>.json` | Opis, dane zgłaszającego, dokładny czas, adres i tytuł strony, środowisko (przeglądarka, system, architektura procesora, rozdzielczość), ostatnie błędy JavaScript, karteczki wraz z numerami, ścieżka kliknięć, lista plików. |
 
 Timestamp jest w trzech miejscach: w nazwie pliku, widoczny na obrazie/nagraniu i w pliku `.json` — łatwo powiązać zgłoszenie z logami serwera.
 
