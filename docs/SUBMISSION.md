@@ -43,48 +43,169 @@ Title, summary, category and language are unchanged:
 | Category | `Developer Tools` |
 | Language | `English` |
 
-**Detailed description — replace with this (the old text predates sticky notes,
-profile sharing, and the narrowed console-error capture):**
+**Detailed description — replace the published text with this. It covers every
+feature, in plain English, with no comparisons to named products (Google
+rejects listings that disparage competitors). Length: 8991 of the 16000
+characters allowed.**
 
 ```
-UsrHelper makes software-deployment feedback effortless. Testers and end users capture annotated screenshots or record screencasts with voice narration — the finished report is saved locally with a timestamp and handed off by email. No backend, no accounts, no cloud: everything stays on your machine.
+UsrHelper turns a bug report into a few clicks. You take a screenshot or record your screen, mark what is wrong, and the finished report lands in your Downloads folder. It can also open a ready-made email to your developer, with the details already filled in.
 
-SCREENSHOTS
-• Three capture modes: visible area, full page (auto-scroll & stitch), selected region
-• Annotation editor: marker, rectangle, ellipse, arrow, text, numbered step markers, crop, undo/redo
-• Yellow sticky notes for a comment of a sentence or two — numbered on the image, and repeated as text in the report so the developer can quote them instead of retyping from the screenshot
-• Anonymization brush — paint a pixel mosaic over sensitive data, irreversibly baked into the exported image
-• Click path — recent clicks stamped onto the screenshot as numbered markers
+Everything happens on your own computer. There is no account to create, no server to upload to, and nothing is sent anywhere.
 
-SCREENCASTS
-• Record a tab, window, or the entire screen with microphone narration
-• Mic level meter, 3-2-1 countdown, pause/resume, elapsed timer
-• Optional camera bubble and burned-in timestamp
-• Long recordings split automatically into standalone clips (configurable)
-• Click ripples and pressed-key captions visible on the recording (plain typing is never shown)
 
-REPORTING
-• Files saved to a configurable subfolder of Downloads with a timestamp in the name
-• Companion JSON with description, reporter details, page URL/title, sticky notes, environment info (including the real OS version and CPU architecture), click path, and JavaScript errors
-• One-click email hand-off (mailto) with recipients and CC from settings
-• Project profiles you can export to a file and hand to your testers — importing shows the recipients for confirmation before anything is stored
-• Report history, and a UI in English and Polish
+WHY PEOPLE CHOOSE IT
+
+• No account, no sign-in, no team to join. You install it and use it.
+
+• Nothing is uploaded. Your screenshots stay in your own Downloads folder. This matters when the software you test shows customer names, invoices, or health data on screen.
+
+• It works offline. There is no service that can be slow, down, or shut down later.
+
+• It is free. The full source code is public on GitHub, so anyone can check what it does.
+
+• You hide sensitive data before the file exists. The mosaic brush is painted into the exported image itself. The hidden part is gone for good — it is not a layer that someone could switch off later.
+
+• Recording keeps running when you switch to another tab. Browsers slow down background tabs, which can freeze a recording. UsrHelper does the recording work in a separate worker, so your video keeps its frames while you move around the app you are testing.
+
+• The report describes your real computer. Browsers now hide the true system version, and every Mac with an Apple chip still reports itself as an Intel Mac. UsrHelper reads the accurate values instead, so your developer sees "macOS 15.3.0, arm64, Chrome 150.0.7827.55" and not a placeholder from 2020.
+
+• Your written notes come back as text, not only as pixels. Sticky notes are numbered on the image, and the same numbers and text are saved in the report file. Your developer can copy a sentence instead of retyping it from a picture.
+
+• One person can set it up for everybody. A developer prepares one profile and sends a small file. Testers import it in two clicks and are done — no explaining which address to type where.
+
+
+TAKING A SCREENSHOT
+
+Three ways to capture, all from the toolbar button:
+
+• Visible area — what you see right now.
+• Full page — the extension scrolls the page, takes several shots, and joins them into one tall image. A sticky header appears once at the top instead of repeating on every slice.
+• Selected region — drag a rectangle over the part that matters.
+
+The extension tells you when a page cannot be captured, such as browser settings pages, so you are never left guessing why nothing happened.
+
+
+MARKING WHAT IS WRONG
+
+The editor opens right after the capture. Tools:
+
+• Marker — draw freehand.
+• Rectangle and ellipse — frame the element.
+• Arrow — point at the problem.
+• Text — a short label. Type it and press Enter.
+• Sticky note — a yellow note for a sentence or two. Press Enter for a new line and Ctrl+Enter to place it. Notes are numbered on the image. Their size adapts to the picture, so a note stays readable on a small cut-out and on a high-resolution screenshot alike.
+• Step marker — each click drops a numbered circle. Good for "do this, then this, then this".
+• Anonymize — paint a pixel mosaic over anything private.
+• Crop — keep only the part that matters.
+
+You also get eight colours, a thickness slider, and full undo and redo, with Ctrl+Z and Ctrl+Y. Click an annotation with the Select tool to move it, or press Delete to remove it.
+
+One more button adds your click path: the last ten places you clicked before capturing appear on the image as numbered markers. It answers "what did you do before it broke" without you having to remember.
+
+A timestamp can be stamped into the corner of the image, so the picture itself says when it was taken.
+
+
+RECORDING YOUR SCREEN
+
+• Choose what to record: one tab, a window, or the whole screen.
+• Speak while you record. A level meter shows that your microphone is actually working before you start.
+• A 3-2-1 countdown gives you a moment to get ready.
+• Pause and resume as needed. A timer shows how long you have been recording.
+• Optional camera bubble in the corner.
+• Optional clock burned into the video.
+• Your clicks show up as ripples, so viewers see where you pressed.
+• Keyboard shortcuts appear as captions, for example "Ctrl + B". Ordinary typing is never shown — if you type a password during a recording, it does not appear on screen.
+• Long recordings are split into separate clips automatically. The default is five minutes per clip and thirty minutes in total, and you can change both. Each clip is a complete file you can play on its own, so a long session never becomes one giant attachment.
+
+
+WHAT A FINISHED REPORT CONTAINS
+
+Files are saved to a folder of your choice inside Downloads, with the date and time in the file name:
+
+• The image, as PNG, with everything you drew on it.
+• Recording clips, as WEBM.
+• A companion file with the details, as JSON.
+
+The details file holds your description and who is reporting: name, company, customer number and AnyDesk number, as far as you filled them in. It also holds the exact time, the page address and title, your sticky notes with their numbers, your click path, and recent JavaScript errors from the page.
+
+Last comes the environment: operating system and version, processor type, exact browser version, screen size and window size.
+
+That gives the person fixing the bug the answers to "where", "when", "on what" and "what did you press" without a single follow-up question.
+
+The timestamp appears in three places: the file name, visibly on the image or video, and inside the details file. That makes it easy to line the report up with server logs.
+
+
+SENDING IT
+
+Press Save and the files are written to your Downloads folder. Press Save and Email and your normal mail program opens with a new message: the recipients, the subject and the whole description are already filled in. You attach the files yourself — the extension shows you the exact path, and your file manager can be opened on them with one click. Email programs are not allowed to attach files on their own, so this last step is yours.
+
+Recent reports stay in a list inside the extension, with small previews. From there you can open a file again or send the same report to somebody else later.
+
+
+SETTINGS AND PROJECT PROFILES
+
+A profile holds everything that changes between projects:
+
+• Who receives the report, and who is copied in.
+• A subject prefix, for example "[Project X]".
+• The subfolder inside Downloads where files are saved.
+• A description template, so testers are asked the right questions.
+• The domains of the application you are testing.
+• Clip length and maximum recording length.
+
+Switch profiles from the extension popup. Everything you capture afterwards uses the profile you picked.
+
+You can export a profile to a small file and send it to your testers. When they import it, they first see what the file would add — the recipient addresses above all, because that decides where their reports will go — and nothing is saved until they agree. The file carries project settings only: never someone's name, customer number or AnyDesk number, and never anyone's report history.
+
+Your own details are entered once in the settings and are added to every report after that.
+
+The interface is available in English and Polish.
+
 
 PRIVACY
-All processing is local. The extension has no backend, no analytics, and never transmits data anywhere. Messages an application logs through console.error are captured only on the domains you list in your project profile — that list is empty by default, so the extension does not touch any other site's console. Privacy policy: https://amigouk.github.io/UsrHelper/privacy.html
 
-Documentation: https://amigouk.github.io/UsrHelper/
+• The extension has no server of its own. There is no code in it that sends anything anywhere.
+• There is no analytics, no tracking, and no advertising.
+• Screenshots, recordings and report files are written to your Downloads folder and nowhere else.
+• Your settings live in your own Chrome profile.
+• Errors that a page prints to its console are collected only for the domains you list in your project profile. That list is empty until you fill it in, so on every other website the extension does not touch the page's console at all.
+• Anonymized areas are destroyed in the saved file, not hidden behind something.
+
+Privacy policy: https://amigouk.github.io/UsrHelper/privacy.html
+
+
+WHY IT ASKS FOR PERMISSIONS
+
+• Access to the page you are on — to take the picture.
+• Tabs — to read the address and title of the page for the report, and to notice pages that cannot be captured.
+• Downloads — to save the image, the clips and the details file.
+• Storage — to keep your settings, your profiles and the recent-reports list.
+• Access to all sites. Three things need it:
+  – The click path and the error context are collected in the seconds before you decide to capture. They have to be there already, or there is nothing to save.
+  – During a recording, the click ripples and key captions follow you into every tab you open.
+  – Region selection and full-page capture must work on whatever site you are testing, and nobody can know that site in advance.
+
+All of it is processed on your computer.
+
+
+HELP AND FEEDBACK
+
+Guide with pictures, in English and Polish: https://amigouk.github.io/UsrHelper/
+Ideas and problem reports: https://attv.uk/projects/usrhelper.html
 Source code: https://github.com/AmigoUK/UsrHelper
 ```
 
-**Graphics — re-upload the screenshots; the published ones predate sticky notes,
-the version badge and the current Settings page:**
+**Graphics — the owner supplies the screenshots for this update:**
 
 | Asset | File |
 |---|---|
 | Store icon 128×128 | `public/icon/128.png` (unchanged) |
-| Screenshots 1280×800 (upload in this order) | `docs/manual/images/editor.png`, `docs/manual/images/recording-overlay.png`, `docs/manual/images/recorder-setup.png`, `docs/manual/images/settings.png`, `docs/manual/images/install-extensions-page.png` |
+| Screenshots | Owner's own set: `annotations.jpg`, `click path.jpg`, `features.jpg`, `json.jpg` — these **replace** the generated set, decided 2026-07-22. Each file must be exactly 1280×800 or 640×400, PNG or JPEG, or the dashboard refuses it. |
 | Small promo tile 440×280 | `docs/store-assets/promo-tile-440x280.png` (unchanged) |
+
+The generated screenshots in `docs/manual/images/` stay in the repository for
+the user guide; they are simply not used in the listing any more.
 
 ## 4. Privacy tab
 
