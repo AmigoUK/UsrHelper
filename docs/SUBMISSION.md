@@ -116,8 +116,9 @@ All processing remains local; the extension has no backend and transmits nothing
 
 ## 6. Distribution tab
 
-Nothing to change unless you want to switch visibility. Confirm the current
-setting is what you want before submitting — changing it triggers a re-review.
+**Nothing to change.** The item is already **Public** (confirmed by the owner on
+2026-07-22), which is the intended state. Leave visibility alone — changing it
+triggers a re-review for no benefit.
 
 ## 7. Submit
 
