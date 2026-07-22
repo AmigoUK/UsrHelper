@@ -1,6 +1,7 @@
 {
   "name": "usrhelper",
   "description": "Deployment feedback helper: annotated screenshots and voice screencasts, saved locally or shared via email.",
+  "license": "MIT",
   "private": true,
   "version": "0.9.1",
   "type": "module",

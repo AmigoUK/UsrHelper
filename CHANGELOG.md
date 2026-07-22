@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+- MIT licence (`LICENSE`), and `license: MIT` in `package.json`. The repository was public but carried no licence, which legally means "all rights reserved" — nobody could reuse the code, and the store listing could not honestly call it open source.
 
 ## [0.9.1] — 2026-07-22
 

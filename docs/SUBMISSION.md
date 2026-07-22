@@ -46,7 +46,7 @@ Title, summary, category and language are unchanged:
 **Detailed description — replace the published text with this. It opens with a
 short lead (what it is for, why it exists, who it is for) before any feature
 list, covers every shipped feature in plain English, and states advantages as
-verifiable facts without naming or disparaging any other product. Length: 10543 of
+verifiable facts without naming or disparaging any other product. Length: 10598 of
 the 16000 characters allowed.**
 
 ```
@@ -85,7 +85,7 @@ WHY PEOPLE CHOOSE IT
 
 • It works offline. There is no service that can be slow, down, or shut down later.
 
-• It is free. The full source code is public on GitHub, so anyone can check what it does.
+• It is free and open source, under the MIT licence. Anyone can read the code, check what it really does with your data, or build it themselves.
 
 • You hide sensitive data before the file exists. The mosaic brush is painted into the exported image itself. The hidden part is gone for good — it is not a layer that someone could switch off later.
 

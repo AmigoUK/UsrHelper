@@ -90,4 +90,6 @@ TypeScript · [WXT](https://wxt.dev) (Manifest V3) · Preact · Vitest. The anno
 
 ## License & credits
 
+[MIT](LICENSE) © 2026 Tomasz 'Amigo' Lewandowski. Use it, change it, ship it — commercially too — as long as the copyright notice travels with the code.
+
 Project & Development: Tomasz 'Amigo' Lewandowski · [dev@attv.uk](mailto:dev@attv.uk) · [www.attv.uk](https://www.attv.uk)
