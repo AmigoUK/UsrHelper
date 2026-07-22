@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.9.0] — 2026-07-22
+
+### Added
+- **Export and import a project profile as a file.** A developer prepares one profile — recipients, CC, subject prefix, Downloads subfolder, description template, project domains, recording limits — and sends the JSON to every tester, instead of each tester configuring Settings by hand and getting one field wrong.
+- Importing **shows what the file will add** — the recipients above all — and stores nothing until it is confirmed. A profile file sets where finished reports are sent, so a file from an untrusted source could otherwise quietly redirect screenshots of a customer's application to a stranger.
+- The exported file carries **project settings only**. Reporter details (name, customer number, AnyDesk) are per-person and never travel in a shared file, report history never leaves the machine, and the profile id is dropped so an import cannot overwrite an existing profile.
+- Every field in an imported file is validated and clamped before it reaches storage: path escapes are stripped from the subfolder, recipients that are not addresses are dropped, domain patterns that would match every site are rejected, recording limits are bounded, over-long text is truncated, and unknown keys are discarded.
+
+### Changed
+- The import confirmation button reads "Add and select this profile" rather than repeating the existing "Add profile" label, so no two controls in Settings say the same thing. E2E now also asserts that no two Settings labels collide.
+
 ## [0.8.0] — 2026-07-22
 
 ### Added
@@ -152,7 +163,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.1...v0.6.0

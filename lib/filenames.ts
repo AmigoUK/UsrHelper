@@ -49,3 +49,16 @@ export function sanitizeSubfolder(input: string): string {
 export function buildDownloadPath(subfolder: string, filename: string): string {
   return `${sanitizeSubfolder(subfolder)}/${filename}`;
 }
+
+/** Filename for an exported project profile: UsrHelper_profile_<slug>.json */
+export function profileFilename(name: string): string {
+  const slug = name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40)
+    .replace(/-+$/, '');
+  return `${PREFIX}_profile_${slug || 'profile'}.json`;
+}

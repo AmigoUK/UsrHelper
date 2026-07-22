@@ -130,6 +130,8 @@ check('Credit footer with version', footer.includes('attv.uk') && /v\d+\.\d+\.\d
 // The console-error toggle and the project-domain list are different controls;
 // they must not share a label, or Settings reads as one contradictory control.
 const optionLabels = (await options.locator('label').allTextContents()).map((l) => l.trim());
+const duplicateLabels = optionLabels.filter((l, i) => l && optionLabels.indexOf(l) !== i);
+check('No two Settings controls share a label', duplicateLabels.length === 0, duplicateLabels.join(' | ') || 'all distinct');
 check(
   'Console-error toggle and project-domain list have distinct labels',
   optionLabels.filter((l) => l === 'Capture console errors').length === 1 &&
@@ -619,6 +621,58 @@ check(
   popupHeader?.trim() === `v${manifestVersion}` && optionsHeader.includes(`v${manifestVersion}`),
   `popup="${popupHeader?.trim()}" settings="${optionsHeader.trim()}"`,
 );
+
+// ============================================ 6. Profile export / import
+// A developer prepares one profile and sends the file to every tester. It runs
+// last because importing switches the active profile.
+console.log('— Profile export & import —');
+await options.bringToFront();
+const beforeExport = idsOf(await completedDownloads());
+await options.locator('button:has-text("Export")').first().click();
+const exportedItems = await waitNewDownloads(beforeExport, 1);
+const exportedFile = exportedItems.find((d) => d.mime === 'application/json');
+check('Export writes the profile as JSON', !!exportedFile && existsSync(exportedFile.filename));
+
+let exportedProfile = null;
+if (exportedFile && existsSync(exportedFile.filename)) {
+  const file = JSON.parse(readFileSync(exportedFile.filename, 'utf8'));
+  exportedProfile = file.profile;
+  check(
+    'Exported file carries the project settings but no personal data',
+    file.kind === 'usrhelper-profile' &&
+      file.profile?.emailTo?.includes('qa@example.com') &&
+      file.profile?.subfolder === 'UsrHelper/e2e' &&
+      !JSON.stringify(file).includes('Kowalski') &&
+      !('id' in file.profile),
+    `keys: ${Object.keys(file.profile ?? {}).join(', ')}`,
+  );
+
+  await options.locator('input[type=file]').setInputFiles(exportedFile.filename);
+  await options.waitForTimeout(400);
+  const preview = await options.textContent('.import-preview').catch(() => '');
+  check(
+    'Import shows the recipients for confirmation before storing anything',
+    preview.includes('qa@example.com') && preview.includes('UsrHelper/e2e'),
+    preview.replace(/\s+/g, ' ').trim().slice(0, 80),
+  );
+
+  const profilesBefore = (await sw.evaluate(() => new Promise((r) => chrome.storage.sync.get('settings', (v) => r(v.settings)))))?.profiles?.length ?? 0;
+  await options.locator('button:has-text("Add and select this profile")').click();
+  await waitFor(async () => {
+    const stored = await sw.evaluate(() => new Promise((r) => chrome.storage.sync.get('settings', (v) => r(v.settings))));
+    return stored?.profiles?.length === profilesBefore + 1;
+  }, 'imported profile stored');
+  const after = await sw.evaluate(() => new Promise((r) => chrome.storage.sync.get('settings', (v) => r(v.settings))));
+  const added = after?.profiles?.[after.profiles.length - 1];
+  check(
+    'Confirming adds the profile, selects it, and keeps its settings',
+    after?.profiles?.length === profilesBefore + 1 &&
+      after.activeProfileId === added?.id &&
+      added?.emailTo?.join() === exportedProfile?.emailTo?.join() &&
+      added?.subfolder === exportedProfile?.subfolder,
+    `${after?.profiles?.length} profiles, active="${added?.name}"`,
+  );
+}
 
 // ------------------------------------------------------------------- summary
 console.log('\n================= SUMMARY =================');

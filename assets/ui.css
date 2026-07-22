@@ -100,6 +100,38 @@ label {
   font-size: 12px;
 }
 
+.button-like {
+  display: inline-block;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.button-like:hover {
+  border-color: var(--accent);
+}
+
+.import-preview {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 12px;
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.import-preview dt {
+  color: var(--faint);
+}
+
+.import-preview dd {
+  margin: 0;
+  word-break: break-word;
+}
+
 .feedback-footer {
   margin-top: auto;
   padding-top: 12px;

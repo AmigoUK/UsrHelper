@@ -3,6 +3,9 @@ import { AppFooter } from '@/components/AppFooter';
 import { AppVersion } from '@/components/AppVersion';
 import { useT, type Language } from '@/lib/i18n';
 import { parseDomainList } from '@/lib/domainScope';
+import { profileFilename } from '@/lib/filenames';
+import { buildProfileFile, parseProfileFile, type SharedProfile } from '@/lib/profileFile';
+import { saveJson } from '@/lib/save';
 import { defaultProfile, loadSettings, newId, saveSettings } from '@/lib/storage';
 import type { ProjectProfile, Settings } from '@/lib/types';
 
@@ -16,6 +19,9 @@ export function OptionsApp() {
   const { t, lang, setLang } = useT();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [savedToast, setSavedToast] = useState(false);
+  const [exported, setExported] = useState<string | null>(null);
+  const [pending, setPending] = useState<SharedProfile | null>(null);
+  const [importError, setImportError] = useState<string | null>(null);
 
   useEffect(() => {
     void loadSettings().then(setSettings);
@@ -53,6 +59,29 @@ export function OptionsApp() {
       activeProfileId: settings.activeProfileId === id ? profiles[0].id : settings.activeProfileId,
     });
   };
+
+  async function exportProfile(profile: ProjectProfile) {
+    setExported(null);
+    const saved = await saveJson(buildProfileFile(profile), profile.subfolder, profileFilename(profile.name));
+    setExported(saved.path);
+  }
+
+  /** Reads the picked file; nothing is stored until the user confirms below. */
+  async function pickProfileFile(file: File | null) {
+    setImportError(null);
+    setPending(null);
+    if (!file) return;
+    const result = parseProfileFile(await file.text());
+    if (result.ok) setPending(result.profile);
+    else setImportError(result.error);
+  }
+
+  function confirmImport() {
+    if (!settings || !pending) return;
+    const profile: ProjectProfile = { id: newId(), ...pending };
+    persist({ ...settings, profiles: [...settings.profiles, profile], activeProfileId: profile.id });
+    setPending(null);
+  }
 
   const toggle = (key: keyof Settings, label: string) => (
     <label class="toggle">
@@ -161,6 +190,7 @@ export function OptionsApp() {
                 />
                 {t('options.profiles.active')}
               </label>
+              <button onClick={() => void exportProfile(profile)}>{t('options.profiles.export')}</button>
               <button
                 class="danger"
                 disabled={settings.profiles.length <= 1}
@@ -258,7 +288,52 @@ export function OptionsApp() {
           </div>
         </div>
       ))}
-      <button onClick={addProfile}>{t('options.profiles.add')}</button>
+      <div class="row" style="gap: 8px;">
+        <button style="flex: 0 0 auto;" onClick={addProfile}>{t('options.profiles.add')}</button>
+        <label class="button-like" style="flex: 0 0 auto;">
+          {t('options.profiles.import')}
+          <input
+            type="file"
+            accept="application/json,.json"
+            style="display: none;"
+            onChange={(e) => {
+              const input = e.currentTarget;
+              void pickProfileFile(input.files?.[0] ?? null).finally(() => {
+                input.value = '';
+              });
+            }}
+          />
+        </label>
+      </div>
+
+      {exported && <div class="hint">{t('options.profiles.exported', { path: exported })}</div>}
+      {importError && (
+        <div class="card" style="border-color: var(--danger);">{t(`options.profiles.error.${importError}`)}</div>
+      )}
+      {pending && (
+        <div class="card" style="border-color: var(--accent);">
+          <strong>{t('options.profiles.importPreview')}</strong>
+          <div class="hint">{t('options.profiles.importHint')}</div>
+          <dl class="import-preview">
+            <dt>{t('options.profiles.name')}</dt>
+            <dd>{pending.name}</dd>
+            <dt>{t('options.email.to')}</dt>
+            <dd>{pending.emailTo.join(', ') || '—'}</dd>
+            <dt>{t('options.email.cc')}</dt>
+            <dd>{pending.emailCc.join(', ') || '—'}</dd>
+            <dt>{t('options.folder.label')}</dt>
+            <dd>{pending.subfolder}</dd>
+            <dt>{t('options.console.domains')}</dt>
+            <dd>{pending.domains.join(', ') || '—'}</dd>
+          </dl>
+          <div class="row" style="gap: 8px;">
+            <button class="primary" style="flex: 0 0 auto;" onClick={confirmImport}>
+              {t('options.profiles.importConfirm')}
+            </button>
+            <button style="flex: 0 0 auto;" onClick={() => setPending(null)}>{t('common.cancel')}</button>
+          </div>
+        </div>
+      )}
 
       <h2>{t('recorder.title')}</h2>
       <div class="card">

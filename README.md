@@ -17,6 +17,7 @@ One click, nothing to configure, no account to create. It works offline; if you 
 ### Screenshots
 - **Three capture modes:** visible area, full page (auto-scroll & stitch), selected region.
 - **Annotation editor:** freehand marker, rectangle/ellipse, arrow, text, numbered step markers (1-2-3…), crop, full undo/redo.
+- **Yellow sticky notes** for a reviewer's comment: numbered on the image, sized to stay readable on anything from a small region crop to a retina capture, and repeated as text in the companion `.json` so the developer can quote them.
 - **Anonymization brush:** paint a pixel mosaic over sensitive data — irreversibly baked into the exported image.
 - **Click path:** the last clicks on the page can be stamped onto the screenshot as numbered markers.
 - Timestamp in the file name, stamped in the image corner, and stored in a companion `.json`.
@@ -34,6 +35,7 @@ One click, nothing to configure, no account to create. It works offline; if you 
 - **Email hand-off:** one click opens a pre-filled email (`mailto:`) with To/CC recipients from settings; the extension reminds you which file to attach.
 - Report history in the popup (thumbnails, show file, re-email).
 - **Project profiles:** switchable sets of recipients, folder, description template, and limits.
+- **Share a profile as a file:** export the active profile to JSON and send it to your testers; importing shows the recipients for confirmation before anything is stored. The file carries project settings only — never reporter details or report history.
 - UI in **English** (default) and **Polish**.
 
 ## Documentation
@@ -52,9 +54,7 @@ Missing a feature, or hit a bug? The project page has a public roadmap you can v
 
 No account needed, and an email address is optional. If you would rather stay on GitHub, [open an issue](https://github.com/AmigoUK/UsrHelper/issues) instead.
 
-Accepted ideas waiting to be built are recorded in [`docs/BACKLOG.md`](docs/BACKLOG.md), including:
-
-- **Project profiles — export / import as JSON.** A developer prepares one profile (recipients, subject prefix, Downloads subfolder, description template, project domains) and sends the file to every tester, instead of each tester configuring Settings by hand.
+Accepted ideas waiting to be built are recorded in [`docs/BACKLOG.md`](docs/BACKLOG.md).
 
 ## Build from source (development)
 

@@ -123,5 +123,14 @@
   "editor.tool.note": "Sticky note",
   "editor.notePrompt": "Write a note…",
   "editor.noteHint": "Ctrl+Enter adds the note · Esc cancels",
-  "editor.textHint": "Enter adds the text · Shift+Enter new line · Esc cancels"
+  "editor.textHint": "Enter adds the text · Shift+Enter new line · Esc cancels",
+  "options.profiles.export": "Export",
+  "options.profiles.import": "Import profile…",
+  "options.profiles.exported": "Profile saved to Downloads/{path}",
+  "options.profiles.importPreview": "This file will be added as a new profile and selected:",
+  "options.profiles.importHint": "The recipients below come from the file. Check them before adding — finished reports will go to these addresses.",
+  "options.profiles.importConfirm": "Add and select this profile",
+  "options.profiles.error.notJson": "That file is not JSON.",
+  "options.profiles.error.notProfile": "That file is not a UsrHelper profile.",
+  "options.profiles.error.unsupportedVersion": "That file was made by a newer version of UsrHelper. Update the extension and try again."
 }

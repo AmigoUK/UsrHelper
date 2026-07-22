@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  profileFilename,
   buildBaseName,
   buildDownloadPath,
   clipFilename,
@@ -56,5 +57,24 @@ describe('sanitizeSubfolder', () => {
 describe('buildDownloadPath', () => {
   it('joins sanitized subfolder and file name', () => {
     expect(buildDownloadPath('UsrHelper/project-X', 'a.png')).toBe('UsrHelper/project-X/a.png');
+  });
+});
+
+describe('profileFilename', () => {
+  it('slugifies the profile name', () => {
+    expect(profileFilename('Deployment QA')).toBe('UsrHelper_profile_deployment-qa.json');
+  });
+
+  it('strips diacritics and punctuation a filesystem would rather not see', () => {
+    expect(profileFilename('Wdrożenie / klient #2')).toBe('UsrHelper_profile_wdrozenie-klient-2.json');
+  });
+
+  it('falls back when the name leaves nothing usable', () => {
+    expect(profileFilename('///')).toBe('UsrHelper_profile_profile.json');
+    expect(profileFilename('')).toBe('UsrHelper_profile_profile.json');
+  });
+
+  it('keeps the name short enough to stay a filename', () => {
+    expect(profileFilename('x'.repeat(200)).length).toBeLessThanOrEqual('UsrHelper_profile_.json'.length + 40);
   });
 });
