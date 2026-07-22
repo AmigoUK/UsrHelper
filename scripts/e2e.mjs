@@ -96,6 +96,19 @@ async function waitNewDownloads(beforeIds, expectedCount, timeoutMs = 20000) {
 }
 const idsOf = (items) => new Set(items.map((d) => d.id));
 
+/** Polls until `condition` holds — fixed sleeps around async storage made checks flaky. */
+async function waitFor(condition, what, timeoutMs = 10000) {
+  const start = Date.now();
+  for (;;) {
+    if (await condition()) return true;
+    if (Date.now() - start > timeoutMs) {
+      console.log(`  … timed out waiting for ${what}`);
+      return false;
+    }
+    await new Promise((r) => setTimeout(r, 100));
+  }
+}
+
 // ================================================================ 1. Options
 console.log('— Settings page —');
 const options = await context.newPage();
@@ -339,6 +352,18 @@ if (jsonItem && existsSync(jsonItem.filename)) {
 const savedNote = await editor.textContent('.editor-sidebar').catch(() => '');
 check('UI confirms save with attach hint', savedNote.includes('Saved to Downloads/') && savedNote.includes('Attach'), '');
 
+// Rate / request-a-feature calls to action, where the user has just finished a
+// report. A typo in either URL would silently send people nowhere.
+const feedbackLinks = await editor
+  .locator('.feedback-footer a')
+  .evaluateAll((els) => els.map((e) => e.href));
+check(
+  'Annotation view links to the Web Store listing and the project page',
+  feedbackLinks.includes('https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic') &&
+    feedbackLinks.includes('https://attv.uk/projects/usrhelper.html'),
+  feedbackLinks.join(' | '),
+);
+
 // --- console.error scope -----------------------------------------------------
 // The wrapper is a stack frame in every console.error on the page, so pages with
 // error telemetry would report the extension's ID. It must appear only once the
@@ -348,10 +373,17 @@ check('console.error is left untouched while no domain is configured', await con
 
 await options.bringToFront();
 await setField('Project domains', '127.0.0.1');
-await options.waitForTimeout(400);
+// Wait for the setting to actually land in storage, and then for the content
+// script to act on it — both are async, so fixed sleeps here made this flaky.
+await waitFor(async () => {
+  const stored = await sw.evaluate(() => new Promise((r) => chrome.storage.sync.get('settings', (v) => r(v.settings))));
+  return stored?.profiles?.[0]?.domains?.includes('127.0.0.1');
+}, 'project domain stored');
 await site.bringToFront();
 await site.reload();
-await site.waitForTimeout(600);
+await site
+  .waitForFunction(() => !console.error.toString().includes('[native code]'), null, { timeout: 10000 })
+  .catch(() => {});
 check('Configuring a project domain installs the console.error wrapper', !(await consoleIsNative()));
 await editor.close();
 
@@ -519,6 +551,18 @@ const thumbs = await popup.locator('img').count();
 check('Screenshot history entry has a thumbnail', thumbs >= 1);
 const restrictedNote = await popup.locator('text=cannot be captured').count();
 check('Restricted-page notice shown (popup opened as extension tab)', restrictedNote > 0);
+
+// A user filing a report must be able to name their build without digging
+// through chrome://extensions, so the version sits next to the app name.
+const manifestVersion = await sw.evaluate(() => chrome.runtime.getManifest().version);
+const popupHeader = await popup.locator('.app-version').first().textContent();
+await options.bringToFront();
+const optionsHeader = await options.textContent('h1');
+check(
+  'Version badge sits next to the app name in popup and settings',
+  popupHeader?.trim() === `v${manifestVersion}` && optionsHeader.includes(`v${manifestVersion}`),
+  `popup="${popupHeader?.trim()}" settings="${optionsHeader.trim()}"`,
+);
 
 // ------------------------------------------------------------------- summary
 console.log('\n================= SUMMARY =================');

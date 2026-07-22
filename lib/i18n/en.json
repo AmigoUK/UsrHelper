@@ -114,5 +114,9 @@
   "common.confirm": "Confirm",
   "options.console.domainsHint": "Comma-separated, e.g. app.example.com, *.staging.example.com, localhost. Leave empty and console errors are not captured anywhere — the extension then stays out of every page’s call stack, so no site can see it. Uncaught errors and rejected promises are always captured, on every page.",
   "options.console.domains": "Project domains (console error capture)",
-  "meta.userAgent": "User agent"
+  "meta.userAgent": "User agent",
+  "feedback.rate": "Is UsrHelper useful to you?",
+  "feedback.rate.link": "Rate it in the Chrome Web Store",
+  "feedback.feature": "Need a feature it does not have?",
+  "feedback.feature.link": "Request it on the project page"
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
+import { AppVersion } from '@/components/AppVersion';
 import { useT } from '@/lib/i18n';
 import type { CaptureMode } from '@/lib/messages';
 import { isRestrictedUrl, sendToBackground } from '@/lib/messages';
@@ -38,7 +39,10 @@ export function PopupApp() {
   return (
     <div style="width: 320px; padding: 12px;">
       <div class="row" style="margin-bottom: 10px;">
-        <strong style="font-size: 15px;">{t('app.name')}</strong>
+        <strong style="font-size: 15px;">
+          {t('app.name')}
+          <AppVersion />
+        </strong>
         <button
           style="flex: 0 0 auto;"
           onClick={() => chrome.runtime.openOptionsPage()}

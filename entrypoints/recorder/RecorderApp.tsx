@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { buildBaseName, clipFilename, companionFilename } from '@/lib/filenames';
+import { AppVersion } from '@/components/AppVersion';
 import { useT } from '@/lib/i18n';
 import { buildMailtoUrl, buildReportBody } from '@/lib/mailto';
 import { collectEnvironment, extensionVersion } from '@/lib/metadata';
@@ -260,7 +261,10 @@ export function RecorderApp() {
 
   return (
     <div style="max-width: 560px; margin: 0 auto; padding: 32px 16px;">
-      <h1>{t('recorder.title')}</h1>
+      <h1>
+        {t('recorder.title')}
+        <AppVersion />
+      </h1>
 
       {phase === 'setup' && (
         <div class="card">

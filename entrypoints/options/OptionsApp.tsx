@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { AppFooter } from '@/components/AppFooter';
+import { AppVersion } from '@/components/AppVersion';
 import { useT, type Language } from '@/lib/i18n';
 import { parseDomainList } from '@/lib/domainScope';
 import { defaultProfile, loadSettings, newId, saveSettings } from '@/lib/storage';
@@ -66,7 +67,10 @@ export function OptionsApp() {
 
   return (
     <div style="max-width: 720px; margin: 0 auto; padding: 24px 16px 0;">
-      <h1>{t('options.title')}</h1>
+      <h1>
+        {t('options.title')}
+        <AppVersion />
+      </h1>
 
       <div class="card">
         <label>{t('options.language')}</label>

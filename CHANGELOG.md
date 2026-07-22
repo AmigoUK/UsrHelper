@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.7.0] — 2026-07-22
+
+### Added
+- The installed version is shown next to the app name on every surface — popup, settings, annotation view and recorder — so you can name your build when reporting a problem without opening `chrome://extensions`. The badge is selectable as one unit for easy copying.
+- A footer in the annotation view, where a report has just been finished: a link to rate the extension in the Chrome Web Store, and a link to request a missing feature on the project page.
+
+### Fixed
+- The E2E check for the project-domain gate was flaky: it slept for a fixed time while waiting on an asynchronous `chrome.storage` write and the content script that reads it. It now polls for the actual conditions. A test that only sometimes passes reports nothing.
+
 ## [0.6.0] — 2026-07-21
 
 ### Fixed
@@ -132,7 +141,8 @@ _Nothing yet._
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.4.5...v0.5.0

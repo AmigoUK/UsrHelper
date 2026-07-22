@@ -6,6 +6,8 @@ import { wrapText } from '@/lib/annotations/wrapText';
 import type { CaptureRecord } from '@/lib/captureStore';
 import { deleteCapture, getCapture } from '@/lib/captureStore';
 import { buildBaseName, companionFilename, screenshotFilename } from '@/lib/filenames';
+import { AppVersion } from '@/components/AppVersion';
+import { FeedbackFooter } from '@/components/FeedbackFooter';
 import { useT } from '@/lib/i18n';
 import { buildMailtoUrl, buildReportBody } from '@/lib/mailto';
 import { collectEnvironment, extensionVersion } from '@/lib/metadata';
@@ -534,7 +536,10 @@ export function EditorApp() {
       </div>
 
       <div class="editor-sidebar">
-        <h1 style="margin: 0;">{t('editor.title')}</h1>
+        <h1 style="margin: 0;">
+          {t('editor.title')}
+          <AppVersion />
+        </h1>
 
         <div class="toolbar">
           {TOOLS.map((tl) => (
@@ -640,6 +645,8 @@ export function EditorApp() {
             <button onClick={() => save(false)}>{t('editor.retry')}</button>
           </div>
         )}
+
+        <FeedbackFooter />
       </div>
     </div>
   );
