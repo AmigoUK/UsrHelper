@@ -43,13 +43,36 @@ Title, summary, category and language are unchanged:
 | Category | `Developer Tools` |
 | Language | `English` |
 
-**Detailed description — replace the published text with this. It covers every
-feature, in plain English, with no comparisons to named products (Google
-rejects listings that disparage competitors). Length: 8991 of the 16000
-characters allowed.**
+**Detailed description — replace the published text with this. It opens with a
+short lead (what it is for, why it exists, who it is for) before any feature
+list, covers every shipped feature in plain English, and states advantages as
+verifiable facts without naming or disparaging any other product. Length: 10543 of
+the 16000 characters allowed.**
 
 ```
-UsrHelper turns a bug report into a few clicks. You take a screenshot or record your screen, mark what is wrong, and the finished report lands in your Downloads folder. It can also open a ready-made email to your developer, with the details already filled in.
+WHAT IT IS FOR
+
+UsrHelper is for reporting problems in software you are testing. You take a screenshot or record your screen, mark what is wrong, and you get a finished report: the picture, your notes, and the technical details a developer needs to reproduce the problem.
+
+WHY IT EXISTS
+
+Most bug reports arrive as "it does not work". Then come the questions. Which page? Which browser? What did you click before it broke? Each round of questions costs a day, and the person who found the bug has usually forgotten the details by then.
+
+UsrHelper collects those answers while the problem is still on screen — the page address, the exact browser and system, your last clicks, the errors the page printed — and puts them next to your screenshot. Nobody has to ask.
+
+The second reason is where your screenshots go. Screens from software under test often show customer names, invoices, or health data. Tools that upload your captures to their own servers make that somebody else's problem to guard. UsrHelper never uploads anything: the files land in your Downloads folder and stay there.
+
+WHO IT IS FOR
+
+• Testers and end users who report problems during a deployment, and who should not have to learn a bug tracker to do it.
+• Support staff who need to show a developer what a customer sees.
+• Developers and teams who receive those reports and are tired of asking the same three questions every time.
+
+You do not need an account, a team, or any technical knowledge to use it. If you can take a screenshot, you can file a complete report.
+
+HOW IT WORKS IN PRACTICE
+
+You press a button in the toolbar, choose what to capture, mark it up, and press Save. The files go to your Downloads folder. If you want, Save and Email opens a ready-made message to your developer with everything filled in except the attachment.
 
 Everything happens on your own computer. There is no account to create, no server to upload to, and nothing is sent anywhere.
 
