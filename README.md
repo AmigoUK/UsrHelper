@@ -6,6 +6,12 @@
 
 A Chrome extension that makes software-deployment feedback effortless. Testers and end users capture **annotated screenshots** or record **screencasts with voice narration**, and the report is saved locally with a timestamp and/or handed off to email — no backend, no accounts.
 
+## See it in action
+
+[![Watch the UsrHelper demo on YouTube](https://img.youtube.com/vi/UESEtxdViBM/maxresdefault.jpg)](https://youtu.be/UESEtxdViBM)
+
+▶️ **[Watch the demo](https://youtu.be/UESEtxdViBM)** — GitHub cannot embed a player in a README, so the picture above opens the video on YouTube.
+
 ## Install
 
 **➡️ [Add to Chrome — Chrome Web Store](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)**
