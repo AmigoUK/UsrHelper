@@ -1,8 +1,7 @@
 # UsrHelper
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hmmlhdogplekofonkkmhacfolcfgejic?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)
-[![Users](https://img.shields.io/chrome-web-store/users/hmmlhdogplekofonkkmhacfolcfgejic?label=users)](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)
-[![Rating](https://img.shields.io/chrome-web-store/rating/hmmlhdogplekofonkkmhacfolcfgejic?label=rating)](https://chromewebstore.google.com/detail/usrhelper/hmmlhdogplekofonkkmhacfolcfgejic)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A Chrome extension that makes software-deployment feedback effortless. Testers and end users capture **annotated screenshots** or record **screencasts with voice narration**, and the report is saved locally with a timestamp and/or handed off to email — no backend, no accounts.
 
