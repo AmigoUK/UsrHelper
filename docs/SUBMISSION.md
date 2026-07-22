@@ -226,6 +226,7 @@ Source code: https://github.com/AmigoUK/UsrHelper
 | Store icon 128×128 | `public/icon/128.png` (unchanged) |
 | Screenshots | Owner's own set: `annotations.jpg`, `click path.jpg`, `features.jpg`, `json.jpg` — these **replace** the generated set, decided 2026-07-22. Each file must be exactly 1280×800 or 640×400, PNG or JPEG, or the dashboard refuses it. |
 | Small promo tile 440×280 | `docs/store-assets/promo-tile-440x280.png` (unchanged) |
+| Promotional video (optional) | A **YouTube URL** — the field takes nothing else, and the video must be Public or Unlisted. Not filled in yet; record the URL here once the video is published. Source files live in `docs/media/video/`. |
 
 The generated screenshots in `docs/manual/images/` stay in the repository for
 the user guide; they are simply not used in the listing any more.
