@@ -7,5 +7,6 @@ stats-*.json
 .env.*
 *.log
 .DS_Store
+._*
 test-results/
 *.png.tmp
