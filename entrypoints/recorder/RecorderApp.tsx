@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { buildBaseName, clipFilename, companionFilename } from '@/lib/filenames';
 import { AppVersion } from '@/components/AppVersion';
 import { useT } from '@/lib/i18n';
 import { buildMailtoUrl, buildReportBody } from '@/lib/mailto';
+import { buildMarkdownReport } from '@/lib/markdownReport';
+import { copyText } from '@/lib/clipboard';
 import { collectEnvironment, extensionVersion } from '@/lib/metadata';
 import { ClipRecorder, composeStreams } from '@/lib/recording';
 import { saveBlob, saveJson, type SavedFile } from '@/lib/save';
@@ -32,6 +34,15 @@ export function RecorderApp() {
   const [savedFiles, setSavedFiles] = useState<SavedFile[]>([]);
   const [limitHit, setLimitHit] = useState(false);
   const [errorKey, setErrorKey] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  /** Set only when the clipboard refused the write — holds the text to copy by hand. */
+  const [copyFallback, setCopyFallback] = useState<string | null>(null);
+
+  /** The fallback box exists to be copied, so it opens ready for Ctrl/Cmd+C. */
+  const selectAll = useCallback((el: HTMLTextAreaElement | null) => {
+    el?.focus();
+    el?.select();
+  }, []);
 
   const recorderRef = useRef<ClipRecorder | null>(null);
   const streamsRef = useRef<{ display?: MediaStream; camera?: MediaStream; compositorStop?: () => void }>({});
@@ -221,8 +232,10 @@ export function RecorderApp() {
     };
   }
 
-  async function saveReport(withEmail: boolean) {
+  async function saveReport(handoff: 'none' | 'email' | 'clipboard') {
     if (!profile) return;
+    setCopied(false);
+    setCopyFallback(null);
     const filePaths = savedFiles.map((f) => f.path);
     const meta = await buildMetadata(filePaths);
     try {
@@ -238,16 +251,22 @@ export function RecorderApp() {
         pageUrl: '',
         pageTitle: '',
       });
-      if (withEmail) {
-        const body = buildReportBody({ ...meta, files: allFiles.map((f) => f.path) }, t);
+      const reported = { ...meta, files: allFiles.map((f) => f.path) };
+      if (handoff === 'email') {
         const url = buildMailtoUrl({
           to: profile.emailTo,
           cc: profile.emailCc,
           subject: `${profile.subjectPrefix} ${t('mailto.subject.screencast')}`.trim(),
-          body,
+          body: buildReportBody(reported, t),
           truncationNote: t('mailto.truncated'),
         });
         window.open(url, '_self');
+      } else if (handoff === 'clipboard') {
+        const markdown = buildMarkdownReport(reported, t);
+        // The clips are already on disk, so a refused clipboard costs the paste,
+        // not the recording — hand the text over to be copied by hand instead.
+        if (await copyText(markdown)) setCopied(true);
+        else setCopyFallback(markdown);
       }
     } catch (err) {
       console.error(err);
@@ -351,16 +370,34 @@ export function RecorderApp() {
             onInput={(e) => setDescription(e.currentTarget.value)}
           />
           <div class="row" style="margin-top: 10px;">
-            <button class="primary" disabled={phase === 'saving'} onClick={() => void saveReport(false)}>
+            <button class="primary" disabled={phase === 'saving'} onClick={() => void saveReport('none')}>
               💾 {t('common.save')}
             </button>
-            <button class="primary" disabled={phase === 'saving'} onClick={() => void saveReport(true)}>
+            <button class="primary" disabled={phase === 'saving'} onClick={() => void saveReport('email')}>
               ✉ {t('recorder.saveEmail')}
+            </button>
+            <button class="primary" disabled={phase === 'saving'} onClick={() => void saveReport('clipboard')}>
+              📋 {t('recorder.saveCopy')}
             </button>
           </div>
           {savedFiles.length > 0 && (
             <div class="hint" style="margin-top: 8px;">
               {t('mailto.attachReminder', { files: savedFiles.map((f) => f.path).join(', ') })}
+            </div>
+          )}
+          {copied && (
+            <div class="card" style="border-color: var(--ok); margin-top: 10px;">{t('clipboard.copied')}</div>
+          )}
+          {copyFallback && (
+            <div class="card" style="border-color: var(--danger); margin-top: 10px;">
+              <div>{t('clipboard.error')}</div>
+              <textarea
+                readOnly
+                class="clipboard-fallback"
+                ref={selectAll}
+                style="width: 100%; min-height: 120px; margin-top: 6px;"
+                value={copyFallback}
+              />
             </div>
           )}
         </div>

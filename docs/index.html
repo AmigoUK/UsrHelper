@@ -169,6 +169,7 @@
 <ul>
 <li><strong>💾 Save</strong> — a PNG plus a <code>.json</code> metadata file land in <code>Downloads/&lt;subfolder&gt;/</code> with a timestamp in the name (e.g. <code>UsrHelper_2026-07-17_14-32-05.png</code>);</li>
 <li><strong>✉ Save + Email</strong> — additionally opens a new message in your mail client with recipients, subject, and description pre-filled. <strong>You attach the file manually</strong> — the extension shows the exact path of the saved file.</li>
+<li><strong>📋 Save + Copy</strong> — additionally copies the whole report to the clipboard as <strong>Markdown</strong>: a heading, a table with the page address, the exact time, your machine and browser, then the sticky notes, the recent console errors and the names of the saved files. Paste it straight into a Jira ticket, a GitHub or GitLab issue, or a Teams message instead of retyping it. <strong>The image itself is not copied</strong> — the text names the file so you can attach or drag it in.</li>
 </ul>
 <p><img src="manual/images/editor-saved.png" alt="Save confirmation with the attach reminder"></p>
 <h2 id="5-recording-screencasts">5. Recording screencasts</h2>
@@ -185,7 +186,7 @@
 <p><img src="manual/images/recording-overlay.png" alt="A page during recording — click ripple and key caption"></p>
 <p><strong>Pause / Resume</strong> stops the clock and the recording. <strong>⏹ Stop &amp; save</strong> ends the session. The recording splits automatically into <strong>standalone clips</strong> (default: 5 minutes each, 30-minute total cap — configurable per profile). Each clip is a separate <code>.webm</code> file (<code>…_part-01.webm</code>, <code>…_part-02.webm</code>).</p>
 <p><img src="manual/images/recorder-done.png" alt="Panel after recording — clip list and description"></p>
-<p>After stopping, add a description and click <strong>💾 Save</strong> (writes the <code>.json</code> metadata) or <strong>✉ Save + Email</strong>.</p>
+<p>After stopping, add a description and click <strong>💾 Save</strong> (writes the <code>.json</code> metadata), <strong>✉ Save + Email</strong>, or <strong>📋 Save + Copy</strong> to put the report in the clipboard as Markdown.</p>
 <h2 id="6-history-and-project-profiles">6. History and project profiles</h2>
 <p>The popup lists your <strong>recent reports</strong> with thumbnails:</p>
 <ul>
@@ -223,6 +224,9 @@
 <p><strong>The recording stopped by itself.</strong> You hit the maximum length (default 30 min). All clips up to that point are saved. Change the limit in the profile settings.</p>
 <p><strong>Where are my files?</strong> In <code>Downloads/&lt;subfolder&gt;/</code> (set the subfolder in the profile; default <code>UsrHelper</code>). Fastest route: popup → <strong>Show file</strong>.</p>
 <p><strong>The email opens without the attachment.</strong> That is a <code>mailto:</code> limitation — no mail client lets an extension attach files automatically. The extension shows the exact path; drag the file into the message.</p>
+<p><strong>I pasted the copied report and the screenshot is missing.</strong> Only the text is copied. The Markdown names the saved file — attach or drag it into the ticket, and the tracker will upload it.</p>
+<p><strong>The pasted report shows raw <code>|</code> characters instead of a table.</strong> The target does not render Markdown (some chat boxes and plain-text fields do not). The report is still complete and readable; a Jira, GitHub or GitLab description field renders it properly.</p>
+<p><strong>Nothing was copied.</strong> Chrome refuses a clipboard write when the tab lost focus. The extension then shows the report in a text box with everything selected — press <code>Ctrl+C</code> (<code>Cmd+C</code>) to copy it by hand. Your files are already saved either way.</p>
 <p><strong>Is the mosaic really safe?</strong> Yes. The mosaic is baked into the PNG&#39;s pixel data at save time — the original pixels cannot be recovered from the exported file.</p>
 <hr>
 <p><em>UsrHelper · <a href="https://github.com/AmigoUK/UsrHelper">github.com/AmigoUK/UsrHelper</a> · Project &amp; Development: Tomasz &#39;Amigo&#39; Lewandowski · <a href="mailto:dev@attv.uk">dev@attv.uk</a> · <a href="https://www.attv.uk">www.attv.uk</a></em></p>
@@ -351,6 +355,7 @@
 <ul>
 <li><strong>💾 Zapisz</strong> — plik PNG + plik <code>.json</code> z metadanymi lądują w <code>Pobrane/&lt;podfolder&gt;/</code> z timestampem w nazwie (np. <code>UsrHelper_2026-07-17_14-32-05.png</code>);</li>
 <li><strong>✉ Zapisz + Email</strong> — dodatkowo otwiera się nowa wiadomość w Twoim programie pocztowym z adresatami, tematem i opisem. <strong>Załącznik musisz dodać ręcznie</strong> — wtyczka pokazuje dokładną ścieżkę zapisanego pliku.</li>
+<li><strong>📋 Zapisz + Kopiuj</strong> — dodatkowo kopiuje całe zgłoszenie do schowka w formacie <strong>Markdown</strong>: nagłówek, tabela z adresem strony, dokładnym czasem, Twoją maszyną i przeglądarką, a dalej żółte karteczki, ostatnie błędy konsoli i nazwy zapisanych plików. Wklej to wprost do zgłoszenia w Jirze, do issue na GitHubie lub GitLabie albo do wiadomości w Teams, zamiast przepisywać ręcznie. <strong>Sam obraz nie trafia do schowka</strong> — w tekście jest nazwa pliku, który dołączasz lub przeciągasz.</li>
 </ul>
 <p><img src="manual/images/editor-saved.png" alt="Potwierdzenie zapisu z podpowiedzią o załączniku"></p>
 <h2 id="5-nagrywanie-screencastów">5. Nagrywanie screencastów</h2>
@@ -367,7 +372,7 @@
 <p><img src="manual/images/recording-overlay.png" alt="Strona podczas nagrywania — ripple kliknięcia i podpis klawisza"></p>
 <p><strong>Pauza / Wznów</strong> zatrzymuje zegar i nagranie. <strong>⏹ Zatrzymaj i zapisz</strong> kończy sesję. Nagranie dzieli się automatycznie na <strong>samodzielne klipy</strong> (domyślnie po 5 minut, limit całości 30 minut — konfigurowalne w profilu). Każdy klip to osobny plik <code>.webm</code> (<code>…_part-01.webm</code>, <code>…_part-02.webm</code>).</p>
 <p><img src="manual/images/recorder-done.png" alt="Panel po nagraniu — lista klipów i opis"></p>
-<p>Po zatrzymaniu dopisz opis i kliknij <strong>💾 Zapisz</strong> (metadane <code>.json</code>) lub <strong>✉ Zapisz + Email</strong>.</p>
+<p>Po zatrzymaniu dopisz opis i kliknij <strong>💾 Zapisz</strong> (metadane <code>.json</code>), <strong>✉ Zapisz + Email</strong> albo <strong>📋 Zapisz + Kopiuj</strong>, żeby zgłoszenie trafiło do schowka jako Markdown.</p>
 <h2 id="6-historia-i-profile-projektów">6. Historia i profile projektów</h2>
 <p>Popup pokazuje <strong>ostatnie zgłoszenia</strong> z miniaturami:</p>
 <ul>
@@ -405,6 +410,9 @@
 <p><strong>Nagranie zatrzymało się samo.</strong> Osiągnąłeś maksymalny czas (domyślnie 30 min). Wszystkie klipy do tego momentu są zapisane. Limit zmienisz w ustawieniach profilu.</p>
 <p><strong>Gdzie są moje pliki?</strong> W folderze <code>Pobrane/&lt;podfolder&gt;/</code> (podfolder ustawiasz w profilu; domyślnie <code>UsrHelper</code>). Najszybciej: popup → <strong>Pokaż plik</strong>.</p>
 <p><strong>Email otwiera się bez załącznika.</strong> To ograniczenie mechanizmu <code>mailto:</code> — żaden program nie pozwala wtyczce samodzielnie dołączyć pliku. Wtyczka pokazuje dokładną ścieżkę; przeciągnij plik do wiadomości.</p>
+<p><strong>Wkleiłem skopiowane zgłoszenie i nie ma zrzutu.</strong> Do schowka trafia sam tekst. Markdown podaje nazwę zapisanego pliku — dołącz go albo przeciągnij do zgłoszenia, a system sam go wgra.</p>
+<p><strong>Po wklejeniu widzę surowe znaki <code>|</code> zamiast tabeli.</strong> Miejsce, w które wklejasz, nie renderuje Markdownu (część okien czatu i pól tekstowych tego nie robi). Zgłoszenie jest kompletne i czytelne; pole opisu w Jirze, na GitHubie i GitLabie wyświetli je poprawnie.</p>
+<p><strong>Nic się nie skopiowało.</strong> Chrome odmawia zapisu do schowka, gdy karta straci fokus. Wtyczka pokazuje wtedy zgłoszenie w polu tekstowym z zaznaczoną treścią — naciśnij <code>Ctrl+C</code> (<code>Cmd+C</code>) i skopiuj ręcznie. Pliki i tak są już zapisane.</p>
 <p><strong>Zamazane dane — czy na pewno bezpieczne?</strong> Tak. Mozaika jest wtapiana w pikselową zawartość pliku PNG przy zapisie — oryginalnych pikseli nie da się odzyskać z pliku wynikowego.</p>
 <hr>
 <p><em>UsrHelper · <a href="https://github.com/AmigoUK/UsrHelper">github.com/AmigoUK/UsrHelper</a> · Project &amp; Development: Tomasz &#39;Amigo&#39; Lewandowski · <a href="mailto:dev@attv.uk">dev@attv.uk</a> · <a href="https://www.attv.uk">www.attv.uk</a></em></p>

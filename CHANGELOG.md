@@ -7,8 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.10.0] — 2026-07-24
+
 ### Added
+- **Copy the finished report to the clipboard as Markdown.** A third hand-off next to Save and Save + Email, for teams who take bug reports in Jira, GitHub/GitLab issues or Teams rather than by email. Until now those testers retyped by hand what the extension had already collected — and the fields that go first when retyping are the browser version and the CPU architecture, the very ones `lib/environment.ts` exists to report accurately.
+- The copied report carries the same evidence as the email body, laid out for a tracker: a heading, a table with the reporter, page address, capture time, machine and extension version, then the numbered sticky notes, the last ten console errors in a fenced code block, and the names of the saved files. A pipe inside user text is escaped so a description cannot break the table, and the code fence widens when a console message contains backticks of its own.
+- No new permission is involved. `navigator.clipboard.writeText()` needs no grant from an extension page that holds focus, so the permission set stays byte-identical to the published v0.9.1 and the store update carries no new consent screen. The clipboard is written on a click and never read.
+- When the clipboard refuses the write — a tab that lost focus, an enterprise policy — the report appears in a text box with everything selected, to be copied by hand. The files are already saved by then, so the report itself is never lost.
 - MIT licence (`LICENSE`), and `license: MIT` in `package.json`. The repository was public but carried no licence, which legally means "all rights reserved" — nobody could reuse the code, and the store listing could not honestly call it open source.
+- `scripts/make-docs-pdf.mjs`, which rebuilds the printable guides from `docs/index.html`. The existing PDFs had been printed from Chrome by hand, leaving no record of how; the recipe now lives in the repository next to the HTML generator.
+
+### Changed
+- User-guide screenshots, the online guide and both PDFs regenerated from the current build, so they show the third button rather than a toolbar that no longer exists.
 
 ## [0.9.1] — 2026-07-22
 
@@ -170,7 +182,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - i18n module with English (default) and Polish dictionaries.
 - Extension icons and base entrypoints (background, content script).
 
-[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/UsrHelper/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.9.1...v0.10.0
 [0.9.1]: https://github.com/AmigoUK/UsrHelper/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/AmigoUK/UsrHelper/compare/v0.7.0...v0.8.0

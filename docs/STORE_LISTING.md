@@ -1,10 +1,10 @@
 # Chrome Web Store — listing & review notes
 
-Working notes to satisfy the [Chrome Web Store program policies](https://support.google.com/chrome/a/answer/2714278) at publication time. Last validated against the codebase: 2026-07-17 (v0.4.2).
+Working notes to satisfy the [Chrome Web Store program policies](https://support.google.com/chrome/a/answer/2714278) at publication time. Last validated against the codebase: 2026-07-24 (v0.10.0) — permissions diffed against the published v0.9.1 package.
 
 ## Single purpose
 
-UsrHelper has one purpose: **capturing deployment feedback** — annotated screenshots and narrated screen recordings saved locally and handed off by email. Every permission below serves that purpose. (Two capture modes, one goal — analogous to Google's accepted "multiple functions, one narrow purpose" examples.)
+UsrHelper has one purpose: **capturing deployment feedback** — annotated screenshots and narrated screen recordings saved locally and handed off by email or by copying the report to the clipboard. Every permission below serves that purpose. (Two capture modes, one goal — analogous to Google's accepted "multiple functions, one narrow purpose" examples.)
 
 ## Permission justifications (for the review form)
 
@@ -16,6 +16,8 @@ UsrHelper has one purpose: **capturing deployment feedback** — annotated scree
 | `storage` | Store user settings, project profiles, and local report history. |
 | `scripting` | Inject the capture helper into already-open tabs right after install/update (the registered content script only loads on new navigations). |
 | `<all_urls>` (host) | Required for capabilities that must exist **before or across** user actions and therefore cannot be granted per-click via `activeTab`: (1) the click-path buffer and error context are collected in the seconds *before* the user decides to capture — on-demand injection would arrive too late to have seen them; (2) during a screencast, click ripples and keystroke captions must follow the user across every tab they switch to; (3) the region-selection overlay and full-page scroll capture must work on whatever site the customer is testing, which cannot be known in advance. All processing is local; nothing is transmitted (see privacy policy). |
+
+**Decision (2026-07-24):** copying a report to the clipboard as Markdown (v0.10.0) adds **no permission**. `navigator.clipboard.writeText()` is called from the extension's own focused pages, where the async Clipboard API needs no grant; the `clipboardWrite` permission covers `document.execCommand` in contexts without a document and is deliberately not declared. The permission set is byte-identical to the published v0.9.1 — verified by diffing the built manifest against the manifest inside `usrhelper-0.9.1-chrome.zip`. The clipboard is only written, never read.
 
 **Decision (2026-07-21):** capture of `console.error` is scoped to the domains the user lists in the project profile (empty by default), so the extension does not enter the `console` call path of unrelated sites. Uncaught errors and rejected promises are still observed passively on any page, which leaves no trace in the page. `<all_urls>` itself is unchanged and still needed for the reasons below.
 

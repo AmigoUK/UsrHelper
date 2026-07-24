@@ -1,22 +1,25 @@
-# Chrome Web Store — submission pack (v0.9.1 update)
+# Chrome Web Store — submission pack (v0.10.0 update)
 
-The extension is **already published**; this is an update to the existing item,
-not a new submission. File to upload: `.output/usrhelper-0.9.1-chrome.zip`
-(rebuild with `npm run zip` if needed).
+The extension is **already published** and v0.9.1 is live; this is an update to
+the existing item, not a new submission. File to upload:
+`.output/usrhelper-0.10.0-chrome.zip` (rebuild with `npm run zip` if needed).
 
 **The single most important fact for this review: the permission set is
-unchanged from the published version.** Verified against the published package:
+unchanged from the published version.** Verified on 2026-07-24 by diffing the
+built manifest against the manifest inside `usrhelper-0.9.1-chrome.zip`:
 
-| | Published | v0.9.1 |
+| | Published (v0.9.1) | v0.10.0 |
 |---|---|---|
 | `permissions` | activeTab, tabs, downloads, storage, scripting | identical |
 | `host_permissions` | `<all_urls>` | identical |
 | `optional_permissions` | none | none |
 
 No new permissions means no re-consent prompt for existing users, and no new
-permission justifications to write. One content script was added
-(`consolescope.js`, isolated world, `document_start`); it **narrows** behaviour
-rather than extending it — see the reviewer note in section 5.
+permission justifications to write. In particular, the new "copy the report as
+Markdown" button declares **no** `clipboardWrite` permission: it calls
+`navigator.clipboard.writeText()` from the extension's own focused pages, where
+the async Clipboard API needs no grant. The clipboard is written on the user's
+click and never read.
 
 ---
 
@@ -27,10 +30,11 @@ status set, contact email verified. Nothing to change.
 
 ## 2. Package tab
 
-**Package → Upload new package** → `usrhelper-0.9.1-chrome.zip`.
+**Package → Upload new package** → `usrhelper-0.10.0-chrome.zip`.
 
-The version in `manifest.json` (0.9.1) must be higher than the published one, or
-the upload is rejected. It is.
+The version in `manifest.json` (0.10.0) must be higher than the published one, or
+the upload is rejected. It is — Chrome compares version parts numerically, so
+0.10.0 outranks 0.9.1.
 
 ## 3. Store listing tab
 
@@ -163,6 +167,8 @@ SENDING IT
 
 Press Save and the files are written to your Downloads folder. Press Save and Email and your normal mail program opens with a new message: the recipients, the subject and the whole description are already filled in. You attach the files yourself — the extension shows you the exact path, and your file manager can be opened on them with one click. Email programs are not allowed to attach files on their own, so this last step is yours.
 
+If your team takes bug reports in an issue tracker rather than by email, press Save and Copy instead. The whole report is placed in your clipboard as formatted text: a heading, a table with the page address, the exact time and your machine, then your sticky notes, the errors the page printed and the names of the saved files. Paste it into a ticket, an issue or a chat message and it arrives laid out, with nothing retyped. The picture is not copied — the text names the file, so you attach it the same way you would to an email.
+
 Recent reports stay in a list inside the extension, with small previews. From there you can open a file again or send the same report to somebody else later.
 
 
@@ -189,6 +195,7 @@ The interface is available in English and Polish.
 PRIVACY
 
 • The extension has no server of its own. There is no code in it that sends anything anywhere.
+• Copying a report writes to your own clipboard, on your click. The extension never reads your clipboard.
 • There is no analytics, no tracking, and no advertising.
 • Screenshots, recordings and report files are written to your Downloads folder and nowhere else.
 • Your settings live in your own Chrome profile.
@@ -237,7 +244,7 @@ Single purpose and permission justifications are **unchanged** — the permissio
 themselves did not change, so leave the existing text in place:
 
 ```
-Capturing deployment feedback: the extension's only purpose is letting users create annotated screenshots and narrated screen recordings of the software they are testing, saved locally and handed off by email.
+Capturing deployment feedback: the extension's only purpose is letting users create annotated screenshots and narrated screen recordings of the software they are testing, saved locally and handed off by email or by copying the report to the clipboard.
 ```
 
 **Data usage declarations** — keep **Website content** ticked, and update the
@@ -252,9 +259,9 @@ Privacy policy URL is unchanged: `https://amigouk.github.io/UsrHelper/privacy.ht
 ## 5. Note for the reviewer (optional field, worth filling in)
 
 ```
-This update adds annotation features and profile sharing. It requests no new permissions — the permission set is byte-identical to the published version.
+This update adds one feature: a button that copies the finished report to the user's clipboard as Markdown, for teams who file bugs in an issue tracker rather than by email. It requests no new permissions — the permission set is byte-identical to the published version.
 
-One content script was added (consolescope.js, isolated world). It exists to REDUCE what the extension touches: previously the extension wrapped console.error on every page in order to include recent errors in a bug report. It now does so only on domains the user has explicitly listed in their project profile, which is empty by default. On every other site the extension no longer enters the page's console call path at all.
+No clipboard permission is declared. The write is navigator.clipboard.writeText() called from the extension's own focused pages (the annotation editor and the recorder), where the async Clipboard API requires no grant. The clipboard is written only when the user clicks that button, and is never read.
 
 All processing remains local; the extension has no backend and transmits nothing.
 ```
@@ -274,20 +281,12 @@ triggers a re-review for no benefit.
 - If rejected, the email carries a colour+element code — fix and resubmit, or
   file one substantiated appeal.
 
-## 8. What ships in this update (v0.4.4 → v0.9.1)
+## 8. What ships in this update (v0.9.1 → v0.10.0)
 
-Six releases have accumulated since the published build:
+One release since the published build:
 
-- **v0.4.4** — a text annotation was added twice for one text box (user report);
-  every text box after the first opened unfocused; Escape left a box behind that
-  blocked every drawing tool.
-- **v0.4.5** — all 16 Dependabot alerts closed; build toolchain upgraded.
-- **v0.5.0** — `console.error` capture narrowed to project domains.
-- **v0.5.1** — the "track click path" switch was doing nothing; duplicate labels
-  in Settings.
-- **v0.6.0** — reports named the wrong machine (`MacIntel` on Apple Silicon,
-  macOS frozen at 10_15_7); now read from User-Agent Client Hints.
-- **v0.7.0** — version shown next to the app name; feedback footer.
-- **v0.8.0** — yellow sticky notes.
-- **v0.9.0 / v0.9.1** — profile export/import; the text box no longer swallows
-  the first characters typed into it.
+- **v0.10.0** — **Save + Copy**: the finished report is copied to the clipboard
+  as Markdown (heading, metadata table, sticky notes, console errors, file
+  names), for teams filing into Jira, GitHub/GitLab issues or Teams. Also the
+  MIT licence file the repository was missing, and a demo video linked from the
+  README.

@@ -73,6 +73,11 @@ if (!sw) sw = await context.waitForEvent('serviceworker');
 const EXT_ID = new URL(sw.url()).host;
 console.log(`Extension loaded: ${EXT_ID}\n`);
 const extUrl = (p) => `chrome-extension://${EXT_ID}/${p}`;
+// Writing the clipboard from an extension page needs no permission; granting it
+// anyway keeps Chrome from showing a prompt if the policy ever changes.
+await context
+  .grantPermissions(['clipboard-write'], { origin: `chrome-extension://${EXT_ID}` })
+  .catch(() => {});
 
 /** All completed downloads (Playwright stores them under GUID names). */
 const completedDownloads = () =>
@@ -407,6 +412,29 @@ if (jsonItem && existsSync(jsonItem.filename)) {
 }
 const savedNote = await editor.textContent('.editor-sidebar').catch(() => '');
 check('UI confirms save with attach hint', savedNote.includes('Saved to Downloads/') && savedNote.includes('Attach'), '');
+
+// The Markdown hand-off is only useful if what lands in the clipboard is the
+// report — heading, the metadata table and the file that was just written.
+// The clipboard is read back by pasting with the keyboard, not by
+// navigator.clipboard.readText(): that call waits forever on a permission the
+// harness cannot grant to a chrome-extension:// origin, which hangs the suite.
+await editor.locator('button:has-text("📋")').click();
+await editor.waitForSelector('text=Markdown report copied', { timeout: 15000 }).catch(() => {});
+const pasteBox = editor.locator('.editor-sidebar textarea').last();
+await pasteBox.click();
+await editor.keyboard.press('Control+a');
+await editor.keyboard.press('Control+v');
+const clipboard = await pasteBox.inputValue();
+check(
+  'Save + Copy puts the Markdown report in the clipboard',
+  clipboard.startsWith('## ') &&
+    clipboard.includes('E2E report description') &&
+    clipboard.includes('| Environment |') &&
+    /- `UsrHelper\/e2e\/UsrHelper_[\d-_]+\.png`/.test(clipboard),
+  clipboard.split('\n')[0]?.slice(0, 60),
+);
+// Leave the description as the later checks found it.
+await pasteBox.fill('E2E report description');
 
 // Rate / request-a-feature calls to action, where the user has just finished a
 // report. A typo in either URL would silently send people nowhere.

@@ -38,6 +38,7 @@ One click, nothing to configure, no account to create. It works offline; if you 
 - Files saved to a configurable subfolder of `Downloads/` with a timestamp in the name.
 - Companion `.json` with the description, exact time, page URL/title, environment info (browser, OS, resolution), recent console errors, and click path.
 - **Email hand-off:** one click opens a pre-filled email (`mailto:`) with To/CC recipients from settings; the extension reminds you which file to attach.
+- **Markdown hand-off:** one click copies the same report as Markdown — heading, metadata table, sticky notes, console errors, file names — ready to paste into Jira, GitHub/GitLab issues or Teams instead of retyping it.
 - Report history in the popup (thumbnails, show file, re-email).
 - **Project profiles:** switchable sets of recipients, folder, description template, and limits.
 - **Share a profile as a file:** export the active profile to JSON and send it to your testers; importing shows the recipients for confirmation before anything is stored. The file carries project settings only — never reporter details or report history.

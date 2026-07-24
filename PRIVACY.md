@@ -19,6 +19,7 @@ UsrHelper is designed to keep every byte of your data on your machine.
 - It does **not** track you, run analytics, or use cookies.
 - It does **not** read pages in the background; content is captured only when you click a capture or record button.
 - Email sending uses your own mail client via a `mailto:` link — the extension never sends email itself.
+- Copying a report as Markdown writes it to your own clipboard, on your click and nowhere else. The extension never reads your clipboard.
 
 ## Data removal
 

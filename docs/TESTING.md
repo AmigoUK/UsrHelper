@@ -18,6 +18,7 @@ Build & load: `npm run build` → `chrome://extensions` → Developer mode → *
 - [ ] "Add click path" stamps orange numbered markers where you clicked before capturing.
 - [ ] Save → PNG + JSON land in `Downloads/<subfolder>/` with timestamped names; timestamp stamped in the image corner (if enabled).
 - [ ] Save + Email → mail client opens with To/CC from the active profile, subject prefix, body with metadata, attach reminder shown in UI.
+- [ ] Save + Copy → confirmation card appears; paste into a GitHub issue or Jira description and the heading, metadata table and code block render (raw `|` characters mean the target does not do Markdown, not a bug in the report).
 - [ ] JSON contains description, URL, title, environment, console errors (trigger one via DevTools first), click path.
 
 ## Screencast
@@ -29,7 +30,7 @@ Build & load: `npm run build` → `chrome://extensions` → Developer mode → *
 - [ ] Pause freezes the timer; resume continues; elapsed time excludes the pause.
 - [ ] Set clip length 1 min, record >2 min → multiple standalone playable `_part-01.webm`, `_part-02.webm` files.
 - [ ] Set max 2 min → auto-stop with the limit notice.
-- [ ] Stop & save → clips listed, JSON saved, Save + Email opens the mail client.
+- [ ] Stop & save → clips listed, JSON saved, Save + Email opens the mail client, Save + Copy puts the report in the clipboard.
 - [ ] "Stop sharing" from Chrome's bar behaves like Stop.
 
 ## Settings & popup
@@ -42,7 +43,8 @@ Build & load: `npm run build` → `chrome://extensions` → Developer mode → *
 ## Automated
 
 ```bash
-npm run test     # 28 unit tests
+npm run test     # 134 unit tests
 npm run compile  # tsc --noEmit
 npm run build
+xvfb-run -a node scripts/e2e.mjs   # 56 end-to-end checks in real Chromium
 ```

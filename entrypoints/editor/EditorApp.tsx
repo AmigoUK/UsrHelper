@@ -11,6 +11,8 @@ import { AppVersion } from '@/components/AppVersion';
 import { FeedbackFooter } from '@/components/FeedbackFooter';
 import { useT } from '@/lib/i18n';
 import { buildMailtoUrl, buildReportBody } from '@/lib/mailto';
+import { buildMarkdownReport } from '@/lib/markdownReport';
+import { copyText } from '@/lib/clipboard';
 import { collectEnvironment, extensionVersion } from '@/lib/metadata';
 import { filterReportContext } from '@/lib/reportContext';
 import { saveBlob, saveJson, type SavedFile } from '@/lib/save';
@@ -63,6 +65,9 @@ export function EditorApp() {
   const [profile, setProfile] = useState<ProjectProfile | null>(null);
   const [savedFiles, setSavedFiles] = useState<SavedFile[] | null>(null);
   const [saveError, setSaveError] = useState(false);
+  const [copied, setCopied] = useState(false);
+  /** Set only when the clipboard refused the write — holds the text to copy by hand. */
+  const [copyFallback, setCopyFallback] = useState<string | null>(null);
   const [cropRect, setCropRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [textInput, setTextInput] = useState<{
@@ -121,6 +126,12 @@ export function EditorApp() {
   const focusTextArea = useCallback((el: HTMLTextAreaElement | null) => {
     textAreaRef.current = el;
     el?.focus();
+  }, []);
+
+  /** The fallback box exists to be copied, so it opens ready for Ctrl/Cmd+C. */
+  const selectAll = useCallback((el: HTMLTextAreaElement | null) => {
+    el?.focus();
+    el?.select();
   }, []);
 
   const currentBase = () => bases.current[baseIndex.current];
@@ -486,9 +497,11 @@ export function EditorApp() {
     };
   }
 
-  async function save(withEmail: boolean) {
+  async function save(handoff: 'none' | 'email' | 'clipboard') {
     if (!record || !profile) return;
     setSaveError(false);
+    setCopied(false);
+    setCopyFallback(null);
     try {
       const { blob, thumbnail } = await exportImage();
       const base = buildBaseName(new Date());
@@ -513,16 +526,22 @@ export function EditorApp() {
         pageTitle: record.pageTitle,
       });
       await deleteCapture(record.id);
-      if (withEmail) {
-        const body = buildReportBody({ ...meta, files: files.map((f) => f.path) }, t);
+      const reported = { ...meta, files: files.map((f) => f.path) };
+      if (handoff === 'email') {
         const url = buildMailtoUrl({
           to: profile.emailTo,
           cc: profile.emailCc,
           subject: `${profile.subjectPrefix} ${t('mailto.subject.screenshot')} — ${record.pageTitle}`.trim(),
-          body,
+          body: buildReportBody(reported, t),
           truncationNote: t('mailto.truncated'),
         });
         window.open(url, '_self');
+      } else if (handoff === 'clipboard') {
+        const markdown = buildMarkdownReport(reported, t);
+        // The files are already on disk, so a refused clipboard costs the paste,
+        // not the report — hand the text over to be copied by hand instead.
+        if (await copyText(markdown)) setCopied(true);
+        else setCopyFallback(markdown);
       }
     } catch (err) {
       console.error(err);
@@ -668,11 +687,14 @@ export function EditorApp() {
         </div>
 
         <div class="row">
-          <button class="primary" disabled={sidebarDisabled} onClick={() => save(false)}>
+          <button class="primary" disabled={sidebarDisabled} onClick={() => save('none')}>
             💾 {t('editor.save')}
           </button>
-          <button class="primary" disabled={sidebarDisabled} onClick={() => save(true)}>
+          <button class="primary" disabled={sidebarDisabled} onClick={() => save('email')}>
             ✉ {t('editor.saveEmail')}
+          </button>
+          <button class="primary" disabled={sidebarDisabled} onClick={() => save('clipboard')}>
+            📋 {t('editor.saveCopy')}
           </button>
         </div>
 
@@ -682,10 +704,27 @@ export function EditorApp() {
             <div class="hint">{t('editor.attachHint', { path: savedFiles[0].path })}</div>
           </div>
         )}
+        {copied && (
+          <div class="card" style="border-color: var(--ok);">
+            <div>{t('clipboard.copied')}</div>
+          </div>
+        )}
+        {copyFallback && (
+          <div class="card" style="border-color: var(--danger);">
+            <div>{t('clipboard.error')}</div>
+            <textarea
+              readOnly
+              class="clipboard-fallback"
+              ref={selectAll}
+              style="width: 100%; min-height: 120px; margin-top: 6px;"
+              value={copyFallback}
+            />
+          </div>
+        )}
         {saveError && (
           <div class="card" style="border-color: var(--danger);">
             <div>{t('editor.saveError')}</div>
-            <button onClick={() => save(false)}>{t('editor.retry')}</button>
+            <button onClick={() => save('none')}>{t('editor.retry')}</button>
           </div>
         )}
 

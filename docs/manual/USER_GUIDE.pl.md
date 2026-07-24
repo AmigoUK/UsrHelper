@@ -92,6 +92,7 @@ W polu **Opis** opisz problem lub instrukcję, następnie:
 
 - **💾 Zapisz** — plik PNG + plik `.json` z metadanymi lądują w `Pobrane/<podfolder>/` z timestampem w nazwie (np. `UsrHelper_2026-07-17_14-32-05.png`);
 - **✉ Zapisz + Email** — dodatkowo otwiera się nowa wiadomość w Twoim programie pocztowym z adresatami, tematem i opisem. **Załącznik musisz dodać ręcznie** — wtyczka pokazuje dokładną ścieżkę zapisanego pliku.
+- **📋 Zapisz + Kopiuj** — dodatkowo kopiuje całe zgłoszenie do schowka w formacie **Markdown**: nagłówek, tabela z adresem strony, dokładnym czasem, Twoją maszyną i przeglądarką, a dalej żółte karteczki, ostatnie błędy konsoli i nazwy zapisanych plików. Wklej to wprost do zgłoszenia w Jirze, do issue na GitHubie lub GitLabie albo do wiadomości w Teams, zamiast przepisywać ręcznie. **Sam obraz nie trafia do schowka** — w tekście jest nazwa pliku, który dołączasz lub przeciągasz.
 
 ![Potwierdzenie zapisu z podpowiedzią o załączniku](images/editor-saved.png)
 
@@ -116,7 +117,7 @@ Podczas nagrania na stronach widoczne są: **żółte kręgi** przy kliknięciac
 
 ![Panel po nagraniu — lista klipów i opis](images/recorder-done.png)
 
-Po zatrzymaniu dopisz opis i kliknij **💾 Zapisz** (metadane `.json`) lub **✉ Zapisz + Email**.
+Po zatrzymaniu dopisz opis i kliknij **💾 Zapisz** (metadane `.json`), **✉ Zapisz + Email** albo **📋 Zapisz + Kopiuj**, żeby zgłoszenie trafiło do schowka jako Markdown.
 
 ## 6. Historia i profile projektów
 
@@ -152,6 +153,12 @@ Timestamp jest w trzech miejscach: w nazwie pliku, widoczny na obrazie/nagraniu 
 **Gdzie są moje pliki?** W folderze `Pobrane/<podfolder>/` (podfolder ustawiasz w profilu; domyślnie `UsrHelper`). Najszybciej: popup → **Pokaż plik**.
 
 **Email otwiera się bez załącznika.** To ograniczenie mechanizmu `mailto:` — żaden program nie pozwala wtyczce samodzielnie dołączyć pliku. Wtyczka pokazuje dokładną ścieżkę; przeciągnij plik do wiadomości.
+
+**Wkleiłem skopiowane zgłoszenie i nie ma zrzutu.** Do schowka trafia sam tekst. Markdown podaje nazwę zapisanego pliku — dołącz go albo przeciągnij do zgłoszenia, a system sam go wgra.
+
+**Po wklejeniu widzę surowe znaki `|` zamiast tabeli.** Miejsce, w które wklejasz, nie renderuje Markdownu (część okien czatu i pól tekstowych tego nie robi). Zgłoszenie jest kompletne i czytelne; pole opisu w Jirze, na GitHubie i GitLabie wyświetli je poprawnie.
+
+**Nic się nie skopiowało.** Chrome odmawia zapisu do schowka, gdy karta straci fokus. Wtyczka pokazuje wtedy zgłoszenie w polu tekstowym z zaznaczoną treścią — naciśnij `Ctrl+C` (`Cmd+C`) i skopiuj ręcznie. Pliki i tak są już zapisane.
 
 **Zamazane dane — czy na pewno bezpieczne?** Tak. Mozaika jest wtapiana w pikselową zawartość pliku PNG przy zapisie — oryginalnych pikseli nie da się odzyskać z pliku wynikowego.
 

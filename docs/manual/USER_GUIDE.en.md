@@ -92,6 +92,7 @@ Describe the issue in the **Description** field, then:
 
 - **💾 Save** — a PNG plus a `.json` metadata file land in `Downloads/<subfolder>/` with a timestamp in the name (e.g. `UsrHelper_2026-07-17_14-32-05.png`);
 - **✉ Save + Email** — additionally opens a new message in your mail client with recipients, subject, and description pre-filled. **You attach the file manually** — the extension shows the exact path of the saved file.
+- **📋 Save + Copy** — additionally copies the whole report to the clipboard as **Markdown**: a heading, a table with the page address, the exact time, your machine and browser, then the sticky notes, the recent console errors and the names of the saved files. Paste it straight into a Jira ticket, a GitHub or GitLab issue, or a Teams message instead of retyping it. **The image itself is not copied** — the text names the file so you can attach or drag it in.
 
 ![Save confirmation with the attach reminder](images/editor-saved.png)
 
@@ -116,7 +117,7 @@ While recording, pages show: **yellow ripples** on clicks (blue for right-click)
 
 ![Panel after recording — clip list and description](images/recorder-done.png)
 
-After stopping, add a description and click **💾 Save** (writes the `.json` metadata) or **✉ Save + Email**.
+After stopping, add a description and click **💾 Save** (writes the `.json` metadata), **✉ Save + Email**, or **📋 Save + Copy** to put the report in the clipboard as Markdown.
 
 ## 6. History and project profiles
 
@@ -152,6 +153,12 @@ The timestamp lives in three places: the file name, visibly on the image/recordi
 **Where are my files?** In `Downloads/<subfolder>/` (set the subfolder in the profile; default `UsrHelper`). Fastest route: popup → **Show file**.
 
 **The email opens without the attachment.** That is a `mailto:` limitation — no mail client lets an extension attach files automatically. The extension shows the exact path; drag the file into the message.
+
+**I pasted the copied report and the screenshot is missing.** Only the text is copied. The Markdown names the saved file — attach or drag it into the ticket, and the tracker will upload it.
+
+**The pasted report shows raw `|` characters instead of a table.** The target does not render Markdown (some chat boxes and plain-text fields do not). The report is still complete and readable; a Jira, GitHub or GitLab description field renders it properly.
+
+**Nothing was copied.** Chrome refuses a clipboard write when the tab lost focus. The extension then shows the report in a text box with everything selected — press `Ctrl+C` (`Cmd+C`) to copy it by hand. Your files are already saved either way.
 
 **Is the mosaic really safe?** Yes. The mosaic is baked into the PNG's pixel data at save time — the original pixels cannot be recovered from the exported file.
 
